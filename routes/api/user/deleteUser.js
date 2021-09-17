@@ -16,7 +16,7 @@
  *         description: 결과 정보
  */
 
-const paramUtil = require('../../../common/utils/paramUTil');
+const paramUtil = require('../../../common/utils/paramUtil');
 const fileUtil = require('../../../common/utils/fileUtil');
 const mysqlUtil = require('../../../common/utils/mysqlUtil');
 const sendUtil = require('../../../common/utils/sendUtil');
