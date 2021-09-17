@@ -32,6 +32,15 @@ if( !funcUtil.isRealServer ) {
     app.use('/api-docs', require('./apiDocs/swaggerDocs'))
 }
 
+
+console.log(`@#isRealServer ${funcUtil.isRealServer}`);
+console.log(`@#getDBUser ${funcUtil.getDBUser()}`);
+console.log(`@#getDBHost ${funcUtil.getDBHost()}`);
+console.log(`@#getDBUser ${funcUtil.getDBUser()}`);
+console.log(`@#getAWSBucket ${funcUtil.getAWSBucket()}`);
+
+
+
 app.all('/api/public/*', require('./routes/middleware/setHeader'));
 app.all('/api/private/*', require('./routes/middleware/setHeader'));
 
