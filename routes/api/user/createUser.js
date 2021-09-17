@@ -172,10 +172,14 @@ module.exports = function (req, res) {
 
 
             req.innerBody['item'] = await queryCreate(req, db_connection);
-            req.innerBody['item']['access_token'] = jwtUtil.createToken(req.innerBody['item', '100d']);
+            console.log("JSON" + JSON.stringify(req.innerBody['item']['uid']));
+            req.innerBody['item']['access_token'] = jwtUtil.createToken(req.innerBody['item'], '100d');
 
+            console.log("asodaispo")
             await queryUpdate(req, db_connection);
 
+            console.log("da" +
+                "")
             await queryCreateAddress(req, db_connection);
 
 
@@ -201,7 +205,7 @@ function checkParam(req) {
     paramUtil.checkParam_noReturn(req.paramBody, 'nickname');
     paramUtil.checkParam_noReturn(req.paramBody, 'push_token');
     paramUtil.checkParam_noReturn(req.paramBody, 'social_id');
-    paramUtil.checkParam_noReturn(req.paramBody, 'sign_type');
+    paramUtil.checkParam_noReturn(req.paramBody, 'signup_type');
     paramUtil.checkParam_noReturn(req.paramBody, 'os');
     paramUtil.checkParam_noReturn(req.paramBody, 'version_app');
     paramUtil.checkParam_noReturn(req.paramBody, 'birth');
@@ -241,7 +245,7 @@ function queryCreate(req, db_connection) {
           , req.paramBody['nickname']
           , req.paramBody['push_token']
           , req.paramBody['social_id']
-          , req.paramBody['sign_type']
+          , req.paramBody['signup_type']
           , req.paramBody['os']
           , req.paramBody['version_app']
           , req.paramBody['birth']
@@ -269,6 +273,7 @@ function queryCreateAddress(req, db_connection) {
 function queryUpdate(req, db_connection) {
     const _funcName = arguments.callee.name;
 
+    console.log("durl?")
     return mysqlUtil.querySingle(db_connection
         , 'call proc_update_user_access_token'
         , [
