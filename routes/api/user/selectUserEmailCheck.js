@@ -51,7 +51,6 @@ module.exports = function (req, res) {
             const email_data = await queryCheck(req, db_connection);
             paramUtil.checkParam_alreadyUse(email_data, '이미 가입한 이메일 입니다.');
 
-            req.innerBody['code'] = 200;
             req.innerBody['success'] = '사용 가능한 이메일입니다.'
 
             deleteBody(req)

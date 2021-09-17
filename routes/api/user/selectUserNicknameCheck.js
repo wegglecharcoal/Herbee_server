@@ -50,7 +50,6 @@ module.exports = function (req, res) {
             const nickname_data = await queryCheck(req, db_connection);
             paramUtil.checkParam_alreadyUse(nickname_data, '이미 사용 중인 닉네임 입니다.');
 
-            req.innerBody['code'] = 200;
             req.innerBody['success'] = '사용 가능한 닉네임 입니다.'
 
             deleteBody(req)
