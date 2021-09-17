@@ -219,8 +219,8 @@ let options = {
     apis: [
         // path: path.join(__dirname, '.env')},
         // {path: path.join(__dirname, '.env')},
-        'routes/**/*.js',
-        'apiDocs/*.js',
+        './routes/**/*.js',
+        './apiDocs/*.js',
     ], // path where API specification are written
 };
 // initialize swaggerJSDoc
