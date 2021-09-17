@@ -38,6 +38,8 @@ console.log(`@#getDBUser ${funcUtil.getDBUser()}`);
 console.log(`@#getDBHost ${funcUtil.getDBHost()}`);
 console.log(`@#getDBUser ${funcUtil.getDBUser()}`);
 console.log(`@#getAWSBucket ${funcUtil.getAWSBucket()}`);
+console.log(`@#genvetAWSBucket ${process.env.DEV_AWS_BUCKET}`);
+console.log(`@#envgetAWSBucket ${process.env.DEV_DB_HOST}`);
 
 
 
