@@ -9,6 +9,7 @@ const swaggerUi = require('swagger-ui-express');
 
 const osUtil = require('../common/utils/osUtil');
 const funcUtil = require('../common/utils/funcUtil');
+const path = require("path");
 
 let private_ip = osUtil.getIpAddress();
 
@@ -216,8 +217,10 @@ let swaggerDefinition = {
 let options = {
     swaggerDefinition: swaggerDefinition, // swagger definition
     apis: [
-        './routes/**/*.js',
-        './apiDocs/*.js',
+        // path: path.join(__dirname, '.env')},
+        // {path: path.join(__dirname, '.env')},
+        'routes/**/*.js',
+        'apiDocs/*.js',
     ], // path where API specification are written
 };
 // initialize swaggerJSDoc
