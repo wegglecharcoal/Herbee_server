@@ -9,7 +9,7 @@ const sendUtil = require('./common/utils/sendUtil');
 const errUtil = require('./common/utils/errUtil');
 const errCode = require('./common/define/errCode');
 
-require('dotenv').config();
+require('dotenv').config({path:__dirname +'./env' });
 
 const indexRouter = require('./routes/index');
 
