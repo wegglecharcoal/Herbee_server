@@ -89,7 +89,6 @@ const errUtil = require('../../../common/utils/errUtil');
 const logUtil = require('../../../common/utils/logUtil');
 
 const errCode = require('../../../common/define/errCode');
-const jwtUtil = require("../../../common/utils/jwtUtil");
 
 let file_name = fileUtil.name(__filename);
 

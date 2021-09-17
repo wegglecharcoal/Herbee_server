@@ -16,6 +16,16 @@ app.route('/user/other').get( require('./user/selectUserOther') );
 
 
 /**
+ * Follow
+ */
+app.route('/follow').post( require('./follow/createFollow') )
+                          .delete( require('./follow/deleteFollow') );
+
+app.route('/follow/list').get( require('./follow/selectFollowList') );
+
+
+
+/**
  * Alert
  */
 app.route('/alert')

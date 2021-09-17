@@ -57,7 +57,7 @@ function getFilename(req, file){
 function replaceName(filename) {
 
 
-    let fileArray = filename.split("_")
+    let fileArray = filename.split("_");
 
     filename =filename.replace('_' + fileArray[fileArray.length -2], '')
 
