@@ -11,8 +11,14 @@ const sendUtil = require('./common/utils/sendUtil');
 const errUtil = require('./common/utils/errUtil');
 const errCode = require('./common/define/errCode');
 
-// require('dotenv').config({path: path.join(__dirname, '.env')});
-require('dotenv').config();
+require('dotenv').config({path: path.join(__dirname, '.env')});
+// require('dotenv').config();
+
+
+console.log("ASDAA: " + path.join(__dirname, '.env'));
+console.log("ASDAA: " + path.join(__dirname, './routes/**/*.js'));
+console.log("ASDAA: " + path.join(__dirname, './apiDocs/*.js'));
+
 
 const indexRouter = require('./routes/index');
 
