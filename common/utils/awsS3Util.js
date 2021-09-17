@@ -19,13 +19,7 @@ AWS.config.update({
 
 const s3 = new AWS.S3();
 
-
-
-
-
-
 const MAX_LENGTH_MB=30
-
 
 const fileOptions = {
     storage: multerS3({
@@ -74,10 +68,6 @@ function replaceName(filename) {
 }
 
 function uploadFile(req, res, next){
-
-    console.log("ASD: " + funcUtil.getAWSAccessKeyID());
-    console.log("ASMMM: " + funcUtil.getAWSSecretAccessKey());
-    console.log("AMAL: " + funcUtil.getAWSRegion());
 
     console.log('awsS3Util, uploadFile start ..............');
     let single = multer(fileOptions).single('file');

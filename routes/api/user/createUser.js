@@ -172,17 +172,14 @@ module.exports = function (req, res) {
 
 
             req.innerBody['item'] = await queryCreate(req, db_connection);
-            console.log("JSON" + JSON.stringify(req.innerBody['item']['uid']));
+
             req.innerBody['item']['access_token'] = jwtUtil.createToken(req.innerBody['item'], '100d');
 
-            console.log("asodaispo")
+
             await queryUpdate(req, db_connection);
 
-            console.log("da" +
-                "")
+
             await queryCreateAddress(req, db_connection);
-
-
 
             deleteBody(req);
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);
