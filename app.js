@@ -4,12 +4,16 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
+
+
 const funcUtil = require('./common/utils/funcUtil');
 const sendUtil = require('./common/utils/sendUtil');
 const errUtil = require('./common/utils/errUtil');
 const errCode = require('./common/define/errCode');
 
-require('dotenv').config({path:__dirname +'./env' });
+const path = require('path');
+require('dotenv').config({path: path.join(__dirname, '.env')});
+// require('dotenv').config({path:__dirname +'./env' });
 
 const indexRouter = require('./routes/index');
 
