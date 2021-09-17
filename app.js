@@ -11,7 +11,6 @@ const sendUtil = require('./common/utils/sendUtil');
 const errUtil = require('./common/utils/errUtil');
 const errCode = require('./common/define/errCode');
 
-const path = require('path');
 require('dotenv').config({path: path.join(__dirname, '.env')});
 // require('dotenv').config({path:__dirname +'./env' });
 
