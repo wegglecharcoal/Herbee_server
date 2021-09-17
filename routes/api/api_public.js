@@ -16,6 +16,12 @@ app.route('/user/nickname/check').get( require('./user/selectUserNicknameCheck')
 
 
 /**
+ * file api
+ */
+app.route('/file').post( require('../../common/utils/awsS3Util').uploadFile, require('./file/uploadFile'))
+
+
+/**
  * dev api
  */
 app.route('/dev/test').get( require('./_dev/_dev_select') )
