@@ -21,8 +21,14 @@ app.route('/user/other').get( require('./user/selectUserOther') );
 app.route('/follow').post( require('./follow/createFollow') )
                           .delete( require('./follow/deleteFollow') );
 
+
 app.route('/follow/list').get( require('./follow/selectFollowList') );
 
+
+/**
+ * Report
+ */
+app.route('/report').post( require('./report/createReport') );
 
 
 /**

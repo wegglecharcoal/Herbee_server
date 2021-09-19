@@ -42,8 +42,6 @@ module.exports = function (req, res, next) {
 }
 
 function checkParam(req) {
-    console.log("asodmaspdoaskpo: " + JSON.stringify(req.headers));
-    console.log("ASDASDS: " + jwt.verify(req.headers['access_token'], process.env.JWT_SECURE_KEY));
 
     if(!paramUtil.checkParam_return(req.headers, 'access_token')) {
         errUtil.createCall(errCode.auth, `접속 토큰이 존재하지 않습니다. 다시 로그인 해주세요.`);
