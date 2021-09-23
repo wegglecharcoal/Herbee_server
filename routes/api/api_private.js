@@ -52,7 +52,23 @@ app.route('/report').post( require('./report/createReport') );
 /**
  * Alert
  */
-app.route('/alert')
+app.route('/alert/msg')
+    .put( require('./alert/updateAlertMsg') );
+
+app.route('/alert/follower')
+    .put( require('./alert/updateAlertFollower') );
+
+app.route('/alert/like')
+    .put( require('./alert/updateAlertLike') );
+
+app.route('/alert/dailyQuestion')
+    .put( require('./alert/updateAlertDailyQuestion') );
+
+app.route('/alert/marketing')
+    .put( require('./alert/updateAlertMarketing') );
+
+app.route('/alert/promise')
+    .put( require('./alert/updateAlertPromise') );
 
 
 
