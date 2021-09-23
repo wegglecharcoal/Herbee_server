@@ -19,19 +19,17 @@ app.route('/user/other').get( require('./user/selectUserOther') );
  * Comment
  */
 app.route('/comment').post( require('./comment/createComment'))
-    // .put( require('./comment/updateComment') )
-    // .delete( require('./comment/deleteComment') );
+                           .delete( require('./comment/deleteComment') );
 
-// app.route('/comment/list').get( require('./comment/selectCommentList'));
+app.route('/comment/list').get( require('./comment/selectCommentList'));
 
 
 
 app.route('/comment/nested').post( require('./comment/createCommentNested'))
-//     .put( require('./comment/updateCommentNested') )
-//     .delete( require('./comment/deleteCommentNested') );
+                                  .delete( require('./comment/deleteCommentNested') );
 
 
-// app.route('/comment/nested/list').get( require('./comment/selectCommentNestedList'));
+app.route('/comment/nested/list').get( require('./comment/selectCommentNestedList'));
 
 
 
