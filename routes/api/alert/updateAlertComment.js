@@ -2,12 +2,12 @@
  * Created by gunucklee on 2021. 09. 23.
  *
  * @swagger
- * /api/private/alert/Comment:
+ * /api/private/alert/comment:
  *   put:
  *     summary: 댓글 알림 on/off
  *     tags: [Alert]
  *     description: |
- *       path : /api/private/alert/Comment
+ *       path : /api/private/alert/comment
  *
  *       * 댓글 알림 on/off
  *

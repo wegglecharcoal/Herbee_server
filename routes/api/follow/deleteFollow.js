@@ -56,7 +56,7 @@ module.exports = function (req, res) {
                 return;
             }
 
-            await query(req, db_connection);
+            await queryDelete(req, db_connection);
             req.innerBody['success'] = '팔로우 삭제가 완료되었습니다.';
 
             deleteBody(req)
@@ -93,7 +93,7 @@ function queryCheck(req, db_connection) {
     );
 }
 
-function query(req, db_connection) {
+function queryDelete(req, db_connection) {
     const _funcName = arguments.callee.name;
 
     return mysqlUtil.querySingle(db_connection

@@ -52,7 +52,7 @@ module.exports = function (req, res) {
         mysqlUtil.connectPool( async function (db_connection) {
             req.innerBody = {};
 
-            req.innerBody['item'] = await query(req, db_connection);
+            req.innerBody['item'] = await queryDelete(req, db_connection);
             if (!req.innerBody['item']) {
                 errUtil.createCall(errCode.param, `대댓글 삭제에 실패하였습니다.`)
                 return
@@ -81,7 +81,7 @@ function checkParam(req) {
 function deleteBody(req) {
 }
 
-function query(req, db_connection) {
+function queryDelete(req, db_connection) {
     const _funcName = arguments.callee.name;
 
     return mysqlUtil.querySingle(db_connection
