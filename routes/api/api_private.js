@@ -52,6 +52,16 @@ app.route('/report').post( require('./report/createReport') );
 /**
  * Alert
  */
+
+app.route('/alert/history')
+    .delete( require('./alert/deleteAlertHistory') );
+
+app.route('/alert/history/list')
+    .get( require('./alert/selectAlertHistoryList') );
+
+app.route('/alert/comment')
+    .put( require('./alert/updateAlertComment') );
+
 app.route('/alert/msg')
     .put( require('./alert/updateAlertMsg') );
 

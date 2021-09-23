@@ -2,36 +2,16 @@
  * Created by gunucklee on 2021. 09. 23.
  *
  * @swagger
- * /api/private/comment/list:
+ * /api/private/alert/history/list:
  *   get:
- *     summary: 댓글 목록
- *     tags: [Comment]
+ *     summary: 알림 히스토리 목록
+ *     tags: [Alert]
  *     description: |
- *       path : /api/private/comment/list
+ *       path : /api/private/alert/history/list
  *
- *       * 댓글 목록
- *       * 대댓글 내용 정보 가져오는 api: /api/private/comment/nested
+ *       * 알림 히스토리 목록
  *
  *     parameters:
- *       - in: query
- *         name: target_uid
- *         default: 0
- *         required: true
- *         schema:
- *           type: number
- *           example: 1
- *         description: 댓글이 달린 파일 uid
- *       - in: query
- *         name: type
- *         default: 0
- *         required: true
- *         schema:
- *           type: number
- *           example: 1
- *         description: |
- *           댓글 타입
- *           * 0: 라이프스타일
- *           * 1: 동네후기
  *       - in: query
  *         name: last_uid
  *         default: 0
@@ -73,9 +53,7 @@ module.exports = function (req, res) {
         mysqlUtil.connectPool(async function (db_connection) {
             req.innerBody = {};
 
-            let count_data = await queryCount(req, db_connection);
             req.innerBody['item'] = await querySelect(req, db_connection);
-            req.innerBody['total_count'] = count_data['total_count'];
 
 
             deleteBody(req)
@@ -92,8 +70,6 @@ module.exports = function (req, res) {
 }
 
 function checkParam(req) {
-    paramUtil.checkParam_noReturn(req.paramBody, 'target_uid');
-    paramUtil.checkParam_noReturn(req.paramBody, 'type');
     paramUtil.checkParam_noReturn(req.paramBody, 'last_uid');
 }
 
@@ -104,24 +80,10 @@ function querySelect(req, db_connection) {
     const _funcName = arguments.callee.name;
 
     return mysqlUtil.queryArray(db_connection
-        , 'call proc_select_comment_list'
+        , 'call proc_select_alert_history_list'
         , [
             req.headers['user_uid']
-          , req.paramBody['target_uid']
-          , req.paramBody['type']
           , req.paramBody['last_uid']
-        ]
-    );
-}
-
-function queryCount(req, db_connection) {
-    const _funcName = arguments.callee.name;
-
-    return mysqlUtil.querySingle(db_connection
-        , 'call proc_select_comment_total_count'
-        , [
-            req.paramBody['target_uid']
-          , req.paramBody['type']
         ]
     );
 }
