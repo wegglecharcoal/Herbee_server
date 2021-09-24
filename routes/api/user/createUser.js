@@ -257,20 +257,20 @@ function queryCreateAddress(req, db_connection) {
     const _funcName = arguments.callee.name;
 
     return mysqlUtil.querySingle(db_connection
-        , 'call proc_create_address_book'
+        , 'call proc_create_addressBook'
         , [
-            req.headers['user_uid']
+            req.innerBody['item']['uid']
           , req.paramBody['address']
           , req.paramBody['latitude']
           , req.paramBody['longitude']
-          , 1  // is_default 기본 주소  0: false   1: true
+          , 1  // is_default 만남 위치 여부 0: false   1: true
+          , 0  // type       타입        0: 기본위치  1: 현재위치
         ])
 }
 
 function queryUpdate(req, db_connection) {
     const _funcName = arguments.callee.name;
 
-    console.log("durl?")
     return mysqlUtil.querySingle(db_connection
         , 'call proc_update_user_access_token'
         , [

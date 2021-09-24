@@ -171,7 +171,7 @@ let swaggerDefinition = {
             description: '약속 관련 API'
         },
         {
-            name: 'AddressBook',
+            name: 'Address',
             description: '주소 관련 API'
         },
         {

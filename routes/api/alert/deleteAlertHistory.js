@@ -5,7 +5,7 @@
  * /api/private/alert/history:
  *   delete:
  *     summary: 알림 히스토리 삭제
- *     tags: [Follow]
+ *     tags: [Alert]
  *     description: |
  *       path : /api/private/alert/history
  *
@@ -50,12 +50,7 @@ module.exports = function (req, res) {
         mysqlUtil.connectPool( async function (db_connection) {
             req.innerBody = {};
 
-            req.innerBody['item'] = await queryDelete(req, db_connection);
-            if (!req.innerBody['item']) {
-                errUtil.createCall(errCode.empty, `존재하지 않는 알림 히스토리입니다.`);
-                return;
-            }
-
+            await queryDelete(req, db_connection);
             req.innerBody['success'] = '알림 히스토리 삭제가 완료되었습니다.';
 
             deleteBody(req)
@@ -77,6 +72,18 @@ function checkParam(req) {
 }
 
 function deleteBody(req) {
+}
+
+function queryCheck(req, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_select_alert_history_check'
+        , [
+            req.headers['user_uid']
+          , req.paramBody['alert_history_uid']
+        ]
+    );
 }
 
 function queryDelete(req, db_connection) {
