@@ -3,71 +3,72 @@
  *
  * @swagger
  * /api/private/addressBook:
- *   post:
- *     summary: 주소 추가
+ *   put:
+ *     summary: 주소 변경
  *     tags: [Address]
  *     description: |
  *       path : /api/private/addressBook
  *
- *       * 주소 추가
+ *       * 주소 변경
  *
  *     parameters:
  *       - in: body
  *         name: body
  *         description: |
- *           주소 추가
+ *           주소 변경
  *         schema:
  *           type: object
  *           required:
+ *             - addressBook_uid
  *             - address
  *             - latitude
  *             - longitude
- *             - is_default
  *             - type
  *           properties:
+ *             addressBook_uid:
+ *               type: number
+ *               example: 1
+ *               description: |
+ *                 주소 uid
  *             address:
  *               type: string
+ *               example: 부산 수영구 망미동
  *               description: |
  *                 주소
  *             latitude:
  *               type: number
+ *               example: 37.5662952
  *               description: |
  *                 위도
  *             longitude:
  *               type: number
+ *               example: 127.1039913
  *               description: |
  *                 경도
- *             is_default:
- *               type: number
- *               description: |
- *                 기본 주소
- *                 *0: false
- *                 *1: true
  *             type:
  *               type: number
+ *               example: 1
  *               description: |
- *                 주소 타입
- *                 *0: 기본 위치
- *                 *1: 현재 위치
- *           example:
- *             address: 부산 수영구 망미동
- *             latitude: 37.5662952
- *             longitude: 126.9773966
- *             is_default: 1
- *             type: 0
+ *                 타입
+ *                 *0: 기본위치
+ *                 *1: 현재위치
+ *
  *
  *     responses:
  *       200:
  *         description: 결과 정보
+ *       400:
+ *         description: 에러 코드 400
+ *         schema:
+ *           $ref: '#/definitions/Error'
  */
-let paramUtil;
-paramUtil = require('../../../common/utils/paramUtil');
+
+const paramUtil = require('../../../common/utils/paramUtil');
 const fileUtil = require('../../../common/utils/fileUtil');
 const mysqlUtil = require('../../../common/utils/mysqlUtil');
 const sendUtil = require('../../../common/utils/sendUtil');
 const errUtil = require('../../../common/utils/errUtil');
 const logUtil = require('../../../common/utils/logUtil');
-
 
 let file_name = fileUtil.name(__filename);
 
@@ -84,12 +85,9 @@ module.exports = function (req, res) {
         mysqlUtil.connectPool( async function (db_connection) {
             req.innerBody = {};
 
-            req.innerBody['item'] = await queryCheck(req, db_connection);
-            paramUtil.checkParam_alreadyUse(req.innerBody['item'], '이미 등록된 주소입니다.');
+            req.innerBody['item'] = await queryUpdate(req, db_connection);
 
-            req.innerBody['item'] = await queryCreate(req, db_connection);
-
-            deleteBody(req);
+            deleteBody(req)
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);
 
         }, function (err) {
@@ -104,45 +102,28 @@ module.exports = function (req, res) {
 }
 
 function checkParam(req) {
+    paramUtil.checkParam_noReturn(req.paramBody, 'addressBook_uid');
     paramUtil.checkParam_noReturn(req.paramBody, 'address');
     paramUtil.checkParam_noReturn(req.paramBody, 'latitude');
     paramUtil.checkParam_noReturn(req.paramBody, 'longitude');
-    paramUtil.checkParam_noReturn(req.paramBody, 'is_default');
     paramUtil.checkParam_noReturn(req.paramBody, 'type');
 }
 
 function deleteBody(req) {
 }
 
-function queryCreate(req, db_connection) {
+function queryUpdate(req, db_connection) {
     const _funcName = arguments.callee.name;
 
     return mysqlUtil.querySingle(db_connection
-        , 'call proc_create_addressBook'
+        , 'call proc_update_addressBook'
         , [
             req.headers['user_uid']
+          , req.paramBody['addressBook_uid']
           , req.paramBody['address']
           , req.paramBody['latitude']
           , req.paramBody['longitude']
-          , req.paramBody['is_default']
           , req.paramBody['type']
         ]
     );
 }
-
-function queryCheck(req, db_connection) {
-    const _funcName = arguments.callee.name;
-
-    return mysqlUtil.querySingle(db_connection
-        , 'call proc_select_addressBook_check'
-        , [
-            req.headers['user_uid']
-          , req.paramBody['address']
-          , req.paramBody['latitude']
-          , req.paramBody['longitude']
-          , req.paramBody['is_default']
-          , req.paramBody['type']
-        ]
-    );
-}
-
