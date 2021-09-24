@@ -28,7 +28,9 @@ app.route('/localReview').post( require('./localReview/createLocalReview') )
 /**
  * Address
  */
-app.route('/addressBook').put( require('./address/updateAddressBook') );
+app.route('/addressBook').put( require('./address/updateAddressBook') )
+                               .get( require('./address/selectAddressBook') );
+
 app.route('/addressBook/default').put( require('./address/updateAddressBookDefault') );
 
 /**
