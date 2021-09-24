@@ -29,7 +29,10 @@ app.route('/localReview').post( require('./localReview/createLocalReview') )
  * Address
  */
 app.route('/addressBook').post( require('./address/createAddressBook') );
+app.route('/addressBook/default').put( require('./address/updateAddressBookDefault') );
 
+
+app.route('/addressBook').post( require('./address/createAddressBook') );
 
 /**
  * Comment
