@@ -16,6 +16,22 @@ app.route('/user/other').get( require('./user/selectUserOther') );
 
 
 /**
+ * LocalReview
+ */
+app.route('/localReview').post( require('./localReview/createLocalReview') )
+                               .put( require('./localReview/updateLocalReview') )
+//                                .delete( require('./localReview/deleteLocalReview') )
+//
+// app.route('/localReview/list').get( require('./localReview/selectLocalReviewList') )
+
+
+/**
+ * Address
+ */
+app.route('/addressBook').post( require('./address/createAddressBook') );
+
+
+/**
  * Comment
  */
 app.route('/comment').post( require('./comment/createComment'))

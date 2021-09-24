@@ -14,6 +14,13 @@ app.route('/user/signup/check').get( require('./user/selectUserSignUpCheck') );
 app.route('/user/email/check').get( require('./user/selectUserEmailCheck') );
 app.route('/user/nickname/check').get( require('./user/selectUserNicknameCheck') );
 
+/**
+ * address
+ */
+
+app.route('/address/info/search').get( require('./address/selectAddressInfoSearch') );
+
+
 
 /**
  * file api
