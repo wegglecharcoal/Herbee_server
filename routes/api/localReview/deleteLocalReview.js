@@ -51,6 +51,7 @@ module.exports = function (req, res) {
             req.innerBody = {};
 
             req.innerBody['item'] = await queryDelete(req, db_connection);
+            console.log("ASD:" + JSON.stringify(req.innerBody['item']))
             if (req.innerBody['item']) {
                 errUtil.createCall(errCode.fail, `삭제에 실패하였습니다.`)
                 return
