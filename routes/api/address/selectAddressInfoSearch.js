@@ -14,7 +14,7 @@
  *     parameters:
  *       - in: query
  *         name: keyword
- *         required: true
+ *         required: false
  *         schema:
  *           type: string
  *           example:
@@ -76,7 +76,6 @@ module.exports = function (req, res) {
 }
 
 function checkParam(req) {
-    paramUtil.checkParam_noReturn(req.paramBody, 'keyword');
     paramUtil.checkParam_noReturn(req.paramBody, 'last_uid');
 }
 

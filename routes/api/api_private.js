@@ -20,6 +20,7 @@ app.route('/user/other').get( require('./user/selectUserOther') );
  */
 app.route('/localReview').post( require('./localReview/createLocalReview') )
                                .put( require('./localReview/updateLocalReview') )
+                               .delete( require('./localReview/deleteLocalReview') )
 //                                .delete( require('./localReview/deleteLocalReview') )
 //
 // app.route('/localReview/list').get( require('./localReview/selectLocalReviewList') )
