@@ -25,7 +25,7 @@ app.route('/user/other')
 app.route('/lifestyle')
     .post( require('./lifestyle/createLifestyle') )
     .put( require('./lifestyle/updateLifestyle') )
-    .delete( require('./lifestyle/deleteLifestyle') )
+    .delete( require('./lifestyle/deleteLifestyle') );
 
 
 /**
@@ -34,7 +34,7 @@ app.route('/lifestyle')
 app.route('/localReview')
     .post( require('./localReview/createLocalReview') )
     .put( require('./localReview/updateLocalReview') )
-    .delete( require('./localReview/deleteLocalReview') )
+    .delete( require('./localReview/deleteLocalReview') );
 //                                .delete( require('./localReview/deleteLocalReview') )
 //
 // app.route('/localReview/list').get( require('./localReview/selectLocalReviewList') )
@@ -90,6 +90,12 @@ app.route('/follow/list')
 app.route('/report')
     .post( require('./report/createReport') );
 
+/**
+ * Block
+ */
+app.route('/block/user/list')
+    .get( require('./block/selectBlockUserList'))
+
 
 /**
  * Alert
@@ -125,9 +131,16 @@ app.route('/alert/promise')
  * Honey
  */
 app.route( '/honeyHistory')
-    .post( require('./honey/createHoneyHistory') )
+    .post( require('./honey/createHoneyHistory') );
 
+app.route( '/honeyHistory/list')
+    .get( require('./honey/selectHoneyHistoryList') );
 
+app.route( '/honeyPrice/list')
+    .get( require('./honey/selectHoneyPriceList') );
+
+app.route( '/honeyManual/list')
+    .get( require('./honey/selectHoneyManualList') );
 
 
 /**
