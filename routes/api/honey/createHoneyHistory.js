@@ -28,7 +28,7 @@
  *               description: |
  *                 타겟 uid
  *                 * 0: 사용
- *                 * 1: 결재
+ *                 * 1: 결제
  *
  *                 * 10: 동영상 무료
  *                 * 11: 사진 무료
@@ -63,7 +63,6 @@ const mysqlUtil = require('../../../common/utils/mysqlUtil');
 const sendUtil = require('../../../common/utils/sendUtil');
 const errUtil = require('../../../common/utils/errUtil');
 const logUtil = require('../../../common/utils/logUtil');
-const fcmUtil = require('../../../common/utils/fcmUtil');;
 
 let file_name = fileUtil.name(__filename);
 
@@ -81,13 +80,9 @@ module.exports = function (req, res) {
             req.innerBody = {};
 
             let check = await queryCheck(req, db_connection);
-            paramUtil.checkParam_alreadyUse(check,'이미 해당 댓글이 등록되어 있습니다.');
+            paramUtil.checkParam_alreadyUse(check,'이미 해당 이 등록되어 있습니다.');
 
             req.innerBody['item'] = await queryCreate(req, db_connection);
-
-            // FCM 기능 추후 반영 예정
-            // if(req.headers['user_uid'] !== req.innerBody['item']['video_user_uid'])
-            //     await fcmUtil.fcmVideoCommentSingle(req.innerBody['item'])
 
             deleteBody(req)
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);
@@ -116,12 +111,12 @@ function queryCheck(req, db_connection) {
     const _funcName = arguments.callee.name;
 
     return mysqlUtil.querySingle(db_connection
-        , 'call proc_select_comment_check'
+        , 'call proc_select_honeyHistory_check'
         , [
             req.headers['user_uid']
-          , req.paramBody['target_uid']
           , req.paramBody['type']
-          , req.paramBody['content']
+          , req.paramBody['payment']
+          , req.paramBody['honey_amount']
         ]
     );
 }
@@ -132,12 +127,12 @@ function queryCreate(req, db_connection) {
     const _funcName = arguments.callee.name;
 
     return mysqlUtil.querySingle(db_connection
-        , 'call proc_create_comment'
+        , 'call proc_create_honeyHistory'
         , [
             req.headers['user_uid']
-          , req.paramBody['target_uid']
           , req.paramBody['type']
-          , req.paramBody['content']
+          , req.paramBody['payment']
+          , req.paramBody['honey_amount']
         ]
     );
 }
