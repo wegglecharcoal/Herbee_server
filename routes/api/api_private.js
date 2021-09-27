@@ -122,6 +122,15 @@ app.route('/alert/promise')
     .put( require('./alert/updateAlertPromise') );
 
 /**
+ * Honey
+ */
+app.route( '/honeyHistory')
+    .post( require('./honey/createHoneyHistory') )
+
+
+
+
+/**
  * Notice
  */
 app.route('/notice/list')

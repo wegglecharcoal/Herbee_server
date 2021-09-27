@@ -153,6 +153,7 @@ module.exports = function (req, res) {
     try {
         req.file_name = file_name;
         logUtil.printUrlLog(req, `header: ${JSON.stringify(req.headers)}`);
+        console.log("ASDADASDASD:" + JSON.stringify(req.paramBody))
         req.paramBody = paramUtil.parse(req);
 
         checkParam(req);
@@ -216,18 +217,6 @@ function checkParam(req) {
 
 function deleteBody(req) {
     // delete req.innerBody['test']['test'];
-}
-
-function alreadyUse(item, errMsg) {
-    if( item ) {
-        errUtil.createCall(errCode.already, errMsg);
-        return true;
-    }
-    return false;
-
-    // if( alreadyUse(user_data, '이미 회원가입한 유저 입니다.') ) {
-    //     return;
-    // }
 }
 
 function queryCreate(req, db_connection) {
