@@ -152,10 +152,12 @@ module.exports = function (req, res) {
 
     try {
         req.file_name = file_name;
+
+        req.paramBody = paramUtil.parse(req);
+
         logUtil.printUrlLog(req, `header: ${JSON.stringify(req.headers)}`);
         console.log("ASDADASDASD:" + JSON.stringify(req.paramBody))
         console.log("ASDADASDASD2:" + JSON.stringify(req.body))
-        req.paramBody = paramUtil.parse(req);
 
         checkParam(req);
 
