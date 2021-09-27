@@ -93,6 +93,9 @@ app.route('/report')
 /**
  * Block
  */
+app.route('/block/user')
+    .delete( require('./block/deleteBlockUser'))
+
 app.route('/block/user/list')
     .get( require('./block/selectBlockUserList'))
 
