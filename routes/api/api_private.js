@@ -8,19 +8,33 @@ const app = express();
 /**
  * User
  */
-app.route('/user').put( require('./user/updateUser') )
-                        .delete( require('./user/deleteUser') );
+app.route('/user')
+    .put( require('./user/updateUser') )
+    .delete( require('./user/deleteUser') );
 
-app.route('/user/me').get( require('./user/selectUserMe') );
-app.route('/user/other').get( require('./user/selectUserOther') );
+app.route('/user/me')
+    .get( require('./user/selectUserMe') );
+
+app.route('/user/other')
+    .get( require('./user/selectUserOther') );
+
+
+/**
+ * Lifestyle
+ */
+app.route('/lifestyle')
+    .post( require('./lifestyle/createLifestyle') )
+    .put( require('./lifestyle/updateLifestyle') )
+    .delete( require('./lifestyle/deleteLifestyle') )
 
 
 /**
  * LocalReview
  */
-app.route('/localReview').post( require('./localReview/createLocalReview') )
-                               .put( require('./localReview/updateLocalReview') )
-                               .delete( require('./localReview/deleteLocalReview') )
+app.route('/localReview')
+    .post( require('./localReview/createLocalReview') )
+    .put( require('./localReview/updateLocalReview') )
+    .delete( require('./localReview/deleteLocalReview') )
 //                                .delete( require('./localReview/deleteLocalReview') )
 //
 // app.route('/localReview/list').get( require('./localReview/selectLocalReviewList') )
@@ -29,49 +43,57 @@ app.route('/localReview').post( require('./localReview/createLocalReview') )
 /**
  * Address
  */
-app.route('/addressBook').put( require('./address/updateAddressBook') )
-                               .get( require('./address/selectAddressBook') );
+app.route('/addressBook')
+    .put( require('./address/updateAddressBook') )
+    .get( require('./address/selectAddressBook') );
 
-app.route('/addressBook/default').put( require('./address/updateAddressBookDefault') );
+app.route('/addressBook/default')
+    .put( require('./address/updateAddressBookDefault') );
 
 /**
  * Comment
  */
-app.route('/comment').post( require('./comment/createComment'))
-                           .delete( require('./comment/deleteComment') );
+app.route('/comment')
+    .post( require('./comment/createComment'))
+    .delete( require('./comment/deleteComment') );
 
-app.route('/comment/list').get( require('./comment/selectCommentList'));
-
-
-
-app.route('/comment/nested').post( require('./comment/createCommentNested'))
-                                  .delete( require('./comment/deleteCommentNested') );
+app.route('/comment/list')
+    .get( require('./comment/selectCommentList'));
 
 
-app.route('/comment/nested/list').get( require('./comment/selectCommentNestedList'));
+
+app.route('/comment/nested')
+    .post( require('./comment/createCommentNested'))
+    .delete( require('./comment/deleteCommentNested') );
+
+
+app.route('/comment/nested/list')
+    .get( require('./comment/selectCommentNestedList'));
 
 
 
 /**
  * Follow
  */
-app.route('/follow').post( require('./follow/createFollow') )
-                          .delete( require('./follow/deleteFollow') );
+app.route('/follow')
+    .post( require('./follow/createFollow') )
+    .delete( require('./follow/deleteFollow') );
 
 
-app.route('/follow/list').get( require('./follow/selectFollowList') );
+app.route('/follow/list')
+    .get( require('./follow/selectFollowList') );
 
 
 /**
  * Report
  */
-app.route('/report').post( require('./report/createReport') );
+app.route('/report')
+    .post( require('./report/createReport') );
 
 
 /**
  * Alert
  */
-
 app.route('/alert/history')
     .delete( require('./alert/deleteAlertHistory') );
 
@@ -99,6 +121,11 @@ app.route('/alert/marketing')
 app.route('/alert/promise')
     .put( require('./alert/updateAlertPromise') );
 
+/**
+ * Notice
+ */
+app.route('/notice/list')
+    .get( require('./notice/selectNoticeList') );
 
 
 

@@ -8,30 +8,39 @@ const app = express();
 /**
  * user api
  */
-app.route('/user/signup').post( require('./user/createUser') );
+app.route('/user/signup')
+    .post( require('./user/createUser') );
 
-app.route('/user/signup/check').get( require('./user/selectUserSignUpCheck') );
-app.route('/user/email/check').get( require('./user/selectUserEmailCheck') );
-app.route('/user/nickname/check').get( require('./user/selectUserNicknameCheck') );
+app.route('/user/signup/check')
+    .get( require('./user/selectUserSignUpCheck') );
+
+app.route('/user/email/check')
+    .get( require('./user/selectUserEmailCheck') );
+
+app.route('/user/nickname/check')
+    .get( require('./user/selectUserNicknameCheck') );
 
 /**
  * address
  */
 
-app.route('/address/info/search').get( require('./address/selectAddressInfoSearch') );
+app.route('/address/info/search')
+    .get( require('./address/selectAddressInfoSearch') );
 
 
 
 /**
  * file api
  */
-app.route('/file').post( require('../../common/utils/awsS3Util').uploadFile, require('./file/uploadFile'))
+app.route('/file')
+    .post( require('../../common/utils/awsS3Util').uploadFile, require('./file/uploadFile'))
 
 
 /**
  * dev api
  */
-app.route('/dev/test').get( require('./_dev/_dev_select') )
+app.route('/dev/test')
+    .get( require('./_dev/_dev_select') )
 
 
 module.exports = app;
