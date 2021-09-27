@@ -19,8 +19,14 @@
  *         schema:
  *           type: object
  *           required:
+ *             - localReview_uid
  *             - content
  *           properties:
+ *             localReview_uid:
+ *               type: number
+ *               example: 1
+ *               description: |
+ *                 동네후기 uid
  *             content:
  *               type: string
  *               example: 동네 후기 내용 수정입니다.
@@ -76,6 +82,7 @@ module.exports = function (req, res) {
 }
 
 function checkParam(req) {
+    paramUtil.checkParam_noReturn(req.paramBody, 'localReview_uid');
     paramUtil.checkParam_noReturn(req.paramBody, 'content');
 
 }
@@ -90,6 +97,7 @@ function queryUpdate(req, db_connection) {
         , 'call proc_update_localReview'
         , [
             req.headers['user_uid']
+          , req.paramBody['localReview_uid']
           , req.paramBody['content']
         ]
     );
