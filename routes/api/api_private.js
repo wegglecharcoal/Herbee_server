@@ -20,6 +20,18 @@ app.route('/user/other')
 
 
 /**
+ * Feed
+ */
+app.route('/feed/list')
+    .get( require('./feed/selectFeedList') );
+
+/**
+ * BalanceGame
+ */
+app.route('/balanceGame/question/daily')
+    .get( require('./balanceGame/selectBalanceGameQuestionDaily') );
+
+/**
  * Lifestyle
  */
 app.route('/lifestyle')
@@ -39,6 +51,20 @@ app.route('/localReview')
 //
 // app.route('/localReview/list').get( require('./localReview/selectLocalReviewList') )
 
+/**
+ * ChatRoom
+ */
+app.route('/chatRoom/general')
+    .post( require('./chatRoom/createChatRoomGeneral') );
+
+/**
+ * Promise
+ */
+app.route( '/promise' )
+    .post( require('./promise/createPromise') );
+
+app.route( '/promise' )
+    .post( require('./promise/') );
 
 /**
  * Address
@@ -82,6 +108,13 @@ app.route('/follow')
 
 app.route('/follow/list')
     .get( require('./follow/selectFollowList') );
+
+
+/**
+ * Report
+ */
+app.route('/like')
+    .put( require('./like/updateLike') );
 
 
 /**
