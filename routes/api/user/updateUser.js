@@ -32,9 +32,6 @@
  *             - job
  *             - introduce
  *             - birth
- *             - address
- *             - latitude
- *             - longitude
  *           properties:
  *             filename:
  *               type: string
@@ -62,18 +59,6 @@
  *               type: string
  *               example: '1996-08-02'
  *               description: 자기소개
- *             address:
- *               type: string
- *               example: '안녕하세요. 이건욱입니다. 여름이였다..'
- *               description: 자기소개
- *             latitude:
- *               type: number
- *               example: 37.5662952
- *               description: 위도
- *             longitude:
- *               type: number
- *               example: 126.9773966
- *               description: 경도
  *
  *     responses:
  *       200:
@@ -113,7 +98,7 @@ module.exports = function (req, res) {
             paramUtil.checkParam_alreadyUse(email_data, '이미 가입한 이메일 입니다.');
 
             const nickname_data = await queryCheckNickname(req, db_connection);
-            paramUtil.checkParam_alreadyUse(nickname_data, '이미 사용 중인 닉네임 입니다.');/**/
+            paramUtil.checkParam_alreadyUse(nickname_data, '이미 사용 중인 닉네임 입니다.');
 
 
             req.innerBody['item'] = await queryCreate(req, db_connection);
@@ -146,7 +131,7 @@ function checkParam(req) {
     paramUtil.checkParam_noReturn(req.paramBody, 'nickname');
     paramUtil.checkParam_noReturn(req.paramBody, 'push_token');
     paramUtil.checkParam_noReturn(req.paramBody, 'social_id');
-    paramUtil.checkParam_noReturn(req.paramBody, 'sign_type');
+    paramUtil.checkParam_noReturn(req.paramBody, 'signup_type');
     paramUtil.checkParam_noReturn(req.paramBody, 'os');
     paramUtil.checkParam_noReturn(req.paramBody, 'version_app');
     paramUtil.checkParam_noReturn(req.paramBody, 'birth');
@@ -186,7 +171,7 @@ function queryCreate(req, db_connection) {
             , req.paramBody['nickname']
             , req.paramBody['push_token']
             , req.paramBody['social_id']
-            , req.paramBody['sign_type']
+            , req.paramBody['signup_type']
             , req.paramBody['os']
             , req.paramBody['version_app']
             , req.paramBody['birth']

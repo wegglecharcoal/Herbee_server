@@ -63,8 +63,8 @@ app.route('/chatRoom/general')
 app.route( '/promise' )
     .post( require('./promise/createPromise') );
 
-app.route( '/promise' )
-    .post( require('./promise/') );
+// app.route( '/promise' )
+//     .post( require('./promise/createPromise') );
 
 /**
  * Address

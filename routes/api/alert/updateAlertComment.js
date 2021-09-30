@@ -64,7 +64,7 @@ module.exports = function (req, res) {
 
             req.innerBody['item'] = await queryUpdate(req, db_connection);
 
-            deleteBody(req)
+            deleteBody(req);
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);
 
         }, function (err) {
