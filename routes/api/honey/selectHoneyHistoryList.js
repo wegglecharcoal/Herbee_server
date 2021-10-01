@@ -13,6 +13,18 @@
  *
  *     parameters:
  *       - in: query
+ *         name: is_payment_history
+ *         default: 0
+ *         required: true
+ *         schema:
+ *           type: number
+ *           example: 0
+ *         description: |
+ *           결제 내역 여부
+ *           * 0: 전체 리스트를 보여줍니다.
+ *           * 1: 결제 내역만 보여줍니다. (type: 1 {결제} || 20 {취소})
+ *         enum: [0,1]
+ *       - in: query
  *         name: last_uid
  *         default: 0
  *         required: true
@@ -70,6 +82,7 @@ module.exports = function (req, res) {
 }
 
 function checkParam(req) {
+    paramUtil.checkParam_noReturn(req.paramBody, 'is_payment_history');
     paramUtil.checkParam_noReturn(req.paramBody, 'last_uid');
 }
 
@@ -83,6 +96,7 @@ function querySelect(req, db_connection) {
         , 'call proc_select_honeyHistory_list'
         , [
             req.headers['user_uid']
+          , req.paramBody['is_payment_history']
           , req.paramBody['last_uid']
         ]
     );
