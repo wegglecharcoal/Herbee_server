@@ -51,6 +51,47 @@
  *               type: string
  *               example: '귀여운다람쥐'
  *               description: 닉네임
+ *             height:
+ *               type: integer
+ *               example: 169
+ *               description: 키
+ *             drink:
+ *               type: integer
+ *               example: 0
+ *               description: |
+ *                 음주
+ *                 * 0: 선택 안함
+ *                 * 1: 알콜 쓰레기에요
+ *                 * 2: 딱히 잘 안 마셔요
+ *                 * 3: 가끔 마셔요
+ *                 * 4: 적당히 즐기면서 마셔요
+ *                 * 5: 많이 즐겨 마셔요
+ *               enum: [0,1,2,3,4,5]
+ *             smoking:
+ *               type: integer
+ *               example: 0
+ *               description: |
+ *                 음주
+ *                 * 0: 선택 안함
+ *                 * 1: 전혀 피우지 않아요
+ *                 * 2: 가끔 피워요
+ *                 * 3: 흡연자에요
+ *               enum: [0,1,2,3]
+ *             education:
+ *               type: integer
+ *               example: 0
+ *               description: |
+ *                 학력
+ *                 * 0: 비공개
+ *                 * 1: 고등학교 졸업
+ *                 * 2: 대학교 2년제
+ *                 * 3: 대학교 4년제
+ *                 * 4: 대학원
+ *               enum: [0,1,2,3,4]
+ *             job:
+ *               type: string
+ *               example: '나무꾼'
+ *               description: 직업
  *             introduce:
  *               type: string
  *               example: '안녕하세요. 이건욱입니다. 여름이였다..'
@@ -58,7 +99,7 @@
  *             birth:
  *               type: string
  *               example: '1996-08-02'
- *               description: 자기소개
+ *               description: 생년월일
  *
  *     responses:
  *       200:
@@ -90,26 +131,8 @@ module.exports = function (req, res) {
         mysqlUtil.connectPool(async function (db_connection) {
             req.innerBody = {};
 
-
-            const user_data = await queryCheck(req, db_connection);
-            paramUtil.checkParam_alreadyUse(user_data, '이미 회원가입한 유저 입니다.');
-
-            const email_data = await queryCheckEmail(req, db_connection);
-            paramUtil.checkParam_alreadyUse(email_data, '이미 가입한 이메일 입니다.');
-
-            const nickname_data = await queryCheckNickname(req, db_connection);
-            paramUtil.checkParam_alreadyUse(nickname_data, '이미 사용 중인 닉네임 입니다.');
-
-
-            req.innerBody['item'] = await queryCreate(req, db_connection);
-
-
-            await queryUpdate(req, db_connection);
-
-            await queryCreateAddress(req, db_connection);
-
-
-
+            req.innerBody['item'] = await queryUpdate(req, db_connection);
+            
             deleteBody(req);
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);
 
@@ -129,120 +152,37 @@ function checkParam(req) {
     paramUtil.checkParam_noReturn(req.paramBody, 'email');
     paramUtil.checkParam_noReturn(req.paramBody, 'phone');
     paramUtil.checkParam_noReturn(req.paramBody, 'nickname');
-    paramUtil.checkParam_noReturn(req.paramBody, 'push_token');
-    paramUtil.checkParam_noReturn(req.paramBody, 'social_id');
-    paramUtil.checkParam_noReturn(req.paramBody, 'signup_type');
-    paramUtil.checkParam_noReturn(req.paramBody, 'os');
-    paramUtil.checkParam_noReturn(req.paramBody, 'version_app');
+    paramUtil.checkParam_noReturn(req.paramBody, 'height');
+    paramUtil.checkParam_noReturn(req.paramBody, 'drink');
+    paramUtil.checkParam_noReturn(req.paramBody, 'smoking');
+    paramUtil.checkParam_noReturn(req.paramBody, 'education');
+    paramUtil.checkParam_noReturn(req.paramBody, 'job');
+    paramUtil.checkParam_noReturn(req.paramBody, 'introduce');
     paramUtil.checkParam_noReturn(req.paramBody, 'birth');
-    paramUtil.checkParam_noReturn(req.paramBody, 'gender');
-    paramUtil.checkParam_noReturn(req.paramBody, 'address');
-    paramUtil.checkParam_noReturn(req.paramBody, 'latitude');
-    paramUtil.checkParam_noReturn(req.paramBody, 'longitude');
-    paramUtil.checkParam_noReturn(req.paramBody, 'is_alert');
-    paramUtil.checkParam_noReturn(req.paramBody, 'is_alert_marketing');
 }
 
 function deleteBody(req) {
-    // delete req.innerBody['test']['test'];
 }
 
-function alreadyUse(item, errMsg) {
-    if( item ) {
-        errUtil.createCall(errCode.already, errMsg);
-        return true;
-    }
-    return false;
-
-    // if( alreadyUse(user_data, '이미 회원가입한 유저 입니다.') ) {
-    //     return;
-    // }
-}
-
-function queryCreate(req, db_connection) {
-    const _funcName = arguments.callee.name;
-
-    return mysqlUtil.querySingle(db_connection
-        , 'call proc_create_user'
-        , [
-            req.paramBody['filename']
-            , req.paramBody['email']
-            , req.paramBody['phone']
-            , req.paramBody['nickname']
-            , req.paramBody['push_token']
-            , req.paramBody['social_id']
-            , req.paramBody['signup_type']
-            , req.paramBody['os']
-            , req.paramBody['version_app']
-            , req.paramBody['birth']
-            , req.paramBody['gender']
-            , req.paramBody['is_alert']
-            , req.paramBody['is_alert_marketing']
-        ]
-    );
-}
-
-function queryCreateAddress(req, db_connection) {
-    const _funcName = arguments.callee.name;
-
-    return mysqlUtil.querySingle(db_connection
-        , 'call proc_create_address_book'
-        , [
-            req.headers['user_uid']
-            , req.paramBody['address']
-            , req.paramBody['latitude']
-            , req.paramBody['longitude']
-            , 1  // is_default 기본 주소  0: false   1: true
-        ])
-}
 
 function queryUpdate(req, db_connection) {
     const _funcName = arguments.callee.name;
 
     return mysqlUtil.querySingle(db_connection
-        , 'call proc_update_user_access_token'
+        , 'call proc_update_user'
         , [
-            req.innerBody['item']['uid']
-            , req.innerBody['item']['access_token']
-        ]
-    );
-}
-
-function queryCheck(req, db_connection) {
-    const _funcName = arguments.callee.name;
-
-    return mysqlUtil.querySingle(db_connection
-        , 'call proc_select_user_signup_check'
-        , [
-            req.paramBody['signup_type']
-            , req.paramBody['social_id']
-        ]
-    );
-}
-
-function queryCheckEmail(req, db_connection) {
-    const _funcName = arguments.callee.name;
-
-    return mysqlUtil.querySingle(db_connection
-        , 'call proc_select_user_email_check'
-        , [
-            req.headers['user_uid']
+              req.headers['user_uid']
+            , req.paramBody['filename']
             , req.paramBody['email']
-        ]
-    );
-}
-
-function queryCheckNickname(req, db_connection) {
-    const _funcName = arguments.callee.name;
-
-    return mysqlUtil.querySingle(db_connection
-        , 'call proc_select_user_nickname_check'
-        , [
-            req.headers['user_uid']
+            , req.paramBody['phone']
             , req.paramBody['nickname']
+            , req.paramBody['height']
+            , req.paramBody['drink']
+            , req.paramBody['smoking']
+            , req.paramBody['education']
+            , req.paramBody['job']
+            , req.paramBody['introduce']
+            , req.paramBody['birth']
         ]
     );
 }
-
-
-
