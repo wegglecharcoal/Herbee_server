@@ -25,6 +25,15 @@ app.route('/user/other')
 app.route('/feed/list')
     .get( require('./feed/selectFeedList') );
 
+app.route('/feed/me/list')
+    .get( require('./feed/selectFeedMeList') );
+
+app.route('/feed/me/like/list')
+    .get( require('./feed/selectFeedMeLikeList') );
+
+app.route('/feed/other/list')
+    .get( require('./feed/selectFeedOtherList') );
+
 /**
  * BalanceGame
  */
