@@ -66,6 +66,9 @@ app.route('/localReview')
 app.route('/chatRoom/general')
     .post( require('./chatRoom/createChatRoomGeneral') );
 
+app.route('/chatRoom/gathering')
+    .post( require('./chatRoom/createChatRoomGathering') );
+
 /**
  * Promise
  */
