@@ -72,14 +72,20 @@ app.route('/chatRoom/gathering')
 app.route('/chatRoom/enter')
     .post( require('./chatRoom/createChatRoomEnter') );
 
-// app.route('/chatRoom')
-//     .delete( require('/') );
+app.route('/chatRoom')
+    .delete( require('./chatRoom/deleteChatRoom') );
 
 app.route('/chatRoom/exit')
     .delete( require('./chatRoom/deleteChatRoomExit') );
 
 app.route('/chatRoom/kick')
     .delete( require('./chatRoom/deleteChatRoomKick') );
+
+app.route('/chatRoom/list')
+    .get( require('./chatRoom/selectChatRoomList') )
+
+app.route('/chatRoom/user/list')
+    .get( require('./chatRoom/selectChatRoomUserList') )
 
 /**
  * Promise
