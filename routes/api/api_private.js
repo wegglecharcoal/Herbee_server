@@ -69,6 +69,18 @@ app.route('/chatRoom/general')
 app.route('/chatRoom/gathering')
     .post( require('./chatRoom/createChatRoomGathering') );
 
+app.route('/chatRoom/enter')
+    .post( require('./chatRoom/createChatRoomEnter') );
+
+// app.route('/chatRoom')
+//     .delete( require('/') );
+
+app.route('/chatRoom/exit')
+    .delete( require('./chatRoom/deleteChatRoomExit') );
+
+app.route('/chatRoom/kick')
+    .delete( require('./chatRoom/deleteChatRoomKick') );
+
 /**
  * Promise
  */
