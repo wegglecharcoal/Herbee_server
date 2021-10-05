@@ -1,7 +1,7 @@
 /**
  * Created by gunucklee on 2021. 09. 28.
  *
- * @swagger
+ * @swagger 
  * /api/private/Promise:
  *   post:
  *     summary: 약속 하기

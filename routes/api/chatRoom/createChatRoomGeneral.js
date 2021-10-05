@@ -1,5 +1,5 @@
 /**
- * Created by gunucklee on 2021. 09. 28.
+ * Created by gunucklee on 2021. 10. 01.
  *
  * @swagger
  * /api/private/chatRoom/general:
@@ -19,8 +19,6 @@
  *         schema:
  *           type: object
  *           required:
- *             - request_msg_type
- *             - chat_room_user_list
  *           properties:
  *             request_msg_type:
  *               type: number
@@ -55,10 +53,6 @@
  *                     description: |
  *                       방장 여부
  *
- *           example:
- *             target_uid: 1
- *             type: 0
- *             content: 라이프 스타일 테스트 댓글 입니다.
  *
  *     responses:
  *       200:
@@ -71,7 +65,7 @@ const mysqlUtil = require('../../../common/utils/mysqlUtil');
 const sendUtil = require('../../../common/utils/sendUtil');
 const errUtil = require('../../../common/utils/errUtil');
 const logUtil = require('../../../common/utils/logUtil');
-const fcmUtil = require('../../../common/utils/fcmUtil');;
+const fcmUtil = require('../../../common/utils/fcmUtil');
 
 let file_name = fileUtil.name(__filename);
 
@@ -88,14 +82,18 @@ module.exports = function (req, res) {
         mysqlUtil.connectPool( async function (db_connection) {
             req.innerBody = {};
 
-            let check = await queryCheck(req, db_connection);
-            paramUtil.checkParam_alreadyUse(check,'이미 해당 채팅방이 등록되어 있습니다.');
+            // let check = await queryCheck(req, db_connection);
+            // paramUtil.checkParam_alreadyUse(check,'이미 해당 채팅방이 등록되어 있습니다.');
 
             req.innerBody['item'] = await queryCreateChatRoom(req, db_connection);
 
+            req.innerBody['user_list'] = [];
+
             for (let idx in req.paramBody['chat_room_user_list']) {
                 req.innerBody['user'] = req.paramBody['chat_room_user_list'][idx];
-                await queryCreateChatRoomUser(req, db_connection);
+                let user = await queryCreateChatRoomUser(req, db_connection);
+
+                req.innerBody['user_list'].push(user);
 
             }
 
@@ -118,12 +116,12 @@ module.exports = function (req, res) {
 }
 
 function checkParam(req) {
-    paramUtil.checkParam_noReturn(req.paramBody, 'target_uid');
-    paramUtil.checkParam_noReturn(req.paramBody, 'type');
-    paramUtil.checkParam_noReturn(req.paramBody, 'content');
+    paramUtil.checkParam_noReturn(req.paramBody, 'request_msg_type');
+    paramUtil.checkParam_noReturn(req.paramBody, 'chat_room_user_list');
 }
 
 function deleteBody(req) {
+    delete req.innerBody['user']
 }
 
 function queryCheck(req, db_connection) {
@@ -148,10 +146,9 @@ function queryCreateChatRoom(req, db_connection) {
     return mysqlUtil.querySingle(db_connection
         , 'call proc_create_chatRoom_general'
         , [
-            req.headers['user_uid']
-          , req.paramBody['target_uid']
-          , req.paramBody['type']
-          , req.paramBody['content']
+            0                       // 채팅방 타입 0: 일반채팅
+          , req.paramBody['request_msg_type']
+          , req.paramBody['request_msg']
         ]
     );
 }
@@ -163,12 +160,9 @@ function queryCreateChatRoomUser(req, db_connection) {
     return mysqlUtil.querySingle(db_connection
         , 'call proc_create_chatRoom_user'
         , [
-            req.headers['user_uid']
-            , req.paramBody['target_uid']
-            , req.paramBody['type']
-            , req.paramBody['content']
+              req.innerBody['item']['uid']
+            , req.innerBody['user']['user_uid']
+            , req.innerBody['user']['is_head']
         ]
     );
 }
-
-

@@ -1,8 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="bin/herbeeServer" type="NodeJSConfigurationType" path-to-js-file="$PROJECT_DIR$/../herbeeServer/bin/herbeeServer" working-dir="$PROJECT_DIR$/../herbeeServer">
-    <envs>
-      <env name="DEBUG" value="herbeeserver:*" />
-    </envs>
-    <method v="2" />
-  </configuration>
-</component>
