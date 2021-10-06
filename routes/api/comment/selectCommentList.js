@@ -75,6 +75,7 @@ module.exports = function (req, res) {
 
             let count_data = await queryCount(req, db_connection);
             req.innerBody['item'] = await querySelect(req, db_connection);
+            req.innerBody['item'] = createJSONArray(req.innerBody['item']);
             req.innerBody['total_count'] = count_data['total_count'];
 
 
@@ -125,3 +126,15 @@ function queryCount(req, db_connection) {
         ]
     );
 }
+
+
+function createJSONArray(item){
+    if( item ) {
+        for( let idx in item ){
+            item[idx]['comment_nested_preview_list'] = JSON.parse(item[idx]['comment_nested_preview_list']);
+        }
+    }
+    return item;
+}
+
+
