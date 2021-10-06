@@ -63,9 +63,6 @@ module.exports = function (req, res) {
         mysqlUtil.connectPool( async function (db_connection) {
             req.innerBody = {};
 
-            let check = await queryCheck(req, db_connection);
-            paramUtil.checkParam_alreadyUse(check,'이미 해당 댓글이 등록되어 있습니다.');
-
             req.innerBody['item'] = await queryCreate(req, db_connection);
 
             // FCM 기능 추후 반영 예정
@@ -94,20 +91,6 @@ function checkParam(req) {
 function deleteBody(req) {
 }
 
-function queryCheck(req, db_connection) {
-    const _funcName = arguments.callee.name;
-
-    return mysqlUtil.querySingle(db_connection
-        , 'call proc_select_comment_nested_check'
-        , [
-            req.paramBody['comment_uid']
-          , req.headers['user_uid']
-          , req.paramBody['content']
-        ]
-    );
-}
-
-
 
 function queryCreate(req, db_connection) {
     const _funcName = arguments.callee.name;
@@ -115,8 +98,8 @@ function queryCreate(req, db_connection) {
     return mysqlUtil.querySingle(db_connection
         , 'call proc_create_comment_nested'
         , [
-              req.paramBody['comment_uid']
-            , req.headers['user_uid']
+              req.headers['user_uid']
+            , req.paramBody['comment_uid']
             , req.paramBody['content']
         ]
     );
