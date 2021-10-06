@@ -5,6 +5,8 @@ const express = require('express');
 const app = express();
 
 
+const checkHoneyAvailable = require('../middleware/checkHoneyAvailable');
+
 /**
  * User
  */
@@ -64,13 +66,13 @@ app.route('/localReview')
  * ChatRoom
  */
 app.route('/chatRoom/general')
-    .post( require('./chatRoom/createChatRoomGeneral') );
+    .post( checkHoneyAvailable, require('./chatRoom/createChatRoomGeneral') );
 
 app.route('/chatRoom/gathering')
-    .post( require('./chatRoom/createChatRoomGathering') );
+    .post( checkHoneyAvailable, require('./chatRoom/createChatRoomGathering') );
 
 app.route('/chatRoom/enter')
-    .post( require('./chatRoom/createChatRoomEnter') );
+    .post( checkHoneyAvailable, require('./chatRoom/createChatRoomEnter') );
 
 app.route('/chatRoom')
     .delete( require('./chatRoom/deleteChatRoom') );
@@ -86,6 +88,11 @@ app.route('/chatRoom/list')
 
 app.route('/chatRoom/user/list')
     .get( require('./chatRoom/selectChatRoomUserList') )
+
+
+// app.route('/chatRoom/exit/reason')
+//     .get( require('./chatRoom/selectChatRoomUserList') )
+
 
 /**
  * Promise

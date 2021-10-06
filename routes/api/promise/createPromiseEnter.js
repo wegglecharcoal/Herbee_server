@@ -1,15 +1,15 @@
 /**
- * Created by gunucklee on 2021. 09. 28.
+ * Created by gunucklee on 2021. 10. 06.
  *
  * @swagger 
- * /api/private/Promise:
+ * /api/private/promise/enter:
  *   post:
- *     summary: 약속 하기
+ *     summary: 약속 참여
  *     tags: [Promise]
  *     description: |
- *       path : /api/private/promise
+ *       path : /api/private/promise/enter
  *
- *       * 약속 하기
+ *       * 약속 참여
  *
  *     parameters:
  *       - in: body
@@ -19,43 +19,13 @@
  *         schema:
  *           type: object
  *           required:
- *             - chat_room_uid
- *             - promise_date
- *             - address
- *             - building_name
- *             - latitude
- *             - longitude
+ *             - promise_uid
  *           properties:
- *             chat_room_uid:
+ *             promise_uid:
  *               type: number
  *               example: 1
  *               description: |
- *                 채팅방 uid
- *             promise_date:
- *               type: string
- *               example: '2021-09-06 10:22:33'
- *               description: |
- *                 약속 일자
- *             address:
- *               type: string
- *               example: '부산광역시 부산진구 부전3동 중앙대로 672'
- *               description: |
- *                 주소
- *             latitude:
- *               type: number
- *               example: 37.5662952
- *               description: |
- *                 위도
- *             longitude:
- *               type: number
- *               example: 126.9773966
- *               description: |
- *                 경도
- *             filename:
- *               type: string
- *               example: 'fem2wefwmpeofmwef.jpg'
- *               description: |
- *                 신고 이미지
+ *                 약속 uid
  *
  *
  *     responses:
@@ -86,6 +56,10 @@ module.exports = function (req, res) {
         mysqlUtil.connectPool(async function (db_connection) {
             req.innerBody = {};
 
+            let check = await queryCheck(req, db_connection);
+            paramUtil.checkParam_alreadyUse(check,'이미 해당 약속에 참여했습니다.');
+
+
             req.innerBody['item'] = await queryCreate(req, db_connection);
 
             deleteBody(req);
@@ -105,27 +79,31 @@ function deleteBody(req) {
 }
 
 function checkParam(req) {
-    paramUtil.checkParam_noReturn(req.paramBody, 'chat_room_uid');
-    paramUtil.checkParam_noReturn(req.paramBody, 'promise_date');
-    paramUtil.checkParam_noReturn(req.paramBody, 'building_name');
-    paramUtil.checkParam_noReturn(req.paramBody, 'latitude');
-    paramUtil.checkParam_noReturn(req.paramBody, 'longitude');
+    paramUtil.checkParam_noReturn(req.paramBody, 'promise_uid');
 }
 
+
+
+function queryCheck(req, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_select_promise_enter_check'
+        , [
+            req.headers['user_uid']
+          , req.paramBody['promise_uid']
+        ]
+    );
+}
 
 function queryCreate(req, db_connection) {
     const _funcName = arguments.callee.name;
 
     return mysqlUtil.querySingle(db_connection
-        , 'call proc_create_promise'
+        , 'call proc_create_promise_enter'
         , [
             req.headers['user_uid']
-          , req.paramBody['chat_room_uid']
-          , req.paramBody['promise_date']
-          , req.paramBody['address']
-          , req.paramBody['building_name']
-          , req.paramBody['latitude']
-          , req.paramBody['longitude']
+          , req.paramBody['promise_uid']
         ]
     );
 }
