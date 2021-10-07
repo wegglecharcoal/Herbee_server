@@ -100,6 +100,12 @@ app.route('/chatRoom/user/list')
 app.route( '/promise' )
     .post( require('./promise/createPromise') );
 
+app.route( '/promise/me/list' )
+    .get( require('./promise/selectPromiseMeList') );
+
+app.route( '/promise/chatRoom/list' )
+    .get( require('./promise/selectPromiseChatRoomList') );
+
 // app.route( '/promise' )
 //     .post( require('./promise/createPromise') );
 

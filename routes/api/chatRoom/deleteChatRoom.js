@@ -23,11 +23,12 @@
  *         required: true
  *         schema:
  *           type: integer
- *           example: 1
+ *           example: 0
  *         description: |
  *           삭제 타입
  *           * 0: 일반 채팅방 삭제
  *           * 1: 모임 채팅방 삭제
+ *         enum: [0,1]
  *       - in: query
  *         name: chat_room_uid
  *         default: 0
