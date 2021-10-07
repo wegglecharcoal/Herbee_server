@@ -98,7 +98,8 @@ app.route('/chatRoom/user/list')
  * Promise
  */
 app.route( '/promise' )
-    .post( require('./promise/createPromise') );
+    .post( require('./promise/createPromise') )
+    .put( require('./promise/updatePromise') );
 
 app.route( '/promise/me/list' )
     .get( require('./promise/selectPromiseMeList') );
