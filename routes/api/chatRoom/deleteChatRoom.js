@@ -4,7 +4,7 @@
  * @swagger
  * /api/private/chatRoom:
  *   delete:
- *     summary: 채팅방 삭제
+ *     summary: 채팅방 삭제 (거절하기)
  *     tags: [ChatRoom]
  *     description: |
  *       path : /api/private/chatRoom
