@@ -50,11 +50,20 @@ module.exports = function (req, res) {
         mysqlUtil.connectPool( async function (db_connection) {
             req.innerBody = {};
 
-            req.innerBody['item'] = await queryCheck(req, db_connection);
+            req.innerBody['item'] = await queryCheckUser(req, db_connection);
             if (!req.innerBody['item']) {
                 errUtil.createCall(errCode.empty, `참여하지 않은 채팅방입니다.`);
                 return;
             }
+
+            req.innerBody['item'] = await queryCheckIsHead(req, db_connection);
+
+            if (req.innerBody['item']) {
+                errUtil.createCall(errCode.fail, `다른 유저가 방에 있습니다. 모임 채팅방은 방장이 혼자 있을 때만 나갈 수 있습니다.`);
+                return;
+            }
+
+
 
             await queryDelete(req, db_connection);
             req.innerBody['success'] = '채팅방에서 나갔습니다.';
@@ -82,18 +91,32 @@ function deleteBody(req) {
 }
 
 
-function queryCheck(req, db_connection) {
+function queryCheckUser(req, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_select_chatRoom_user_all_check'
+        , [
+            req.headers['user_uid']
+          , req.paramBody['chat_room_uid']
+        ]
+    );
+}
+
+
+function queryCheckIsHead(req, db_connection) {
     const _funcName = arguments.callee.name;
 
     return mysqlUtil.querySingle(db_connection
         , 'call proc_select_chatRoom_user_check'
         , [
-            req.headers['user_uid']
-          , req.paramBody['chat_room_uid']
-          , 0        // is_head      {0: false, 1: true}
+              req.headers['user_uid']
+            , req.paramBody['chat_room_uid']
+            , 1    // is_head      {0: false, 1: true}
         ]
     );
 }
+
 
 function queryDelete(req, db_connection) {
     const _funcName = arguments.callee.name;
