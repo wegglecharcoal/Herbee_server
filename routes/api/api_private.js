@@ -42,6 +42,9 @@ app.route('/feed/other/list')
 app.route('/balanceGame/question/daily')
     .get( require('./balanceGame/selectBalanceGameQuestionDaily') );
 
+app.route('/balanceGame/vote/result')
+    .get( require('./balanceGame/selectBalanceGameVoteResult') );
+
 /**
  * Lifestyle
  */

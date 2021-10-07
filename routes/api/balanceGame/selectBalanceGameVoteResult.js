@@ -1,15 +1,27 @@
 /**
- * Created by gunucklee on 2021. 09. 27.
+ * Created by gunucklee on 2021. 10. 07.
  *
  * @swagger
- * /api/private/balanceGame/question/daily:
+ * /api/private/balanceGame/vote/result:
  *   get:
- *     summary: 일일 질문
+ *     summary: 투표 결과
  *     tags: [BalanceGame]
  *     description: |
- *       path : /api/private/balanceGame/question/daily
+ *       path : /api/private/balanceGame/vote/result
  *
- *       * 일일 질문
+ *       * 투표 결과
+ *
+ *     parameters:
+ *       - in: query
+ *         name: balance_game_question_uid
+ *         default: 0
+ *         required: true
+ *         schema:
+ *           type: number
+ *           example: 1
+ *         description: |
+ *           밸런스게임 질문 uid
+ *
  *
  *     responses:
  *       200:
@@ -44,7 +56,6 @@ module.exports = function (req, res) {
 
             req.innerBody['item'] = await querySelect(req, db_connection);
 
-
             deleteBody(req)
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);
 
@@ -59,6 +70,7 @@ module.exports = function (req, res) {
 }
 
 function checkParam(req) {
+    paramUtil.checkParam_noReturn(req.paramBody, 'balance_game_question_uid');
 }
 
 function deleteBody(req) {
@@ -68,9 +80,9 @@ function querySelect(req, db_connection) {
     const _funcName = arguments.callee.name;
 
     return mysqlUtil.querySingle(db_connection
-        , 'call proc_select_balanceGame_question_daily'
+        , 'call proc_select_balanceGame_vote_result'
         , [
-            req.headers['user_uid']
+            req.paramBody['balance_game_question_uid']
         ]
     );
 }
