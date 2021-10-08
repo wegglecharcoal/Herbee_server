@@ -23,6 +23,13 @@ module.exports = function (req, res, next) {
         mysqlUtil.connectPool(async function (db_connection) {
             req.innerBody = {};
 
+            console.log("ASDASDAS:" + JSON.stringify(systemHoney));
+            console.log("ASDASDAS:" + systemHoney['honey_amount']);
+
+            console.log("ASDASDAS2:" + JSON.stringify(ownHoney));
+            console.log("ASDASDAS2:" + ownHoney['own_honey_amount']);
+
+
             let ownHoney = await querySelectOwnHoney(req, db_connection);
             if(!ownHoney) {
                 errUtil.createCall(errCode.empty, `해당 유저의 꿀이 존재하지 않습니다. 확인 해주세요.`);
@@ -37,11 +44,6 @@ module.exports = function (req, res, next) {
             if(systemHoney['honey_amount'] > ownHoney['own_honey_amount']) {
                 errUtil.createCall(errCode.empty, `사용할 수 있는 꿀이 모자라요 ㅠㅠ`);
             }
-            console.log("ASDASDAS:" + JSON.stringify(systemHoney));
-            console.log("ASDASDAS:" + systemHoney['honey_amount']);
-
-            console.log("ASDASDAS2:" + JSON.stringify(ownHoney));
-            console.log("ASDASDAS2:" + ownHoney['own_honey_amount']);
 
 
             next();
