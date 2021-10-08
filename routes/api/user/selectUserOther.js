@@ -86,8 +86,8 @@ function queryCheck(req, db_connection) {
     return mysqlUtil.querySingle(db_connection
         , 'call proc_select_user_info'
         , [
-            req.headers['user_uid']
-          , req.paramBody['user_uid']
+            req.paramBody['user_uid']
+          , req.headers['user_uid']
         ]
     );
 }
