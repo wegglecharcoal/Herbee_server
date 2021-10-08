@@ -1,27 +1,51 @@
 /**
- * Created by gunucklee on 2021. 01. 02.
+ * Created by gunucklee on 2021. 10. 08.
  *
  * @swagger
- * /api/private/user/me:
+ * /api/private/balanceGame/answer/list:
  *   get:
- *     summary: 내 유저 정보
- *     tags: [User]
+ *     summary: 밸런스게임 답변 리스트
+ *     tags: [BalanceGame]
  *     description: |
- *       path : /api/private/user/me
+ *       path : /api/private/balanceGame/answer/list
  *
- *       * 내 유저 정보
+ *       * 밸런스게임 답변 리스트
+ *
+ *     parameters:
+ *       - in: query
+ *         name: search_uid
+ *         default: 0
+ *         required: true
+ *         schema:
+ *           type: number
+ *           example: 1
+ *         description: |
+ *           검색할 user_uid
+ *       - in: query
+ *         name: last_uid
+ *         default: 0
+ *         required: true
+ *         schema:
+ *           type: number
+ *           example: 0
+ *         description: |
+ *           목록 마지막 uid (처음일 경우 0)
  *
  *     responses:
  *       200:
  *         description: 결과 정보
+ *       400:
+ *         description: 에러 코드 400
+ *         schema:
+ *           $ref: '#/definitions/Error'
  */
+
 const paramUtil = require('../../../common/utils/paramUtil');
 const fileUtil = require('../../../common/utils/fileUtil');
 const mysqlUtil = require('../../../common/utils/mysqlUtil');
 const sendUtil = require('../../../common/utils/sendUtil');
 const errUtil = require('../../../common/utils/errUtil');
 const logUtil = require('../../../common/utils/logUtil');
-const errCode = require('../../../common/define/errCode');
 
 let file_name = fileUtil.name(__filename);
 
@@ -39,19 +63,14 @@ module.exports = function (req, res) {
             req.innerBody = {};
 
             req.innerBody['item'] = await querySelect(req, db_connection);
-            if (!req.innerBody['item']) {
-                errUtil.createCall(errCode.empty, `회원가입하지 않은 유저입니다.`);
-                return;
-            }
 
-            deleteBody(req);
+
+            deleteBody(req)
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);
 
         }, function (err) {
             sendUtil.sendErrorPacket(req, res, err);
         });
-
-
 
     } catch (e) {
         let _err = errUtil.get(e);
@@ -59,24 +78,22 @@ module.exports = function (req, res) {
     }
 }
 
-
 function checkParam(req) {
+    paramUtil.checkParam_noReturn(req.paramBody, 'search_uid');
 }
 
 function deleteBody(req) {
-    delete req.innerBody['item']['push_token']
-    delete req.innerBody['item']['access_token']
 }
 
 function querySelect(req, db_connection) {
     const _funcName = arguments.callee.name;
 
-    return mysqlUtil.querySingle(db_connection
-        , 'call proc_select_user_info'
+    return mysqlUtil.queryArray(db_connection
+        , 'call proc_select_balanceGame_answer_list'
         , [
             req.headers['user_uid']
-          , req.headers['user_uid']
+          , req.paramBody['search_uid']
+          , req.paramBody['last_uid']
         ]
     );
-
 }
