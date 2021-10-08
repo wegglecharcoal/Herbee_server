@@ -52,7 +52,7 @@ module.exports = function (req, res, next) {
 
 function checkParam(req) {
     if(!paramUtil.checkParam_return(req.headers, 'manual_code')) {
-        errUtil.createCall(errCode.auth, `꿀 메뉴얼 코드가 비어있습니다. 확인 해주세요.`);
+        errUtil.createCall(errCode.auth, `꿀 메뉴얼 코드가 비어있습니다. 헤더에 'manual_code' 코드 값을 넣어주세요.`);
     }
 }
 

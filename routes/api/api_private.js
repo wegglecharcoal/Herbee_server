@@ -227,6 +227,9 @@ app.route( '/honeyHistory/list')
 app.route( '/honeyPrice/list')
     .get( require('./honey/selectHoneyPriceList') );
 
+app.route( '/honeyManual')
+    .get( require('./honey/selectHoneyManual') );
+
 app.route( '/honeyManual/list')
     .get( require('./honey/selectHoneyManualList') );
 
