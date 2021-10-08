@@ -37,6 +37,12 @@ module.exports = function (req, res, next) {
             if(systemHoney['honey_amount'] > ownHoney['own_honey_amount']) {
                 errUtil.createCall(errCode.empty, `사용할 수 있는 꿀이 모자라요 ㅠㅠ`);
             }
+            console.log("ASDASDAS:" + JSON.stringify(systemHoney));
+            console.log("ASDASDAS:" + systemHoney['honey_amount']);
+
+            console.log("ASDASDAS2:" + JSON.stringify(ownHoney));
+            console.log("ASDASDAS2:" + ownHoney['own_honey_amount']);
+
 
             next();
 
