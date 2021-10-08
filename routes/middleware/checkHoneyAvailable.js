@@ -23,13 +23,6 @@ module.exports = function (req, res, next) {
         mysqlUtil.connectPool(async function (db_connection) {
             req.innerBody = {};
 
-            console.log("ASDASDAS:" + JSON.stringify(systemHoney));
-            console.log("ASDASDAS:" + systemHoney['honey_amount']);
-
-            console.log("ASDASDAS2:" + JSON.stringify(ownHoney));
-            console.log("ASDASDAS2:" + ownHoney['own_honey_amount']);
-
-
             let ownHoney = await querySelectOwnHoney(req, db_connection);
             if(!ownHoney) {
                 errUtil.createCall(errCode.empty, `해당 유저의 꿀이 존재하지 않습니다. 확인 해주세요.`);
