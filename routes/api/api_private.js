@@ -93,8 +93,8 @@ app.route('/chatRoom/user/list')
     .get( require('./chatRoom/selectChatRoomUserList') )
 
 
-// app.route('/chatRoom/exit/reason')
-//     .get( require('./chatRoom/selectChatRoomUserList') )
+app.route('/chatRoom/exit/reason')
+    .get( require('./chatRoom/selectChatRoomExitReason') )
 
 
 /**
@@ -102,7 +102,8 @@ app.route('/chatRoom/user/list')
  */
 app.route( '/promise' )
     .post( require('./promise/createPromise') )
-    .put( require('./promise/updatePromise') );
+    .put( require('./promise/updatePromise') )
+    .delete( require('./promise/deletePromise') );
 
 app.route( '/promise/me/list' )
     .get( require('./promise/selectPromiseMeList') );
