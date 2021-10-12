@@ -1,26 +1,16 @@
 /**
- * Created by gunucklee on 2021. 09. 27.
+ * Created by gunucklee on 2021. 10. 12.
  *
  * @swagger
- * /api/private/block/user/list:
+ * /api/private/block/phone/list:
  *   get:
- *     summary: 차단 유저 목록
+ *     summary: 차단 연락처 목록
  *     tags: [Block]
  *     description: |
- *       path : /api/private/block/user/list
+ *       path : /api/private/block/phone/list
  *
- *       * 차단 유저 목록
- *
- *     parameters:
- *       - in: query
- *         name: last_uid
- *         default: 0
- *         required: true
- *         schema:
- *           type: number
- *           example: 0
- *         description: |
- *           목록 마지막 uid (처음일 경우 0)
+ *       * 차단 연락처 목록
+ *       콤마로 구분되어 있는 String 리스트가 반환됩니다.
  *
  *     responses:
  *       200:
@@ -70,7 +60,6 @@ module.exports = function (req, res) {
 }
 
 function checkParam(req) {
-    paramUtil.checkParam_noReturn(req.paramBody, 'last_uid');
 }
 
 function deleteBody(req) {
@@ -80,10 +69,9 @@ function querySelect(req, db_connection) {
     const _funcName = arguments.callee.name;
 
     return mysqlUtil.queryArray(db_connection
-        , 'call proc_select_block_user_list'
+        , 'call proc_select_block_phone_list'
         , [
             req.headers['user_uid']
-          , req.paramBody['last_uid']
         ]
     );
 }

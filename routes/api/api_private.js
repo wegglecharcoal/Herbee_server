@@ -81,6 +81,9 @@ app.route('/chatRoom/gathering')
 app.route('/chatRoom/enter')
     .post( checkHoneyAvailable, require('./chatRoom/createChatRoomEnter') );
 
+app.route('/chatRoom/recentMsg')
+    .put( require('./chatRoom/updateChatRoomRecentMsg') );
+
 app.route('/chatRoom')
     .delete( require('./chatRoom/deleteChatRoom') );
 
@@ -91,14 +94,14 @@ app.route('/chatRoom/kick')
     .delete( require('./chatRoom/deleteChatRoomKick') );
 
 app.route('/chatRoom/list')
-    .get( require('./chatRoom/selectChatRoomList') )
+    .get( require('./chatRoom/selectChatRoomList') );
 
 app.route('/chatRoom/user/list')
-    .get( require('./chatRoom/selectChatRoomUserList') )
+    .get( require('./chatRoom/selectChatRoomUserList') );
 
 
 app.route('/chatRoom/exit/reason')
-    .get( require('./chatRoom/selectChatRoomExitReason') )
+    .get( require('./chatRoom/selectChatRoomExitReason') );
 
 
 /**
@@ -179,11 +182,13 @@ app.route('/report')
  * Block
  */
 app.route('/block/user')
-    .delete( require('./block/deleteBlockUser'))
+    .delete( require('./block/deleteBlockUser') );
 
 app.route('/block/user/list')
-    .get( require('./block/selectBlockUserList'))
+    .get( require('./block/selectBlockUserList') );
 
+app.route('/block/phone/list')
+    .get( require('./block/selectBlockPhoneList') );
 
 /**
  * Alert
