@@ -4,7 +4,7 @@
  * @swagger
  * /api/private/follow/list:
  *   get:
- *     summary: 팔로우 목록
+ *     summary: 팔로우 목록 (검색 겸용 사용가능)
  *     tags: [Follow]
  *     description: |
  *       path : /api/private/follow/list
@@ -12,6 +12,14 @@
  *       * 팔로우 목록
  *
  *     parameters:
+ *       - in: query
+ *         name: find
+ *         default: 지존건육
+ *         required: false
+ *         schema:
+ *           type: string
+ *           example: 도두녁
+ *         description: 유저 이름
  *       - in: query
  *         name: search_uid
  *         default: 0
@@ -101,6 +109,7 @@ function querySelect(req, db_connection) {
         , 'call proc_select_follow_list'
         , [
             req.headers['user_uid']
+          , req.paramBody['find']
           , req.paramBody['search_uid']
           , req.paramBody['type']
           , req.paramBody['last_uid']
@@ -114,7 +123,8 @@ function querySelectTotalCount(req, db_connection) {
     return mysqlUtil.querySingle(db_connection
         , 'call proc_select_follow_total_count'
         , [
-            req.paramBody['search_uid']
+            req.paramBody['find']
+          , req.paramBody['search_uid']
           , req.paramBody['type']
         ]
     );
