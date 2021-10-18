@@ -182,6 +182,9 @@ app.route('/report')
  * Block
  */
 app.route('/block/user')
+    .post( require('./block/createBlockPhone') );
+
+app.route('/block/user')
     .delete( require('./block/deleteBlockUser') );
 
 app.route('/block/user/list')
