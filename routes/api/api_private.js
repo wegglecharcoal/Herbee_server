@@ -65,6 +65,10 @@ app.route('/localReview')
     .post( require('./localReview/createLocalReview') )
     .put( require('./localReview/updateLocalReview') )
     .delete( require('./localReview/deleteLocalReview') );
+
+app.route('/localReview/dong/list')
+    .get( require('./localReview/selectLocalReviewList') );
+
 //                                .delete( require('./localReview/deleteLocalReview') )
 //
 // app.route('/localReview/list').get( require('./localReview/selectLocalReviewList') )
@@ -108,9 +112,12 @@ app.route('/chatRoom/exit/reason')
  * Promise
  */
 app.route( '/promise' )
-    .post( require('./promise/createPromise') )
+    .post(checkHoneyAvailable, require('./promise/createPromise') )
     .put( require('./promise/updatePromise') )
     .delete( require('./promise/deletePromise') );
+
+app.route('/promise')
+    .post(checkHoneyAvailable, require('./promise/createPromiseEnter'));
 
 app.route( '/promise/me/list' )
     .get( require('./promise/selectPromiseMeList') );
