@@ -1,8 +1,8 @@
 /**
- * Created by gunucklee on 2021. 09. 28.
+ * Created by gunucklee on 2021. 10. 19.
  *
  * @swagger 
- * /api/private/Promise:
+ * /api/private/promise:
  *   post:
  *     summary: 약속 하기
  *     tags: [Promise]
@@ -22,7 +22,6 @@
  *             - chat_room_uid
  *             - promise_date
  *             - address
- *             - building_name
  *             - latitude
  *             - longitude
  *           properties:
@@ -41,6 +40,11 @@
  *               example: '부산광역시 부산진구 부전3동 중앙대로 672'
  *               description: |
  *                 주소
+ *             building_name:
+ *               type: string
+ *               example: '삼정타워'
+ *               description: |
+ *                 주소
  *             latitude:
  *               type: number
  *               example: 37.5662952
@@ -51,11 +55,6 @@
  *               example: 126.9773966
  *               description: |
  *                 경도
- *             filename:
- *               type: string
- *               example: 'fem2wefwmpeofmwef.jpg'
- *               description: |
- *                 신고 이미지
  *
  *
  *     responses:
@@ -107,7 +106,7 @@ function deleteBody(req) {
 function checkParam(req) {
     paramUtil.checkParam_noReturn(req.paramBody, 'chat_room_uid');
     paramUtil.checkParam_noReturn(req.paramBody, 'promise_date');
-    paramUtil.checkParam_noReturn(req.paramBody, 'building_name');
+    paramUtil.checkParam_noReturn(req.paramBody, 'address');
     paramUtil.checkParam_noReturn(req.paramBody, 'latitude');
     paramUtil.checkParam_noReturn(req.paramBody, 'longitude');
 }
