@@ -69,6 +69,10 @@ app.route('/localReview')
 app.route('/localReview/dong/list')
     .get( require('./localReview/selectLocalReviewList') );
 
+app.route('/localReview/recent/visit/list')
+    .get( require('./localReview/selectLocalReviewRecentVisitList') );
+
+
 //                                .delete( require('./localReview/deleteLocalReview') )
 //
 // app.route('/localReview/list').get( require('./localReview/selectLocalReviewList') )
