@@ -92,7 +92,8 @@ function querySelect(req, db_connection) {
     return mysqlUtil.queryArray(db_connection
         , 'call proc_select_promise_chatRoom_list'
         , [
-            req.paramBody['chat_room_uid']
+            req.headers['user_uid']
+          , req.paramBody['chat_room_uid']
           , req.paramBody['last_uid']
         ]
     );
