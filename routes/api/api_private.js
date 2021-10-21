@@ -132,6 +132,9 @@ app.route( '/promise/me/list' )
 app.route( '/promise/chatRoom/list' )
     .get( require('./promise/selectPromiseChatRoomList') );
 
+app.route( '/promise/my/position' )
+    .put( require('./promise/updatePromiseMyPosition') );
+
 
 // app.route( '/promise' )
 //     .post( require('./promise/createPromise') );
