@@ -116,7 +116,7 @@ function queryCheck(req, db_connection) {
 function queryUpdate(req, db_connection) {
     const _funcName = arguments.callee.name;
 
-    return mysqlUtil.querySingle(db_connection
+    return mysqlUtil.queryArray(db_connection
         , 'call proc_update_promise_my_position'
         , [
             req.headers['user_uid']
