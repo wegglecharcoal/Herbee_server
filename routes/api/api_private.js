@@ -120,7 +120,7 @@ app.route( '/promise' )
     .put( require('./promise/updatePromise') )
     .delete( require('./promise/deletePromise') );
 
-app.route('/promise')
+app.route('/promise/enter')
     .post(checkHoneyAvailable, require('./promise/createPromiseEnter'));
 
 app.route( '/promise/me/list' )
