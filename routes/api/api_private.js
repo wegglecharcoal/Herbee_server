@@ -121,7 +121,7 @@ app.route( '/promise' )
     .delete( require('./promise/deletePromise') );
 
 app.route('/promise/enter')
-    .post(checkHoneyAvailable, require('./promise/createPromiseEnter'));
+    .post( require('./promise/createPromiseEnter') );
 
 app.route( '/promise/me/list' )
     .get( require('./promise/selectPromiseMeList') );
