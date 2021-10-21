@@ -120,6 +120,9 @@ app.route( '/promise' )
     .put( require('./promise/updatePromise') )
     .delete( require('./promise/deletePromise') );
 
+app.route( '/promise/user' )
+    .put( require('./promise/updatePromiseUser') )
+
 app.route('/promise/enter')
     .post( require('./promise/createPromiseEnter') );
 
@@ -128,6 +131,7 @@ app.route( '/promise/me/list' )
 
 app.route( '/promise/chatRoom/list' )
     .get( require('./promise/selectPromiseChatRoomList') );
+
 
 // app.route( '/promise' )
 //     .post( require('./promise/createPromise') );
