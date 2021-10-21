@@ -76,7 +76,7 @@ module.exports = function (req, res) {
             let meet_success = await queryCheck(req, db_connection);
 
             req.innerBody['item'] = await queryUpdate(req, db_connection);
-            req.innerBody['item']['is_meet_success'] = meet_success ?  1 : 0;
+            req.innerBody['is_meet_success'] = meet_success ?  1 : 0;
 
             deleteBody(req)
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);
