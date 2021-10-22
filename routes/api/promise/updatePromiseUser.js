@@ -92,7 +92,11 @@ module.exports = function (req, res) {
             // 채팅 룸을 삭제와 해당 유저 차단
             if(req.paramBody['review'] === 2) {
                 await queryDelete(req, db_connection);
-                await queryCreateBlockUser(req, db_connection);
+                let check = await queryBlockCheck(req, db_connection);
+
+                if(!check) {
+                    await queryCreateBlockUser(req, db_connection);
+                }
                 req.innerBody['success'] = '채팅방에서 나갔습니다.';
             }
 
@@ -154,6 +158,17 @@ function deleteBody(req) {
 }
 
 
+function queryBlockCheck(req, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_select_block_user_check'
+        , [
+            req.headers['user_uid']
+          , req.innerBody['item']['other_user_uid']
+        ]
+    );
+}
 
 function queryPromiseRefuseCheck(req, db_connection) {
     const _funcName = arguments.callee.name;
