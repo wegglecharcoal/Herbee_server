@@ -89,18 +89,17 @@ module.exports = function (req, res) {
 
             req.innerBody['item'] = await queryUpdate(req, db_connection);
 
-            // 변경 못하게하는거
-
+            // 채팅 룸을 삭제와 해당 유저 차단
             if(req.paramBody['review'] === 2) {
-                // 채팅 룸을 삭제시켜주어야함.
                 await queryDelete(req, db_connection);
+                await queryCreateBlockUser(req, db_connection);
                 req.innerBody['success'] = '채팅방에서 나갔습니다.';
             }
 
             // 주최자 외에 모든 사람이 거절한다면 꿀을 환불 해주어야 함
             if(req.paramBody['status'] === 0) {
                 let user = await queryPromiseRefuseCheck(req, db_connection);
-                console.log("ASDASKDAOSDMNWOQ: "  + JSON.stringify(user))
+
                 if(user) {
                     req.innerBody['manual_code'] = 'H2-001';
                     let system_honey = await querySelect(req, db_connection);
@@ -115,7 +114,7 @@ module.exports = function (req, res) {
             // 모두가 만남이 성사된다면 꿀을 지급해주어야 함
             if(req.paramBody['status'] === 3) {
                 let price_user_list = await queryMeetSuccessCheck(req, db_connection);
-                console.log("ASDADAFsdpfsoj: " + JSON.stringify(price_user_list))
+
                 if(price_user_list) {
 
                     req.innerBody['manual_code'] = 'H0-003';
@@ -206,6 +205,22 @@ function queryCreate(user, db_connection) {
         ]
     );
 }
+
+
+
+function queryCreateBlockUser(req, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_create_block_user'
+        , [
+            req.headers['user_uid']
+          , req.innerBody['item']['other_user_uid']
+        ]
+    );
+}
+
+
 
 function queryUpdate(req, db_connection) {
     const _funcName = arguments.callee.name;
