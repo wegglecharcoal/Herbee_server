@@ -100,13 +100,14 @@ module.exports = function (req, res) {
             // 주최자 외에 모든 사람이 거절한다면 꿀을 환불 해주어야 함
             if(req.paramBody['status'] === 0) {
                 let user = await queryPromiseRefuseCheck(req, db_connection);
-
+                console.log("ASDASKDAOSDMNWOQ: "  + JSON.stringify(user))
                 if(user) {
                     req.innerBody['manual_code'] = 'H2-001';
                     let system_honey = await querySelect(req, db_connection);
                     user['honey_amount'] = system_honey['honey_amount'];
                     user['content'] = system_honey['title'];
                     await queryCreate(user, db_connection);
+                    req.innerBody['success'] = '환불 꿀이 지급되었습니다.';
                 }
 
             }
@@ -114,19 +115,19 @@ module.exports = function (req, res) {
             // 모두가 만남이 성사된다면 꿀을 지급해주어야 함
             if(req.paramBody['status'] === 3) {
                 let price_user_list = await queryMeetSuccessCheck(req, db_connection);
-
+                console.log("ASDADAFsdpfsoj: " + JSON.stringify(price_user_list))
                 if(price_user_list) {
 
                     req.innerBody['manual_code'] = 'H0-003';
                     let system_honey = await querySelect(req, db_connection);
 
-                    for (let user in price_user_list) {
-                        user['honey_amount'] = system_honey['honey_amount'];
-                        user['content'] = system_honey['title'];
-                        await queryCreate(user, db_connection);
+                    for (let idx in price_user_list) {
+                        price_user_list[idx]['honey_amount'] = system_honey['honey_amount'];
+                        price_user_list[idx]['content'] = system_honey['title'];
+                        await queryCreate(price_user_list[idx], db_connection);
                     }
 
-                    req.innerBody['success'] = '꿀이 지급되었습니다.';
+                    req.innerBody['success'] = '만남 꿀이 지급되었습니다.';
 
                 }
             }
@@ -170,7 +171,7 @@ function queryPromiseRefuseCheck(req, db_connection) {
 function queryMeetSuccessCheck(req, db_connection) {
     const _funcName = arguments.callee.name;
 
-    return mysqlUtil.querySingle(db_connection
+    return mysqlUtil.queryArray(db_connection
         , 'call proc_select_meet_success_check'
         , [
             req.paramBody['promise_uid']
