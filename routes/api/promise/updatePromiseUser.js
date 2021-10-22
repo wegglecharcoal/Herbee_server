@@ -102,6 +102,11 @@ module.exports = function (req, res) {
 
             // 주최자 외에 모든 사람이 거절한다면 꿀을 환불 해주어야 함
             if(req.paramBody['status'] === 0) {
+                let check = await queryPromiseEnterCheck(req, db_connection);
+                paramUtil.checkParam_alreadyUse(check,'이미 해당 약속에 참여했기 때문에 거절을 수행할 수 없습니다.');
+
+                await queryCreatePromiseRefuse(req, db_connection);
+
                 let user = await queryPromiseRefuseCheck(req, db_connection);
 
                 if(user) {
@@ -198,6 +203,20 @@ function queryMeetSuccessCheck(req, db_connection) {
 }
 
 
+
+function queryPromiseEnterCheck(req, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_select_promise_enter_check'
+        , [
+            req.headers['user_uid']
+            , req.paramBody['promise_uid']
+        ]
+    );
+}
+
+
 function querySelect(req, db_connection) {
     const _funcName = arguments.callee.name;
 
@@ -221,6 +240,19 @@ function queryCreate(user, db_connection) {
             , 0   // payment
             , user['honey_amount']
             , user['content']
+        ]
+    );
+}
+
+
+function queryCreatePromiseRefuse(req, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_create_promise_refuse'
+        , [
+              req.headers['user_uid']
+            , req.paramBody['promise_uid']
         ]
     );
 }
