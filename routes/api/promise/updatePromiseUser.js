@@ -91,7 +91,7 @@ module.exports = function (req, res) {
 
             // 채팅 룸을 삭제와 해당 유저 차단
             if(req.paramBody['review'] === 2) {
-                await queryDelete(req, db_connection);
+                await queryDeleteChatRoom(req, db_connection);
                 let check = await queryBlockCheck(req, db_connection);
 
                 if(!check) {
@@ -110,6 +110,10 @@ module.exports = function (req, res) {
                     user['honey_amount'] = system_honey['honey_amount'];
                     user['content'] = system_honey['title'];
                     await queryCreate(user, db_connection);
+
+                    user['promise_uid'] = req.paramBody['promise_uid'];
+                    await queryDeletePromise(user, db_connection);
+
                     req.innerBody['success'] = '환불 꿀이 지급되었습니다.';
                 }
 
@@ -252,13 +256,26 @@ function queryUpdate(req, db_connection) {
     );
 }
 
-function queryDelete(req, db_connection) {
+function queryDeleteChatRoom(req, db_connection) {
     const _funcName = arguments.callee.name;
 
     return mysqlUtil.querySingle(db_connection
         , 'call proc_delete_chatRoom'
         , [
             req.innerBody['item']['chat_room_uid']
+        ]
+    );
+}
+
+
+function queryDeletePromise(user, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_delete_promise'
+        , [
+              user['user_uid']
+            , user['promise_uid']
         ]
     );
 }
