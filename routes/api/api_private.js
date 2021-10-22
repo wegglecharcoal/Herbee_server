@@ -111,6 +111,8 @@ app.route('/chatRoom/user/list')
 app.route('/chatRoom/exit/reason')
     .get( require('./chatRoom/selectChatRoomExitReason') );
 
+app.route('/chatRoom/gathering/list')
+    .get( require('./chatRoom/selectChatRoomGatheringList') );
 
 /**
  * Promise
