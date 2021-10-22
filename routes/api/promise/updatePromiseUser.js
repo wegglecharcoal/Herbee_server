@@ -89,24 +89,49 @@ module.exports = function (req, res) {
 
             req.innerBody['item'] = await queryUpdate(req, db_connection);
 
+            // 변경 못하게하는거
+
             if(req.paramBody['review'] === 2) {
                 // 채팅 룸을 삭제시켜주어야함.
                 await queryDelete(req, db_connection);
                 req.innerBody['success'] = '채팅방에서 나갔습니다.';
             }
 
+            // 주최자 외에 모든 사람이 거절한다면 꿀을 환불 해주어야 함
+            if(req.paramBody['status'] === 0) {
+                let user = await queryPromiseRefuseCheck(req, db_connection);
 
-            if(req.paramBody['status'] === 3) {
-                // 모두가 만남이 성사된다면 꿀을 지급해주어야 함
-                req.innerBody['manual_code'] = 'H0-003';
-                let system_honey = await querySelect(req, db_connection);
+                if(user) {
+                    req.innerBody['manual_code'] = 'H2-001';
+                    let system_honey = await querySelect(req, db_connection);
+                    user['honey_amount'] = system_honey['honey_amount'];
+                    user['content'] = system_honey['title'];
+                    await queryCreate(user, db_connection);
+                }
 
-                req.innerBody['honey_amount'] = system_honey['honey_amount'];;
-                await queryCreate(req, db_connection);
-                req.innerBody['success'] = '꿀이 지급되었습니다.';
             }
 
-            deleteBody(req)
+            // 모두가 만남이 성사된다면 꿀을 지급해주어야 함
+            if(req.paramBody['status'] === 3) {
+                let price_user_list = await queryMeetSuccessCheck(req, db_connection);
+
+                if(price_user_list) {
+
+                    req.innerBody['manual_code'] = 'H0-003';
+                    let system_honey = await querySelect(req, db_connection);
+
+                    for (let user in price_user_list) {
+                        user['honey_amount'] = system_honey['honey_amount'];
+                        user['content'] = system_honey['title'];
+                        await queryCreate(user, db_connection);
+                    }
+
+                    req.innerBody['success'] = '꿀이 지급되었습니다.';
+
+                }
+            }
+
+            deleteBody(req);
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);
 
         }, function (err) {
@@ -128,6 +153,32 @@ function checkParam(req) {
 function deleteBody(req) {
 }
 
+
+
+function queryPromiseRefuseCheck(req, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_select_promise_refuse_check'
+        , [
+            req.paramBody['promise_uid']
+        ]
+    );
+}
+
+
+function queryMeetSuccessCheck(req, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_select_meet_success_check'
+        , [
+            req.paramBody['promise_uid']
+        ]
+    );
+}
+
+
 function querySelect(req, db_connection) {
     const _funcName = arguments.callee.name;
 
@@ -140,17 +191,17 @@ function querySelect(req, db_connection) {
 }
 
 
-function queryCreate(req, db_connection) {
+function queryCreate(user, db_connection) {
     const _funcName = arguments.callee.name;
 
     return mysqlUtil.querySingle(db_connection
         , 'call proc_create_honeyHistory'
         , [
-            req.headers['user_uid']
+              user['user_uid']
             , 12  // type => 12: 만남인증 무료
             , 0   // payment
-            , req.innerBody['honey_amount']
-            , req.innerBody['content']
+            , user['honey_amount']
+            , user['content']
         ]
     );
 }
