@@ -22,21 +22,26 @@ module.exports = function (req, res, next) {
 
         mysqlUtil.connectPool(async function (db_connection) {
             req.innerBody = {};
+            let is_subscribe = await querySelectSubscribe(req, db_connection);
 
-            let ownHoney = await querySelectOwnHoney(req, db_connection);
-            if(!ownHoney) {
-                errUtil.createCall(errCode.empty, `해당 유저의 꿀이 존재하지 않습니다. 확인 해주세요.`);
+            if (!is_subscribe) {
+
+                let ownHoney = await querySelectOwnHoney(req, db_connection);
+                if(!ownHoney) {
+                    errUtil.createCall(errCode.empty, `해당 유저의 꿀이 존재하지 않습니다. 확인 해주세요.`);
+                }
+
+                let systemHoney = await querySelectSystemHoney(req, db_connection);
+                if(!systemHoney) {
+                    errUtil.createCall(errCode.empty, `찾을려는 꿀 종류가 존재하지 않습니다. 확인 해주세요.`);
+                }
+
+                if(systemHoney['honey_amount'] > ownHoney['own_honey_amount']) {
+                    errUtil.createCall(errCode.empty, `사용할 수 있는 꿀이 모자라요 ㅠㅠ`);
+                }
+
             }
 
-
-            let systemHoney = await querySelectSystemHoney(req, db_connection);
-            if(!systemHoney) {
-                errUtil.createCall(errCode.empty, `찾을려는 꿀 종류가 존재하지 않습니다. 확인 해주세요.`);
-            }
-
-            if(systemHoney['honey_amount'] > ownHoney['own_honey_amount']) {
-                errUtil.createCall(errCode.empty, `사용할 수 있는 꿀이 모자라요 ㅠㅠ`);
-            }
 
 
             next();
@@ -55,6 +60,18 @@ function checkParam(req) {
     if(!paramUtil.checkParam_return(req.headers, 'manual_code')) {
         errUtil.createCall(errCode.auth, `꿀 메뉴얼 코드가 비어있습니다. 헤더에 'manual_code' 코드 값을 넣어주세요.`);
     }
+}
+
+
+function querySelectSubscribe(req, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_select_is_subscribe'
+        , [
+            req.headers['user_uid']
+        ]
+    )
 }
 
 
