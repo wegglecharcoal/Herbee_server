@@ -69,7 +69,7 @@ const fcmUtil = require('../../../common/utils/fcmUtil');
 
 let file_name = fileUtil.name(__filename);
 
-module.exports = function (req, res) {
+module.exports = function (req, res, next) {
     const _funcName = arguments.callee.name;
 
     try{
@@ -101,7 +101,8 @@ module.exports = function (req, res) {
             // if(req.headers['user_uid'] !== req.innerBody['item']['video_user_uid'])
             //     await fcmUtil.fcmVideoCommentSingle(req.innerBody['item'])
 
-            deleteBody(req)
+            deleteBody(req);
+            await queryCreateUseHoney(req, db_connection);
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);
 
         }, function (err) {
@@ -163,6 +164,18 @@ function queryCreateChatRoomUser(req, db_connection) {
               req.innerBody['item']['uid']
             , req.innerBody['user']['user_uid']
             , req.innerBody['user']['is_head']
+        ]
+    );
+}
+
+function queryCreateUseHoney(req, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_create_use_honey'
+        , [
+              req.headers['user_uid']
+            , req.headers['manual_code']
         ]
     );
 }

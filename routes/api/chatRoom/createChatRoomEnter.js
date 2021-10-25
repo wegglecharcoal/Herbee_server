@@ -64,6 +64,7 @@ module.exports = function (req, res) {
             req.innerBody['item'] = await queryCreate(req, db_connection);
 
             deleteBody(req);
+            await queryCreateUseHoney(req, db_connection);
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);
 
         }, function (err) {
@@ -109,3 +110,15 @@ function queryCheck(req, db_connection) {
     );
 }
 
+
+function queryCreateUseHoney(req, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_create_use_honey'
+        , [
+            req.headers['user_uid']
+            , req.headers['manual_code']
+        ]
+    );
+}

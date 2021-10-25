@@ -135,6 +135,7 @@ module.exports = function (req, res) {
             //     await fcmUtil.fcmVideoCommentSingle(req.innerBody['item'])
 
             deleteBody(req)
+            await queryCreateUseHoney(req, db_connection);
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);
 
         }, function (err) {
@@ -202,6 +203,18 @@ function queryCreateChatRoom(req, db_connection) {
             , req.paramBody['address']
             , req.paramBody['latitude']
             , req.paramBody['longitude']
+        ]
+    );
+}
+
+function queryCreateUseHoney(req, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_create_use_honey'
+        , [
+            req.headers['user_uid']
+            , req.headers['manual_code']
         ]
     );
 }

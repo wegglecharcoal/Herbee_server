@@ -6,7 +6,6 @@ const app = express();
 
 
 const checkHoneyAvailable = require('../middleware/checkHoneyAvailable');
-
 /**
  * User
  */
