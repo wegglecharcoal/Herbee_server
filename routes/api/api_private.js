@@ -125,7 +125,13 @@ app.route( '/promise' )
     .delete( require('./promise/deletePromise') );
 
 app.route( '/promise/user' )
-    .put( require('./promise/updatePromiseUser') )
+    .put( require('./promise/updatePromiseUser') );
+
+app.route( '/promise/my/position' )
+    .put( require('./promise/updatePromiseMyPosition') );
+
+app.route( '/promise/after/recommend/list' )
+    .get( require('./promise/selectPromiseAfterRecommendList') );
 
 app.route('/promise/enter')
     .post( require('./promise/createPromiseEnter') );
@@ -136,8 +142,6 @@ app.route( '/promise/me/list' )
 app.route( '/promise/chatRoom/list' )
     .get( require('./promise/selectPromiseChatRoomList') );
 
-app.route( '/promise/my/position' )
-    .put( require('./promise/updatePromiseMyPosition') );
 
 
 // app.route( '/promise' )
