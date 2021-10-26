@@ -106,6 +106,9 @@ app.route('/chatRoom/exit')
 app.route('/chatRoom/kick')
     .delete( require('./chatRoom/deleteChatRoomKick') );
 
+app.route('/chatRoom/retry')
+    .delete( require('./chatRoom/deleteChatRoomRetry') );
+
 app.route('/chatRoom/list')
     .get( require('./chatRoom/selectChatRoomList') );
 
