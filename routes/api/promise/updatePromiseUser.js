@@ -91,13 +91,12 @@ module.exports = function (req, res) {
 
             // 채팅 룸을 삭제와 해당 유저 차단
             if(req.paramBody['review'] === 2) {
-                await queryDeleteChatRoom(req, db_connection);
                 let check = await queryBlockCheck(req, db_connection);
 
                 if(!check) {
                     await queryCreateBlockUser(req, db_connection);
                 }
-                req.innerBody['success'] = '채팅방에서 나갔습니다.';
+                req.innerBody['success'] = '해당 유저 차단을 완료했습니다.';
             }
 
             // 주최자 외에 모든 사람이 거절한다면 꿀을 환불 해주어야 함
@@ -287,18 +286,6 @@ function queryUpdate(req, db_connection) {
         ]
     );
 }
-
-function queryDeleteChatRoom(req, db_connection) {
-    const _funcName = arguments.callee.name;
-
-    return mysqlUtil.querySingle(db_connection
-        , 'call proc_delete_chatRoom'
-        , [
-            req.innerBody['item']['chat_room_uid']
-        ]
-    );
-}
-
 
 function queryDeletePromise(user, db_connection) {
     const _funcName = arguments.callee.name;

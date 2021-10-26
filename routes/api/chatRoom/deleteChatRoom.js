@@ -90,9 +90,16 @@ module.exports = function (req, res) {
                     return;
                 }
 
-
-                await queryDelete(req, db_connection);
             }
+            // 1대1 채팅일 때
+            else {
+                let check = await queryBlockCheck(req, db_connection);
+
+                if(!check) {
+                    await queryCreateBlockUser(req, db_connection);
+                }
+            }
+
 
             await queryDelete(req, db_connection);
             req.innerBody['success'] = '채팅방에서 나갔습니다.';
@@ -120,6 +127,18 @@ function deleteBody(req) {
     delete req.innerBody['item']
 }
 
+
+function queryBlockCheck(req, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_select_block_user_check'
+        , [
+            req.headers['user_uid']
+            , req.innerBody['item']['other_user_uid']
+        ]
+    );
+}
 
 function queryCheckUser(req, db_connection) {
     const _funcName = arguments.callee.name;
@@ -155,6 +174,18 @@ function queryCheckIsHead(req, db_connection) {
               req.headers['user_uid']
             , req.paramBody['chat_room_uid']
             , 1    // is_head      {0: false, 1: true}
+        ]
+    );
+}
+
+function queryCreateBlockUser(req, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_create_block_user'
+        , [
+              req.headers['user_uid']
+            , req.innerBody['item']['other_user_uid']
         ]
     );
 }

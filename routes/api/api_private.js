@@ -88,6 +88,9 @@ app.route('/chatRoom/gathering')
 app.route('/chatRoom/enter')
     .post( checkHoneyAvailable, require('./chatRoom/createChatRoomEnter') );
 
+app.route('/chatRoom/status')
+    .put( require('./chatRoom/updateChatRoomStatus') );
+
 app.route('/chatRoom/recentMsg')
     .put( require('./chatRoom/updateChatRoomRecentMsg') );
 
