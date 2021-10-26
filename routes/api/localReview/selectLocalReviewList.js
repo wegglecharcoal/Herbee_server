@@ -13,24 +13,6 @@
  *
  *     parameters:
  *       - in: query
- *         name: latitude
- *         default: 37.5662952
- *         required: true
- *         schema:
- *           type: number
- *           example: 37.5662952
- *         description: |
- *           위도
- *       - in: query
- *         name: longitude
- *         default: 127.1039913
- *         required: true
- *         schema:
- *           type: number
- *           example: 127.1039913
- *         description: |
- *           경도
- *       - in: query
  *         name: last_uid
  *         default: 0
  *         required: true
@@ -89,8 +71,6 @@ module.exports = function (req, res) {
 }
 
 function checkParam(req) {
-    paramUtil.checkParam_noReturn(req.paramBody, 'latitude');
-    paramUtil.checkParam_noReturn(req.paramBody, 'longitude');
     paramUtil.checkParam_noReturn(req.paramBody, 'last_uid');
 }
 
@@ -103,8 +83,7 @@ function querySelect(req, db_connection) {
     return mysqlUtil.queryArray(db_connection
         , 'call proc_select_localReview_list'
         , [
-            req.paramBody['latitude']
-          , req.paramBody['longitude']
+            req.headers['user_uid']
           , req.paramBody['last_uid']
         ]
     );
