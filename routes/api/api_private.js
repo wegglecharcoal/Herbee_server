@@ -56,6 +56,8 @@ app.route('/lifestyle')
     .put( require('./lifestyle/updateLifestyle') )
     .delete( require('./lifestyle/deleteLifestyle') );
 
+app.route('/lifestyle/popular/topic/list')
+    .get( require('./lifestyle/selectLifestylePopularTopicList') );
 
 /**
  * LocalReview
