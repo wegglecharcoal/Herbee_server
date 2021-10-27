@@ -5,7 +5,7 @@
  * /api/private/lifestyle/popular/topic/list:
  *   get:
  *     summary: 인기주제 목록
- *     tags: [LocalReview]
+ *     tags: [Lifestyle]
  *     description: |
  *       path : /api/private/lifestyle/popular/topic/list
  *
