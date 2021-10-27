@@ -1,30 +1,35 @@
 /**
- * Created by gunucklee on 2021. 10. 26.
+ * Created by gunucklee on 2021. 10. 27.
  *
  * @swagger
- * /api/private/lifestyle/same/topic/list:
+ * /api/private/balanceGame/search/topic/list:
  *   get:
- *     summary: 나와 취향이 같은 친구 목록
- *     tags: [Lifestyle]
+ *     summary: 밸런스게임 주제 검색 리스트
+ *     tags: [BalanceGame]
  *     description: |
- *       path : /api/private/lifestyle/same/topic/list
+ *       path : /api/private/balanceGame/search/topic/list
  *
- *       * 인기주제 목록
+ *       * 밸런스게임 주제 검색 리스트
  *
  *     parameters:
  *       - in: query
- *         name: offset
+ *         name: balance_game_question_uid
+ *         default: 0
+ *         required: true
+ *         schema:
+ *           type: number
+ *           example: 1
+ *         description: |
+ *           검색할 밸런스 게임 질문 Uid
+ *       - in: query
+ *         name: last_uid
  *         default: 0
  *         required: true
  *         schema:
  *           type: number
  *           example: 0
  *         description: |
- *           0을 넣으면 30개의 정보를 가져옵니다 Limit 30
- *           offset 0: 0~30개 정보
- *           offset 30: 30~60개 정보
- *           offset 60: 60~90개 정보
- *
+ *           목록 마지막 uid (처음일 경우 0)
  *
  *     responses:
  *       200:
@@ -60,7 +65,7 @@ module.exports = function (req, res) {
             req.innerBody['item'] = await querySelect(req, db_connection);
 
 
-            deleteBody(req);
+            deleteBody(req)
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);
 
         }, function (err) {
@@ -74,7 +79,8 @@ module.exports = function (req, res) {
 }
 
 function checkParam(req) {
-    paramUtil.checkParam_noReturn(req.paramBody, 'offset');
+    paramUtil.checkParam_noReturn(req.paramBody, 'balance_game_question_uid');
+    paramUtil.checkParam_noReturn(req.paramBody, 'last_uid');
 }
 
 function deleteBody(req) {
@@ -84,10 +90,11 @@ function querySelect(req, db_connection) {
     const _funcName = arguments.callee.name;
 
     return mysqlUtil.queryArray(db_connection
-        , 'call proc_select_lifestyle_same_topic_list'
+        , 'call proc_select_balanceGame_answer_list'
         , [
             req.headers['user_uid']
-          , req.paramBody['offset']
+          , req.paramBody['balance_game_question_uid']
+          , req.paramBody['last_uid']
         ]
     );
 }

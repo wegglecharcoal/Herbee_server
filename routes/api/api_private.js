@@ -38,6 +38,9 @@ app.route('/feed/other/list')
 /**
  * BalanceGame
  */
+app.route('/balanceGame/search/topic/list')
+    .get( require('./balanceGame/selectBalanceGameSearchTopicList') );
+
 app.route('/balanceGame/question/daily')
     .get( require('./balanceGame/selectBalanceGameQuestionDaily') );
 
