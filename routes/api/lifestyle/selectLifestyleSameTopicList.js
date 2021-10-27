@@ -13,6 +13,24 @@
  *
  *     parameters:
  *       - in: query
+ *         name: latitude
+ *         default: 37.5662952
+ *         required: true
+ *         schema:
+ *           type: number
+ *           example: 37.5662952
+ *         description: |
+ *           위도
+ *       - in: query
+ *         name: longitude
+ *         default: 127.1039913
+ *         required: true
+ *         schema:
+ *           type: number
+ *           example: 127.1039913
+ *         description: |
+ *           경도
+ *       - in: query
  *         name: offset
  *         default: 0
  *         required: true
@@ -74,6 +92,8 @@ module.exports = function (req, res) {
 }
 
 function checkParam(req) {
+    paramUtil.checkParam_noReturn(req.paramBody, 'latitude');
+    paramUtil.checkParam_noReturn(req.paramBody, 'longitude');
     paramUtil.checkParam_noReturn(req.paramBody, 'offset');
 }
 
@@ -87,6 +107,8 @@ function querySelect(req, db_connection) {
         , 'call proc_select_lifestyle_same_topic_list'
         , [
             req.headers['user_uid']
+          , req.paramBody['latitude']
+          , req.paramBody['longitude']
           , req.paramBody['offset']
         ]
     );
