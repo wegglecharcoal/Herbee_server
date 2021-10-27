@@ -86,7 +86,8 @@ function querySelect(req, db_connection) {
     return mysqlUtil.queryArray(db_connection
         , 'call proc_select_lifestyle_same_topic_list'
         , [
-            req.paramBody['offset']
+            req.headers['user_uid']
+          , req.paramBody['offset']
         ]
     );
 }
