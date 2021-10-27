@@ -56,6 +56,9 @@ app.route('/lifestyle')
     .put( require('./lifestyle/updateLifestyle') )
     .delete( require('./lifestyle/deleteLifestyle') );
 
+app.route('/lifestyle/same/topic/list')
+    .get( require('./lifestyle/selectLifestyleSameTopicList') );
+
 app.route('/lifestyle/popular/topic/list')
     .get( require('./lifestyle/selectLifestylePopularTopicList') );
 
