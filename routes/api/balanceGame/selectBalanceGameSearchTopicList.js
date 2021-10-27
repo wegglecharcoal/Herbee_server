@@ -90,7 +90,7 @@ function querySelect(req, db_connection) {
     const _funcName = arguments.callee.name;
 
     return mysqlUtil.queryArray(db_connection
-        , 'call proc_select_balanceGame_answer_list'
+        , 'call proc_select_balanceGame_search_topic_list'
         , [
             req.headers['user_uid']
           , req.paramBody['balance_game_question_uid']
