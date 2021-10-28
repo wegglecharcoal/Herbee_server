@@ -73,7 +73,7 @@ app.route('/localReview')
     .put( require('./localReview/updateLocalReview') )
     .delete( require('./localReview/deleteLocalReview') );
 
-app.route('/localReview/dong/list')
+app.route('/localReview/list')
     .get( require('./localReview/selectLocalReviewList') );
 
 app.route('/localReview/recent/visit/list')
