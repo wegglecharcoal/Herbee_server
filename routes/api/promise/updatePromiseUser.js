@@ -99,48 +99,50 @@ module.exports = function (req, res) {
                 req.innerBody['success'] = '해당 유저 차단을 완료했습니다.';
             }
 
-            // 주최자 외에 모든 사람이 거절한다면 꿀을 환불 해주어야 함
-            if(req.paramBody['status'] === 0) {
-                let check = await queryPromiseEnterCheck(req, db_connection);
-                paramUtil.checkParam_alreadyUse(check,'이미 해당 약속에 참여했기 때문에 거절을 수행할 수 없습니다.');
+            switch (req.paramBody['status']){
 
-                await queryCreatePromiseRefuse(req, db_connection);
+                // 주최자 외에 모든 사람이 거절한다면 꿀을 환불 해주어야 함
+                case 0: {
+                    let check = await queryPromiseEnterCheck(req, db_connection);
+                    paramUtil.checkParam_alreadyUse(check,'이미 해당 약속에 참여했기 때문에 거절을 수행할 수 없습니다.');
 
-                let user = await queryPromiseRefuseCheck(req, db_connection);
+                    await queryCreatePromiseRefuse(req, db_connection);
 
-                if(user) {
-                    req.innerBody['manual_code'] = 'H2-001';
-                    let system_honey = await querySelect(req, db_connection);
-                    user['honey_amount'] = system_honey['honey_amount'];
-                    user['content'] = system_honey['title'];
-                    await queryCreate(user, db_connection);
+                    let user = await queryPromiseRefuseCheck(req, db_connection);
+                    if(user) {
+                        req.innerBody['manual_code'] = 'H2-001';
+                        let system_honey = await querySelect(req, db_connection);
+                        user['honey_amount'] = system_honey['honey_amount'];
+                        user['content'] = system_honey['title'];
+                        await queryCreate(user, db_connection);
 
-                    user['promise_uid'] = req.paramBody['promise_uid'];
-                    await queryDeletePromise(user, db_connection);
+                        user['promise_uid'] = req.paramBody['promise_uid'];
+                        await queryDeletePromise(user, db_connection);
 
-                    req.innerBody['success'] = '환불 꿀이 지급되었습니다.';
-                }
-
-            }
-
-            // 모두가 만남이 성사된다면 꿀을 지급해주어야 함
-            if(req.paramBody['status'] === 3) {
-                let price_user_list = await queryMeetSuccessCheck(req, db_connection);
-
-                if(price_user_list) {
-
-                    req.innerBody['manual_code'] = 'H0-003';
-                    let system_honey = await querySelect(req, db_connection);
-
-                    for (let idx in price_user_list) {
-                        price_user_list[idx]['honey_amount'] = system_honey['honey_amount'];
-                        price_user_list[idx]['content'] = system_honey['title'];
-                        await queryCreate(price_user_list[idx], db_connection);
+                        req.innerBody['success'] = '환불 꿀이 지급되었습니다.';
                     }
+                } break;
 
-                    req.innerBody['success'] = '만남 꿀이 지급되었습니다.';
+                // 모두가 만남이 성사된다면 꿀을 지급해주어야 함
+                case 3: {
+                    let price_user_list = await queryMeetSuccessCheck(req, db_connection);
 
-                }
+                    if(price_user_list) {
+
+                        req.innerBody['manual_code'] = 'H0-003';
+                        let system_honey = await querySelect(req, db_connection);
+
+                        for (let idx in price_user_list) {
+                            price_user_list[idx]['honey_amount'] = system_honey['honey_amount'];
+                            price_user_list[idx]['content'] = system_honey['title'];
+                            await queryCreate(price_user_list[idx], db_connection);
+                        }
+
+                        req.innerBody['success'] = '만남 꿀이 지급되었습니다.';
+
+                    }
+                } break;
+                default: break;
             }
 
             deleteBody(req);
