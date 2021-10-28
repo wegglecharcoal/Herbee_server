@@ -65,6 +65,9 @@ app.route('/lifestyle/same/topic/list')
 app.route('/lifestyle/popular/topic/list')
     .get( require('./lifestyle/selectLifestylePopularTopicList') );
 
+app.route('/lifestyle/realTime/list')
+    .get( require('./lifestyle/selectLifestyleRealTimeList') );
+
 /**
  * LocalReview
  */
