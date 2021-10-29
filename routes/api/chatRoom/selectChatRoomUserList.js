@@ -22,14 +22,17 @@
  *         description: |
  *           채팅방 uid
  *       - in: query
- *         name: last_uid
+ *         name: offset
  *         default: 0
  *         required: true
  *         schema:
  *           type: number
  *           example: 0
  *         description: |
- *           목록 마지막 uid (처음일 경우 0)
+ *           0을 넣으면 30개의 정보를 가져옵니다 Limit 30
+ *           offset 0: 0~30개 정보
+ *           offset 30: 30~60개 정보
+ *           offset 60: 60~90개 정보
  *
  *     responses:
  *       200:
@@ -80,7 +83,7 @@ module.exports = function (req, res) {
 
 function checkParam(req) {
     paramUtil.checkParam_noReturn(req.paramBody, 'chat_room_uid');
-    paramUtil.checkParam_noReturn(req.paramBody, 'last_uid');
+    paramUtil.checkParam_noReturn(req.paramBody, 'offset');
 }
 
 function deleteBody(req) {
@@ -93,7 +96,7 @@ function querySelect(req, db_connection) {
         , 'call proc_select_chatRoom_user_list'
         , [
             req.paramBody['chat_room_uid']
-          , req.paramBody['last_uid']
+          , req.paramBody['offset']
         ]
     );
 }
