@@ -13,6 +13,13 @@
  *
  *     parameters:
  *       - in: query
+ *         name: keyword
+ *         required: false
+ *         schema:
+ *           type: string
+ *           example:
+ *         description: 검색 키워드(모임명 검색)
+ *       - in: query
  *         name: latitude
  *         default: 37.5662952
  *         required: true
@@ -103,9 +110,12 @@ function querySelect(req, db_connection) {
     return mysqlUtil.queryArray(db_connection
         , 'call proc_select_chatRoom_gathering_list'
         , [
-            req.paramBody['latitude']
+            req.headers['user_uid']
+          , req.paramBody['latitude']
           , req.paramBody['longitude']
+          , req.paramBody['keyword']
           , req.paramBody['last_uid']
+
         ]
     );
 }
