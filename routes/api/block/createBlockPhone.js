@@ -21,7 +21,7 @@
  *           type: object
  *           required:
  *             - block_phone_list
- *           properties:ㅎ
+ *           properties:
  *             content:
  *               type: string
  *               description: |
