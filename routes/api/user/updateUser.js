@@ -22,15 +22,7 @@
  *           type: object
  *           required:
  *             - filename
- *             - email
- *             - phone
  *             - nickname
- *             - height
- *             - drink
- *             - smoking
- *             - education
- *             - job
- *             - introduce
  *             - birth
  *           properties:
  *             filename:
@@ -149,15 +141,7 @@ module.exports = function (req, res) {
 
 function checkParam(req) {
     paramUtil.checkParam_noReturn(req.paramBody, 'filename');
-    paramUtil.checkParam_noReturn(req.paramBody, 'email');
-    paramUtil.checkParam_noReturn(req.paramBody, 'phone');
     paramUtil.checkParam_noReturn(req.paramBody, 'nickname');
-    paramUtil.checkParam_noReturn(req.paramBody, 'height');
-    paramUtil.checkParam_noReturn(req.paramBody, 'drink');
-    paramUtil.checkParam_noReturn(req.paramBody, 'smoking');
-    paramUtil.checkParam_noReturn(req.paramBody, 'education');
-    paramUtil.checkParam_noReturn(req.paramBody, 'job');
-    paramUtil.checkParam_noReturn(req.paramBody, 'introduce');
     paramUtil.checkParam_noReturn(req.paramBody, 'birth');
 }
 
