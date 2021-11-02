@@ -224,7 +224,7 @@ app.route('/report')
 /**
  * Block
  */
-app.route('/block/user')
+app.route('/block/phone')
     .post( require('./block/createBlockPhone') );
 
 app.route('/block/user')
