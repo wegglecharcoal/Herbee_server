@@ -4,7 +4,7 @@
  * @swagger
  * /api/private/localReview/image/list:
  *   get:
- *     summary: 동네후기 목록
+ *     summary: 동네후기 이미지 목록
  *     tags: [LocalReview]
  *     description: |
  *       path : /api/private/localReview/image/list
