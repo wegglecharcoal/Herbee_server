@@ -98,6 +98,12 @@ module.exports = function (req, res) {
                 if(!check) {
                     await queryCreateBlockUser(req, db_connection);
                 }
+
+                req.innerBody['manual_code'] = 'H2-002';
+                let refund_honey = await querySelectHoneySystem(req, db_connection);
+                refund_honey['user_uid'] = req.headers['user_uid']
+                await queryRefundHoney(refund_honey, db_connection);
+
             }
 
 
@@ -127,6 +133,33 @@ function deleteBody(req) {
     delete req.innerBody['item']
 }
 
+
+function querySelectHoneySystem(req, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_select_honey_system'
+        , [
+            req.innerBody['manual_code']
+        ]
+    );
+}
+
+
+function queryRefundHoney(refund_honey, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_create_honeyHistory'
+        , [
+              refund_honey['user_uid']
+            , 21  // type => 21: 채팅 제안 거절 환불
+            , 0   // payment
+            , refund_honey['honey_amount']
+            , refund_honey['content']
+        ]
+    );
+}
 
 function queryBlockCheck(req, db_connection) {
     const _funcName = arguments.callee.name;
