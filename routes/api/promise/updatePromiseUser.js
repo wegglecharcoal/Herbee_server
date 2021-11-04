@@ -113,6 +113,7 @@ module.exports = function (req, res) {
                         req.innerBody['manual_code'] = 'H2-001';
                         let system_honey = await querySelect(req, db_connection);
                         user['honey_amount'] = system_honey['honey_amount'];
+                        user['type'] = 20; // type 20: 약속 거절 환불
                         user['content'] = system_honey['title'];
                         await queryCreate(user, db_connection);
 
@@ -134,6 +135,7 @@ module.exports = function (req, res) {
 
                         for (let idx in price_user_list) {
                             price_user_list[idx]['honey_amount'] = system_honey['honey_amount'];
+                            price_user_list[idx]['type'] = 12; // type 12: 만남 인증 무료
                             price_user_list[idx]['content'] = system_honey['title'];
                             await queryCreate(price_user_list[idx], db_connection);
                         }
@@ -237,7 +239,7 @@ function queryCreate(user, db_connection) {
         , 'call proc_create_honeyHistory'
         , [
               user['user_uid']
-            , 12  // type => 12: 만남인증 무료
+            , user['type']
             , 0   // payment
             , user['honey_amount']
             , user['content']

@@ -61,7 +61,12 @@ module.exports = function (req, res) {
             req.innerBody['item'] = await queryDelete(req, db_connection);
             req.innerBody['success'] = '다시 대화하기를 거절했습니다.';
 
-            deleteBody(req)
+            req.innerBody['manual_code'] = 'H2-002';
+            let refund_honey = await querySelectHoneySystem(req, db_connection);
+            refund_honey['user_uid'] = req.headers['user_uid'];
+            await queryRefundHoney(refund_honey, db_connection);
+
+            deleteBody(req);
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);
 
         }, function (err) {
@@ -80,6 +85,32 @@ function checkParam(req) {
 }
 
 function deleteBody(req) {
+}
+
+function querySelectHoneySystem(req, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_select_honey_system'
+        , [
+            req.innerBody['manual_code']
+        ]
+    );
+}
+
+function queryRefundHoney(refund_honey, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_create_honeyHistory'
+        , [
+            refund_honey['user_uid']
+            , 21  // type => 21: 채팅 제안 거절 환불
+            , 0   // payment
+            , refund_honey['honey_amount']
+            , refund_honey['content']
+        ]
+    );
 }
 
 function queryCheckUser(req, db_connection) {

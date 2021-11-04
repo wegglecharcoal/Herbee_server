@@ -19,6 +19,8 @@ app.route('/user/me')
 app.route('/user/other')
     .get( require('./user/selectUserOther') );
 
+app.route('/user/overtime/check')
+    .get( require('./user/selectUserOvertimeCheck') );
 
 /**
  * Feed
