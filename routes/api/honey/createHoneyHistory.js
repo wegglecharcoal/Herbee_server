@@ -80,7 +80,7 @@ module.exports = function (req, res) {
             req.innerBody = {};
 
             let check = await queryCheck(req, db_connection);
-            paramUtil.checkParam_alreadyUse(check,'이미 해당 이 등록되어 있습니다.');
+            paramUtil.checkParam_alreadyUse(check,'이미 해당 꿀 기록이 등록되어 있습니다.');
 
             req.innerBody['item'] = await queryCreate(req, db_connection);
 
