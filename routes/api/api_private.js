@@ -113,6 +113,9 @@ app.route('/chatRoom/status')
 app.route('/chatRoom/recentMsg')
     .put( require('./chatRoom/updateChatRoomRecentMsg') );
 
+app.route('/chatRoom/user/chatReadTime')
+    .put( require('./chatRoom/updateChatRoomUserChatReadTime') );
+
 app.route('/chatRoom')
     .delete( require('./chatRoom/deleteChatRoom') );
 

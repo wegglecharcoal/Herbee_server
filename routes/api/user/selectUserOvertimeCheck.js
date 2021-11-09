@@ -7,7 +7,7 @@
  *     summary: 유저 시간초과 체크
  *     tags: [User]
  *     description: |
- *       path : /api/private/user/me
+ *       path : /api/private/user/overtime/check
  *
  *       * 유저 시간초과 체크
  *       1. 약속 제안 자동 취소 환불 (6시간 안에 수락 안하면 자동 전액 환불 + 취소)
