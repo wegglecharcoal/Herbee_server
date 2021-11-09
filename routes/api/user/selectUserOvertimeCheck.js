@@ -41,6 +41,7 @@ module.exports = function (req, res) {
         mysqlUtil.connectPool(async function (db_connection) {
             req.innerBody = {};
 
+            req.innerBody['item'] = {};
             // 약속 제안 자동 취소 환불 (6시간 안에 수락 안하면 자동 전액 환불)
             let overtimePromiseList = await queryCheckPromiseAccept(req, db_connection);
 
@@ -114,6 +115,8 @@ function checkParam(req) {
 }
 
 function deleteBody(req) {
+    delete req.innerBody['item'];
+    delete req.innerBody['manual_code'];
 }
 
 function queryCheckPromiseAccept(req, db_connection) {
