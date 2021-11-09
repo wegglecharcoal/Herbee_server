@@ -48,7 +48,7 @@ module.exports = function (req, res) {
 
                 for(let idx in overtimePromiseList) {
 
-                    req.innerBody['item']['chat_room_uid'] = overtimePromiseList[idx]['uid'];
+                    req.innerBody['item']['promise_uid'] = overtimePromiseList[idx]['uid'];
                     await queryDeletePromise(req, db_connection);
 
                     req.innerBody['manual_code'] = 'H2-003';
