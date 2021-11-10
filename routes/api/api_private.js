@@ -81,6 +81,9 @@ app.route('/localReview')
 app.route('/localReview/list')
     .get( require('./localReview/selectLocalReviewList') );
 
+app.route('/localReview/building/list')
+    .get( require('./localReview/selectLocalReviewBuildingList') );
+
 app.route('/localReview/image/list')
     .get( require('./localReview/selectLocalReviewImageList') );
 
