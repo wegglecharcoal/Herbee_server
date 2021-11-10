@@ -113,7 +113,8 @@ function querySelect(req, db_connection) {
     return mysqlUtil.queryArray(db_connection
         , 'call proc_select_localReview_list'
         , [
-            req.paramBody['latitude']
+            req.headers['user_uid']
+          , req.paramBody['latitude']
           , req.paramBody['longitude']
           , req.paramBody['keyword']
           , req.paramBody['offset']
