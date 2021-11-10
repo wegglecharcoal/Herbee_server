@@ -13,6 +13,13 @@
  *
  *     parameters:
  *       - in: query
+ *         name: keyword
+ *         required: false
+ *         schema:
+ *           type: string
+ *           example:
+ *         description: 검색 키워드
+ *       - in: query
  *         name: latitude
  *         default: 37.5662952
  *         required: true
@@ -108,6 +115,7 @@ function querySelect(req, db_connection) {
         , [
             req.paramBody['latitude']
           , req.paramBody['longitude']
+          , req.paramBody['keyword']
           , req.paramBody['offset']
         ]
     );
