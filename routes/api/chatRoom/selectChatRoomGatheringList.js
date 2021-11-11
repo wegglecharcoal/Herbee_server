@@ -38,6 +38,22 @@
  *         description: |
  *           경도
  *       - in: query
+ *         name: gathering_interests
+ *         required: false
+ *         schema:
+ *           type: number
+ *         description: |
+ *           모임 관심사
+ *           * 0: 운동
+ *           * 1: 스터디
+ *           * 2: 맛집 탐방
+ *           * 3: 독서
+ *           * 4: 영화
+ *           * 5: 여행
+ *           * 6: 전시/공연
+ *           * 7: 악기
+ *           * 8: 기타
+ *       - in: query
  *         name: offset
  *         default: 0
  *         required: true
@@ -116,6 +132,7 @@ function querySelect(req, db_connection) {
             req.headers['user_uid']
           , req.paramBody['latitude']
           , req.paramBody['longitude']
+          , req.paramBody['gathering_interests']
           , req.paramBody['keyword']
           , req.paramBody['offset']
 
