@@ -13,6 +13,13 @@
  *
  *     parameters:
  *       - in: query
+ *         name: keyword
+ *         required: false
+ *         schema:
+ *           type: string
+ *           example:
+ *         description: 검색 키워드(주제 검색)
+ *       - in: query
  *         name: offset
  *         default: 0
  *         required: true
@@ -86,7 +93,8 @@ function querySelect(req, db_connection) {
     return mysqlUtil.queryArray(db_connection
         , 'call proc_select_lifestyle_popular_topic_list'
         , [
-            req.paramBody['offset']
+            req.paramBody['keyword']
+          , req.paramBody['offset']
         ]
     );
 }
