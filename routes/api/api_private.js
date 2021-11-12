@@ -25,6 +25,9 @@ app.route('/user/overtime/check')
 /**
  * Feed
  */
+app.route('/feed/count/view')
+    .put( require('./feed/updateFeedCountView') );
+
 app.route('/feed/list')
     .get( require('./feed/selectFeedList') );
 
