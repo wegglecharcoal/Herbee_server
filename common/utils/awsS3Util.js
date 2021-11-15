@@ -42,29 +42,11 @@ const fileOptions = {
 
 function getFilename(req, file){
 
-    let originalname = file.originalname
-    if(file.originalname.includes('.mp4'))
-        originalname = replaceName(file.originalname);
-
-    console.log("s3util :" + originalname)
-
+    let originalname = file.originalname;
     let extension = path.extname(originalname);
     let basename = path.basename(originalname, extension);        //확장자 .jpg 만 빠진 파일명을 얻어온다
     let hash_name = crypto.createHash('md5').update(Date.now()+basename).digest("hex");
     return `${hash_name}${extension}`;
-}
-
-function replaceName(filename) {
-
-
-    let fileArray = filename.split("_");
-
-    filename =filename.replace('_' + fileArray[fileArray.length -2], '')
-
-    filename =filename.replace('_' + fileArray[fileArray.length -1], '')
-
-    console.log("idjkw: " +filename)
-    return filename;
 }
 
 function uploadFile(req, res, next){

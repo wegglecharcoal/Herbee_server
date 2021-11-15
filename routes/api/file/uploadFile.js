@@ -34,7 +34,7 @@ const errUtil = require('../../../common/utils/errUtil');
 const logUtil = require('../../../common/utils/logUtil');
 const errCode = require('../../../common/define/errCode');
 
-// const mediaConvertUtil = require('../../../common/utils/mediaConvertUtil');
+const mediaConvertUtil = require('../../../common/utils/mediaConvertUtil');
 
 let file_name = fileUtil.name(__filename);
 
@@ -49,44 +49,19 @@ module.exports = async function (req, res) {
         req.file_name = file_name;
         req.paramBody = paramUtil.parse(req);
 
-        checkParam(req);
-
         console.log('upload file awsS3 function start........................');
         if( req.file ) {
 
             let final_name = req.file.key;
-            let originalname = req.file.originalname;
 
             req.innerBody = {};
 
 
             if(req.file.originalname.includes('.mp4')) {
-                final_name = replaceName(req.file.key);
-
-                let originalnameArray = originalname.split("_")
-
-                console.log("uploadfile: " + originalnameArray)
-
-                let video_width = originalnameArray[originalnameArray.length -2];
-                let video_height = originalnameArray[originalnameArray.length -1];
-
-                video_height = video_height.replace('.mp4', '');
-
-                console.log("uploadfile: " + video_width)
-                console.log("uploadfile2: " + video_height)
-
-                // final_name = mediaConvertUtil(final_name, parseInt(video_width), parseInt(video_height));
-
-                console.log("finalname mediaconvert :" + final_name)
-
-                req.innerBody['thumbnail'] = final_name.replace('ConvertSuccess.mp4', 'Thumbnail.0000001.jpg');
+                final_name = mediaConvertUtil(final_name);
             }
 
             req.innerBody['filename'] = final_name
-
-            console.log('here filename: ' + req.innerBody['filename'])
-
-            // req.innerBody['thumbnail'] = thumbnail_name
 
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);
         }
@@ -102,19 +77,4 @@ module.exports = async function (req, res) {
         let _err = errUtil.get(e);
         sendUtil.sendErrorPacket(req, res, _err);
     }
-}
-
-function checkParam(req) {
-}
-
-
-
-function replaceName(filename) {
-
-    let fileArray = filename.split("_")
-    filename =filename.replace('_'+ fileArray[fileArray.length -2], '')
-
-    filename =filename.replace('_' + fileArray[fileArray.length -1], '')
-
-    return filename;
 }
