@@ -49,15 +49,17 @@ module.exports = function (req, res) {
 
                 for(let idx in overtimePromiseList) {
 
-                    req.innerBody['item']['promise_uid'] = overtimePromiseList[idx]['uid'];
-                    await queryDeletePromise(req, db_connection);
+                    if(!overtimePromiseList[idx]) {
+                        req.innerBody['item']['promise_uid'] = overtimePromiseList[idx]['uid'];
+                        await queryDeletePromise(req, db_connection);
 
-                    req.innerBody['manual_code'] = 'H2-003';
-                    let refund_honey = await querySelectHoneySystem(req, db_connection);
+                        req.innerBody['manual_code'] = 'H2-003';
+                        let refund_honey = await querySelectHoneySystem(req, db_connection);
 
-                    refund_honey['user_uid'] = req.headers['user_uid'];
-                    refund_honey['type'] = 22; // type 22: 약속 제안 자동 취소 환불 (6시간 안에 수락 안하면 자동 전액 환불)
-                    await queryRefundHoney(refund_honey, db_connection);
+                        refund_honey['user_uid'] = req.headers['user_uid'];
+                        refund_honey['type'] = 22; // type 22: 약속 제안 자동 취소 환불 (6시간 안에 수락 안하면 자동 전액 환불)
+                        await queryRefundHoney(refund_honey, db_connection);
+                    }
 
                 }
 
