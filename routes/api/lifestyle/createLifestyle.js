@@ -125,6 +125,21 @@ module.exports = function (req, res) {
             }
 
 
+            if(req.paramBody['file_type'] === 0) {
+                req.innerBody['manual_code'] = 'H0-001';
+                let system_honey = await querySelectHoneySystem(req, db_connection);
+                system_honey['user_uid'] = req.headers['user_uid'];
+                system_honey['type'] = 10; // type 10: 동영상 무료
+                await queryCreateHoney(system_honey, db_connection);
+            }
+            else if(req.paramBody['file_type'] === 1) {
+                req.innerBody['manual_code'] = 'H0-002';
+                let system_honey = await querySelectHoneySystem(req, db_connection);
+                system_honey['user_uid'] = req.headers['user_uid'];
+                system_honey['type'] = 11; // type 11: 사진 무료
+                await queryCreateHoney(system_honey, db_connection);
+            }
+
             deleteBody(req)
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);
 
@@ -205,4 +220,30 @@ function queryCreateBalanceGame(req, db_connection) {
 
 
 
+function querySelectHoneySystem(req, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_select_honey_system'
+        , [
+            req.innerBody['manual_code']
+        ]
+    );
+}
+
+
+function queryCreateHoney(system_honey, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_create_honeyHistory'
+        , [
+              system_honey['user_uid']
+            , system_honey['type']
+            , 0   // payment
+            , system_honey['honey_amount']
+            , system_honey['title']
+        ]
+    );
+}
 

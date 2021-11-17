@@ -183,7 +183,7 @@ function queryRefundHoney(refund_honey, db_connection) {
             , refund_honey['type']
             , 0   // payment
             , refund_honey['honey_amount']
-            , refund_honey['content']
+            , refund_honey['title']
         ]
     );
 }
