@@ -133,6 +133,7 @@ function queryCreate(req, db_connection) {
           , req.paramBody['type']
           , req.paramBody['payment']
           , req.paramBody['honey_amount']
+          , '결제'  // 추후 무조건 수정해야 함
         ]
     );
 }
