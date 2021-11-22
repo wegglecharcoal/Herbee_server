@@ -79,8 +79,8 @@ module.exports = function (req, res) {
         mysqlUtil.connectPool( async function (db_connection) {
             req.innerBody = {};
 
-            let check = await queryCheck(req, db_connection);
-            paramUtil.checkParam_alreadyUse(check,'이미 해당 꿀 기록이 등록되어 있습니다.');
+            // let check = await queryCheck(req, db_connection);
+            // paramUtil.checkParam_alreadyUse(check,'이미 해당 꿀 기록이 등록되어 있습니다.');
 
             req.innerBody['item'] = await queryCreate(req, db_connection);
 
