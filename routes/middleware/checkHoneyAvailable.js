@@ -30,7 +30,7 @@ module.exports = function (req, res, next) {
                 if(!ownHoney || 0 >= ownHoney['own_honey_amount'] ) {
                     // let _err = errUtil.get(errUtil.createCall(errCode.empty, `해당 유저의 꿀이 존재하지 않습니다. 확인 해주세요.`));
                     // sendUtil.sendErrorPacket(req, res, _err);
-                    errUtil.createCall(errCode.empty, `해당 유저의 꿀이 존재하지 않습니다. 확인 해주세요.`);
+                    errUtil.createCall(errCode.empty, `꿀이 부족합니다.`);
                 }
 
                 let systemHoney = await querySelectSystemHoney(req, db_connection);
