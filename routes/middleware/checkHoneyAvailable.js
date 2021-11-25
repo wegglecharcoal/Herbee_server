@@ -25,7 +25,7 @@ module.exports = function (req, res, next) {
             let is_subscribe = await querySelectSubscribe(req, db_connection);
 
             console.log('실행');
-            if (!is_subscribe) {
+            if (!is_subscribe || !is_subscribe['end_subscribed']) {
 
                 let ownHoney = await querySelectOwnHoney(req, db_connection);
                 if(!ownHoney || 0 >= ownHoney['own_honey_amount'] ) {
