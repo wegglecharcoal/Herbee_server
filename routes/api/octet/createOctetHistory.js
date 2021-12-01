@@ -16,19 +16,19 @@ module.exports = function (req, res) {
     try{
         req.file_name = file_name;
         logUtil.printUrlLog(req, `header: ${JSON.stringify(req.headers)}`);
-        console.log('adasdajsdako: ' + JSON.stringify(req.query));
+
         req.paramBody = paramUtil.parse(req);
-        console.log('옥텟 히스토리 생성 creakcejowe');
+
         mysqlUtil.connectPool( async function (db_connection) {
             req.innerBody = {};
 
-            console.log('adasdaqwdqwdjsdako: ' + JSON.stringify(req.paramBody));;
+            if(req.paramBody['id']) {
+                await queryCreateDepositHistory(req, db_connection);
+            }
+            else {
+                await queryCreateWithdrawHistory(req, db_connection);
+            }
 
-            console.log('req.okfewo: ' + req.paramBody['id'] );
-            console.log('req.okfewo: ' + req.paramBody['coinSymbol'] );
-            console.log('req.okfewo: ' + req.paramBody['idx'] );
-
-            // req.innerBody['item'] = await queryCreate(req, db_connection);
 
             deleteBody(req);
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);
@@ -50,23 +50,40 @@ function checkParam(req) {
 function deleteBody(req) {
 }
 
-function queryCreate(req, db_connection) {
+function queryCreateDepositHistory(req, db_connection) {
     const _funcName = arguments.callee.name;
 
     return mysqlUtil.querySingle(db_connection
-        , 'call proc_create_octet_history'
+        , 'call proc_create_octet_deposit_history'
         , [
-              req.headers['user_uid']
-            , req.paramBody['address']
-            , req.paramBody['building_name']
-            , req.paramBody['latitude']
-            , req.paramBody['longitude']
-            , req.paramBody['filename']
-            , req.paramBody['video_thumbnail']
-            , req.paramBody['content']
-            , req.paramBody['file_type']
+              req.paramBody['id']
+            , req.paramBody['coinSymbol']
+            , req.paramBody['fromAddress']
+            , req.paramBody['toAddress']
+            , req.paramBody['amount']
+            , req.paramBody['txid']
         ]
     );
 }
 
+function queryCreateWithdrawHistory(req, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_create_octet_withdraw_history'
+        , [
+              req.paramBody['idx']
+            , req.paramBody['requestId']
+            , req.paramBody['type']
+            , req.paramBody['status']
+            , req.paramBody['coinSymbol']
+            , req.paramBody['txid']
+            , req.paramBody['fromAddress']
+            , req.paramBody['toAddress']
+            , req.paramBody['amount']
+            , req.paramBody['actualFee']
+            , req.paramBody['webhookStatus']
+        ]
+    );
+}
 
