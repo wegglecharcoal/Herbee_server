@@ -24,9 +24,9 @@ module.exports = function (req, res) {
 
             console.log('adasdaqwdqwdjsdako: ' + JSON.stringify(req.paramBody));;
 
-            console.log('req.okfewo: ' + req.paramBody['data']['id'] );
-            console.log('req.okfewo: ' + req.paramBody['data']['coinSymbol'] );
-            console.log('req.okfewo: ' + req.paramBody['data']['idx'] );
+            console.log('req.okfewo: ' + req.paramBody['id'] );
+            console.log('req.okfewo: ' + req.paramBody['coinSymbol'] );
+            console.log('req.okfewo: ' + req.paramBody['idx'] );
 
             // req.innerBody['item'] = await queryCreate(req, db_connection);
 
