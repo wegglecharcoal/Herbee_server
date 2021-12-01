@@ -122,7 +122,7 @@ module.exports = function (req, res) {
 function checkParam(req) {
     paramUtil.checkParam_noReturn(req.paramBody, 'signup_type');
     paramUtil.checkParam_noReturn(req.paramBody, 'social_id');
-    paramUtil.checkParam_noReturn(req.paramBody, 'push_token');
+    // paramUtil.checkParam_noReturn(req.paramBody, 'push_token');
     paramUtil.checkParam_noReturn(req.paramBody, 'os');
     paramUtil.checkParam_noReturn(req.paramBody, 'version_app');
 }
