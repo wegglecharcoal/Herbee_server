@@ -16,10 +16,13 @@ module.exports = function (req, res) {
     try{
         req.file_name = file_name;
         logUtil.printUrlLog(req, `header: ${JSON.stringify(req.headers)}`);
+        console.log('adasdajsdako: ' + JSON.stringify(req.query));
         req.paramBody = paramUtil.parse(req);
         console.log('옥텟 히스토리 생성 creakcejowe');
         mysqlUtil.connectPool( async function (db_connection) {
             req.innerBody = {};
+
+            console.log('adasdaqwdqwdjsdako: ' + JSON.stringify(req.paramBody));;
 
             console.log('req.okfewo: ' + req.paramBody['data']['id'] );
             console.log('req.okfewo: ' + req.paramBody['data']['coinSymbol'] );
