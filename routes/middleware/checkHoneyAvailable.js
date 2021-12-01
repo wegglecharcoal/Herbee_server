@@ -28,21 +28,15 @@ module.exports = function (req, res, next) {
 
                 let ownHoney = await querySelectOwnHoney(req, db_connection);
                 if(!ownHoney || 0 >= ownHoney['own_honey_amount'] ) {
-                    // let _err = errUtil.get(errUtil.createCall(errCode.empty, `해당 유저의 꿀이 존재하지 않습니다. 확인 해주세요.`));
-                    // sendUtil.sendErrorPacket(req, res, _err);
                     errUtil.createCall(errCode.empty, `꿀이 부족합니다.`);
                 }
 
                 let systemHoney = await querySelectSystemHoney(req, db_connection);
                 if(!systemHoney) {
-                    // let _err = errUtil.get(errUtil.createCall(errCode.empty, `찾을려는 꿀 종류가 존재하지 않습니다. 확인 해주세요.`));
-                    // sendUtil.sendErrorPacket(req, res, _err);
                     errUtil.createCall(errCode.empty, `찾을려는 꿀 종류가 존재하지 않습니다. 확인 해주세요.`);
                 }
 
                 if(systemHoney['honey_amount'] > ownHoney['own_honey_amount']) {
-                    // let _err = errUtil.get(errUtil.createCall(errCode.empty, `사용할 수 있는 꿀이 모자라요 ㅠㅠ`));
-                    // sendUtil.sendErrorPacket(req, res, _err);
                     errUtil.createCall(errCode.empty, `사용할 수 있는 꿀이 모자라요 ㅠㅠ`);
                 }
 

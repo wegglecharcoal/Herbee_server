@@ -142,6 +142,7 @@ const sendUtil = require('../../../common/utils/sendUtil');
 const errUtil = require('../../../common/utils/errUtil');
 const logUtil = require('../../../common/utils/logUtil');
 const jwtUtil = require('../../../common/utils/jwtUtil');
+const octetUtil = require('../../../common/utils/octetUtil');
 
 const errCode = require('../../../common/define/errCode');
 
@@ -185,6 +186,8 @@ module.exports = function (req, res) {
 
             await queryCreateAddress(req, db_connection);
 
+            await octetFunction(req, db_connection);
+
             deleteBody(req);
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);
 
@@ -204,7 +207,7 @@ function checkParam(req) {
     paramUtil.checkParam_noReturn(req.paramBody, 'email');
     paramUtil.checkParam_noReturn(req.paramBody, 'phone');
     paramUtil.checkParam_noReturn(req.paramBody, 'nickname');
-    paramUtil.checkParam_noReturn(req.paramBody, 'push_token');
+    // paramUtil.checkParam_noReturn(req.paramBody, 'push_token');
     paramUtil.checkParam_noReturn(req.paramBody, 'social_id');
     paramUtil.checkParam_noReturn(req.paramBody, 'signup_type');
     paramUtil.checkParam_noReturn(req.paramBody, 'os');
@@ -308,5 +311,56 @@ function queryCheckNickname(req, db_connection) {
     );
 }
 
+function querySelectOctetAccessToken(req, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_select_octet_access_token'
+        , []
+    );
+}
 
 
+function queryUpdateOctetAccessToken(accessToken, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_update_octet_access_token'
+        , [
+            accessToken
+        ]
+    );
+}
+
+
+
+function queryUpdateWalletAddress(wallet_address, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_update_wallet_address'
+        , [
+              wallet_address['data']['uid']
+            , wallet_address['data']['address']
+        ]
+    );
+}
+
+
+async function octetFunction(req, db_connection) {
+
+    let current_access_token = await querySelectOctetAccessToken(req, db_connection);
+
+    let get_token_result = await octetUtil.octetToken(current_access_token['access_token']);
+
+    if( get_token_result !== 'maintain'
+        && get_token_result !== null && get_token_result !== undefined ) {
+        await queryUpdateOctetAccessToken(get_token_result, db_connection);
+    }
+
+    let wallet_address = await octetUtil.octetCreateAddress(req.innerBody['item']['uid'],
+        get_token_result === 'maintain' ? current_access_token['access_token'] : get_token_result);
+    wallet_address['data']['uid'] = req.innerBody['item']['uid']
+    await queryUpdateWalletAddress(wallet_address, db_connection);
+
+}

@@ -124,6 +124,25 @@ module.exports = function (req, res) {
                     }
                 } break;
 
+                // 1:1 채팅일 시에 약속을 수락한다면 주최자에게 알림을 보내준다.
+                case 1: {
+                    // 앱단 쪽 FCM 되면 풀어주면 됨
+                    // if(req.innerBody['item']['type'] === 0) {
+                    //
+                        // await fcmUtil.fcmPromiseAcceptSingle(req.innerBody['item']);
+                    // }
+
+                } break;
+
+                // 1:1 채팅일 시에 약속을 출발한다면 상대방에게 알림을 보내준다.
+                case 2: {
+
+                    // 앱단 쪽 FCM 되면 풀어주면 됨
+                    // await fcmUtil.fcmPromiseAcceptSingle(req.innerBody['item']);
+
+                } break;
+
+
                 // 모두가 만남이 성사된다면 꿀을 지급해주어야 함
                 case 3: {
                     let price_user_list = await queryMeetSuccessCheck(req, db_connection);

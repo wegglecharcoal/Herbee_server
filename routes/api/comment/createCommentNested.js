@@ -66,8 +66,7 @@ module.exports = function (req, res) {
             req.innerBody['item'] = await queryCreate(req, db_connection);
 
             // FCM 기능 추후 반영 예정
-            // if(req.headers['user_uid'] !== req.innerBody['item']['video_user_uid'])
-            //     await fcmUtil.fcmVideoCommentSingle(req.innerBody['item'])
+            // await fcmUtil.fcmCommentSingle(req.innerBody['item'])
 
             deleteBody(req)
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);
@@ -89,6 +88,9 @@ function checkParam(req) {
 }
 
 function deleteBody(req) {
+    delete req.innerBody['item']['fcm_push_token'];
+    delete req.innerBody['item']['fcm_nickname'];
+    delete req.innerBody['item']['fcm_filename'];
 }
 
 

@@ -40,6 +40,8 @@ const sendUtil = require('../../../common/utils/sendUtil');
 const errUtil = require('../../../common/utils/errUtil');
 const logUtil = require('../../../common/utils/logUtil');
 
+const fcmUtil = require('../../../common/utils/fcmUtil');
+
 const errCode = require('../../../common/define/errCode');
 
 
@@ -63,6 +65,9 @@ module.exports = function (req, res) {
 
             req.innerBody['item'] = await queryCreate(req, db_connection);
 
+            // 앱단 쪽 FCM 되면 풀어주면 됨
+            // await fcmUtil.fcmFollowSingle(req.innerBody['item']);
+
             deleteBody(req);
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);
 
@@ -82,6 +87,9 @@ function checkParam(req) {
 }
 
 function deleteBody(req) {
+    delete req.innerBody['item']['fcm_nickname'];
+    delete req.innerBody['item']['fcm_push_token'];
+    delete req.innerBody['item']['fcm_filename'];
 }
 
 function queryCreate(req, db_connection) {

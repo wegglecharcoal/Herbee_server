@@ -27,6 +27,11 @@ app.route('/user/nickname/check')
 app.route('/address/info/search')
     .get( require('./address/selectAddressInfoSearch') );
 
+/**
+ * octet
+ */
+app.route('/octet/history')
+    .post( require('./octet/createOctetHistory'));
 
 
 /**
@@ -41,6 +46,7 @@ app.route('/file')
  */
 app.route('/dev/test')
     .get( require('./_dev/_dev_select') )
+
 
 
 module.exports = app;
