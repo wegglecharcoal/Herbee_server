@@ -305,6 +305,17 @@ app.route( '/honeyManual/list')
 app.route('/notice/list')
     .get( require('./notice/selectNoticeList') );
 
+/**
+ * Octet
+ */
+app.route('/octet/history/list')
+    .get( require('./octet/selectOctetHistoryList') );
+app.route('/octet/bee/coin')
+    .get( require('./octet/selectOctetBeeCoin') );
+
+app.route('/octet/withdraw')
+    .post( require('./octet/createOctetWithdraw') );
+
 
 
 module.exports = app;

@@ -207,6 +207,10 @@ let swaggerDefinition = {
             description: '공지사항 관련 API'
         },
         {
+            name: 'Octet',
+            description: '옥텟 관련 API'
+        },
+        {
             name: 'File',
             description: '파일(이미지, 영상) 관련 API'
         },

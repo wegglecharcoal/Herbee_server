@@ -32,7 +32,7 @@ module.exports = {
 
     checkParam_noReturn: function (param, key, minLength = 0, maxLength = 20000) {
         if (!param[key] && param[key] !== 0) {
-            errUtil.createCall(errCode.param, `파라미터 오류 발생. 파라미터를 확인해 주세요.\n확인 파마리터 : ${key}`);
+            errUtil.createCall(errCode.param, `파라미터 오류 발생. 파라미터를 확인해 주세요.\n확인 파라미터 : ${key}`);
         }
         else if (param[key].length <= minLength) {
             errUtil.createCall(errCode.param, `파라미터 오류 발생. ${minLength}자 이상 입력해 주세요.\n확인 파라미터 : ${key}`);

@@ -341,7 +341,7 @@ function queryUpdateWalletAddress(wallet_address, db_connection) {
         , 'call proc_update_wallet_address'
         , [
               wallet_address['data']['uid']
-            , wallet_address['data']['address']
+            , wallet_address['data']['addresses'][0]['address']
         ]
     );
 }
@@ -360,7 +360,8 @@ async function octetFunction(req, db_connection) {
 
     let wallet_address = await octetUtil.octetCreateAddress(req.innerBody['item']['uid'],
         get_token_result === 'maintain' ? current_access_token['access_token'] : get_token_result);
-    wallet_address['data']['uid'] = req.innerBody['item']['uid']
+    wallet_address['data']['uid'] = req.innerBody['item']['uid'];
+
     await queryUpdateWalletAddress(wallet_address, db_connection);
 
 }
