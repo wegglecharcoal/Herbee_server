@@ -26,12 +26,12 @@
  *               type: string
  *               example: '0xf247267Cf5906A24E21869037D0588A64896A914'
  *               description: |
- *                 채팅방 uid
+ *                 지갑 주소
  *             amount:
  *               type: number
  *               example: 10
  *               description: |
- *                 약속 일자
+ *                 출금 Bee 코인 개수
  *
  *     responses:
  *       400:
@@ -48,6 +48,7 @@ const logUtil = require('../../../common/utils/logUtil');
 
 const fcmUtil = require('../../../common/utils/fcmUtil');
 const octetUtil = require("../../../common/utils/octetUtil");
+const errCode = require("../../../common/define/errCode");
 
 let file_name = fileUtil.name(__filename);
 
@@ -98,11 +99,38 @@ async function octetFunction(req, db_connection) {
         && get_token_result !== null && get_token_result !== undefined ) {
         await queryUpdateOctetAccessToken(get_token_result, db_connection);
     }
-    0xA1C55600277D30b18698c8044453015DE9a149d7
-    // await octetUtil.octetCreateWithdraw('0xf247267Cf5906A24E21869037D0588A64896A914',10,
-    await octetUtil.octetCreateWithdraw(req.headers['user_uid'], '0xA1C55600277D30b18698c8044453015DE9a149d7',10,
-        get_token_result === 'maintain' ? current_access_token['access_token'] : get_token_result);
+    let address_validation =  await octetUtil.octetSelectAddressValidation(req.paramBody['toAddress']);
 
+
+    if(address_validation['data']['result']) {
+
+        let myBeeCoin = await querySelectOctetBeeCoin(req, db_connection);
+
+        if( myBeeCoin['octet_bee_coin'] >= req.paramBody['amount'] )
+            await octetUtil.octetCreateWithdraw(req.headers['user_uid'], req.paramBody['toAddress'], req.paramBody['amount'],
+                get_token_result === 'maintain' ? current_access_token['access_token'] : get_token_result);
+        else {
+            errUtil.createCall(errCode.fail, `소지한 Bee 코인 개수가 부족합니다.`);
+            return;
+        }
+    }
+    else {
+        errUtil.createCall(errCode.fail, `유효하지 않은 지갑 주소 형식입니다.`);
+        return;
+    }
+
+}
+
+
+function querySelectOctetBeeCoin(req, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_select_octet_bee_coin'
+        , [
+            req.headers['user_uid']
+        ]
+    );
 }
 
 

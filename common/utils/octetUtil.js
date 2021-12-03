@@ -48,6 +48,17 @@ module.exports = {
         );
     },
 
+    // 주소 유효성 검증
+    octetSelectAddressValidation : async function(address, accessToken){
+        return await octetGet(
+            `v1/${TOKEN_SYMBOL}/address/${address}/validation`
+            , null
+            , accessToken
+        );
+    },
+
+
+
 };
 
 
