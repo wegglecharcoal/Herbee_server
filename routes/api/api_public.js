@@ -31,7 +31,7 @@ app.route('/address/info/search')
  * octet
  */
 app.route('/octet/history')
-    .post( require('./octet/createOctetHistory'));
+    .post( require('./octet/createOctetWebhookHistory'));
 
 
 /**

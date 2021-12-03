@@ -54,7 +54,7 @@ function queryCreateDepositHistory(req, db_connection) {
     const _funcName = arguments.callee.name;
 
     return mysqlUtil.querySingle(db_connection
-        , 'call proc_create_octet_deposit_history'
+        , 'call proc_create_octet_webhook_deposit_history'
         , [
               req.paramBody['id']
             , req.paramBody['coinSymbol']
@@ -70,7 +70,7 @@ function queryCreateWithdrawHistory(req, db_connection) {
     const _funcName = arguments.callee.name;
 
     return mysqlUtil.querySingle(db_connection
-        , 'call proc_create_octet_withdraw_history'
+        , 'call proc_create_octet_webhook_withdraw_history'
         , [
               req.paramBody['idx']
             , req.paramBody['requestId']
