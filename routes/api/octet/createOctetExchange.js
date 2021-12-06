@@ -129,8 +129,6 @@ function selectExchangeCheck(req, db_connection) {
         , 'call proc_select_honey_octet_bee_coin'
         , [
               req.headers['user_uid']
-            , req.paramBody['type']
-            , req.paramBody['amount']
         ]
     );
 }
