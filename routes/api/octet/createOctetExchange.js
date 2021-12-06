@@ -71,13 +71,13 @@ module.exports = function (req, res) {
             switch (req.paramBody['type']) {
                 case 0:
                     if(check['own_honey_amount'] < req.paramBody['amount']) {
-                        errUtil.createCall(errCode.fail, `소지한 Bee 코인 개수가 부족합니다.`);
+                        errUtil.createCall(errCode.fail, `소지한 꿀 개수가 부족합니다.`);
                         return;
                     }
                     break;
                 case 1:
-                    if(check['v_own_bee_coin_amount'] < req.paramBody['amount']) {
-                        errUtil.createCall(errCode.fail, `소지한 꿀 개수가 부족합니다.`);
+                    if(check['own_bee_coin_amount'] < req.paramBody['amount']) {
+                        errUtil.createCall(errCode.fail, `소지한 BEE coin 개수가 부족합니다.`);
                         return;
                     }
                     break;
