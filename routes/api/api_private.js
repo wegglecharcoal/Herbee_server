@@ -311,13 +311,15 @@ app.route('/notice/list')
 /**
  * Octet
  */
+app.route('/octet/withdraw')
+    .post( require('./octet/createOctetWithdraw') );
+app.route('/octet/exchange')
+    .post( require('./octet/createOctetExchange') );
 app.route('/octet/history/list')
     .get( require('./octet/selectOctetHistoryList') );
 app.route('/octet/bee/coin')
     .get( require('./octet/selectOctetBeeCoin') );
 
-app.route('/octet/withdraw')
-    .post( require('./octet/createOctetWithdraw') );
 
 
 
