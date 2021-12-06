@@ -85,7 +85,7 @@ module.exports = function (req, res) {
                     break;
             }
 
-            await createOctetExchange(req, db_connection);
+            req.innerBody['item'] =  await createOctetExchange(req, db_connection);
 
             deleteBody(req);
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);
