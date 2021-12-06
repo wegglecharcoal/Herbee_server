@@ -286,6 +286,9 @@ app.route('/alert/promise')
 app.route( '/honeyHistory')
     .post( require('./honey/createHoneyHistory') );
 
+app.route('/honey/subscribe')
+    .put( require('./honey/updateHoneySubscribe') );
+
 app.route( '/honeyHistory/list')
     .get( require('./honey/selectHoneyHistoryList') );
 
