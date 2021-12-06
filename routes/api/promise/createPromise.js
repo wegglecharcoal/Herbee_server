@@ -70,6 +70,8 @@ const sendUtil = require('../../../common/utils/sendUtil');
 const errUtil = require('../../../common/utils/errUtil');
 const logUtil = require('../../../common/utils/logUtil');
 
+const fcmUtil = require('../../../common/utils/fcmUtil');
+
 let file_name = fileUtil.name(__filename);
 
 module.exports = function (req, res) {
@@ -85,7 +87,18 @@ module.exports = function (req, res) {
         mysqlUtil.connectPool(async function (db_connection) {
             req.innerBody = {};
 
-            req.innerBody['item'] = await queryCreate(req, db_connection);
+            let push_token_list = [];
+            let chatRoomUserList = await queryCreate(req, db_connection);
+            for (let idx in chatRoomUserList) {
+                push_token_list.push(chatRoomUserList[idx]['push_token']);
+            }
+            req.innerBody['fcm_push_token_list'] = push_token_list;
+            req.innerBody['fcm_nickname'] = chatRoomUserList[0]['fcm_nickname'];
+            req.innerBody['fcm_filename'] = chatRoomUserList[0]['fcm_filename'];
+
+            // 앱단 쪽 FCM 되면 풀어주면 됨
+            // await fcmUtil.fcmPromiseCreateArray(req.innerBody);
+
 
             deleteBody(req);
             await queryCreateUseHoney(req, db_connection);
@@ -102,6 +115,9 @@ module.exports = function (req, res) {
 }
 
 function deleteBody(req) {
+    delete req.innerBody['push_token_list'];
+    delete req.innerBody['fcm_nickname'];
+    delete req.innerBody['fcm_filename'];
 }
 
 function checkParam(req) {
@@ -116,7 +132,7 @@ function checkParam(req) {
 function queryCreate(req, db_connection) {
     const _funcName = arguments.callee.name;
 
-    return mysqlUtil.querySingle(db_connection
+    return mysqlUtil.queryArray(db_connection
         , 'call proc_create_promise'
         , [
             req.headers['user_uid']
