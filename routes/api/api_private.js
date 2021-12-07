@@ -319,6 +319,10 @@ app.route('/octet/history/list')
     .get( require('./octet/selectOctetHistoryList') );
 app.route('/octet/bee/coin')
     .get( require('./octet/selectOctetBeeCoin') );
+app.route('/octet/walletAddress')
+    .get( require('./octet/selectOctetWalletAddress') );
+app.route('/octet/exchange/rate')
+    .get( require('./octet/selectOctetExchangeRate') );
 
 
 
