@@ -108,15 +108,16 @@ async function octetFunction(req, db_connection) {
 
         let reqId = `${req.headers['user_uid']}@${Math.floor(new Date().getTime()) + 1}`;
 
-        let isWithdrawSuccess = await querySelectOctetIsWithdrawSuccess(reqId, db_connection);
+        let isWithdrawSuccess = await querySelectOctetIsWithdrawSuccess(req, db_connection);
 
-        if(!isWithdrawSuccess && myBeeCoin['octet_bee_coin'] >= req.paramBody['amount'] ) {
-            await queryCreateBeeCoinWithdraw(req, db_connection);
+        console.log('a3pio2j: ' + isWithdrawSuccess.length);
+        if(isWithdrawSuccess.length === 0 && myBeeCoin['octet_bee_coin'] >= req.paramBody['amount'] ) {
+            await queryCreateBeeCoinWithdraw(reqId, db_connection);
 
             await octetUtil.octetCreateWithdraw(reqId, req.paramBody['toAddress'], req.paramBody['amount'],
                 get_token_result === 'maintain' ? current_access_token['access_token'] : get_token_result);
         }
-        else if(isWithdrawSuccess) {
+        else if(isWithdrawSuccess.length > 0) {
             errUtil.createCall(errCode.fail, `이전 출금 처리가 완료되지 않았습니다.`);
             return;
         }
