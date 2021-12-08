@@ -178,14 +178,9 @@ module.exports = function (req, res) {
 
             req.innerBody['item'] = await queryCreate(req, db_connection);
 
-            console.log('afewoqmo: ' + JSON.stringify(req.innerBody['item']));
-
             req.innerBody['item']['access_token'] = jwtUtil.createToken(req.innerBody['item'], '100d');
 
-            console.log('afewoqmo2: ' + JSON.stringify(req.innerBody['item']['access_token']));
-
             await queryUpdate(req, db_connection);
-
 
             await queryCreateAddress(req, db_connection);
 
