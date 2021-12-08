@@ -4,9 +4,9 @@
 const axios = require('axios');
 const {log} = require("debug");
 
-// 바꿔야함 common
-// axios.defaults.headers.common['Authorization'] = 'key=AAAAH1HxpKo:APA91bEGjPgOgXK2xZ-uqZHiR_PT69tO4knZt6ZCRpAXRESsnuY23MXWFneIQ-EALixYNkcUZg0iNczMW8eXc9ZLp6_dd1Kmz0t4rw5rJwboLwG-65hS0nyNps5OchEw72zP8dzlLNIa';
+axios.defaults.headers.common['Authorization'] = 'key=AAAAlCvmEC0:APA91bHNdaj9f8kQBKA5ZMMbDh6ynivhr94si-Wkm9qEalYPzSAMwSDNXMC6AvFTkmWh9kQi44S_2fyibcWGrJbUHS6Nx0s1q3Y1HOdXFt7w4-xI-AkrMGSHUWzEMie50ZMrkE8ZUzP';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
+
 // fcm_type
 // 0: 댓글 등록 알림
 // 1: 대댓글 등록 알림
