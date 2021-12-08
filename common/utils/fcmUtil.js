@@ -38,7 +38,7 @@ module.exports = {
     // 중복 처리 해결 해주어야 함 연속으로 눌렀을 때
     fcmLikePostSingle : async function(item){
         return await fcmFunc(
-              item['fcm_push_token']
+              [item['fcm_push_token']]
             , "게시물 좋아요 알림"
             , `${item['fcm_nickname']}님이 게시물에 좋아요를 눌렀습니다.`
             , "좋아요 알림"
@@ -49,7 +49,7 @@ module.exports = {
     // 중복 처리 해결 해주어야 함 연속으로 눌렀을 때
     fcmLikeCommentSingle : async function(item){
         return await fcmFunc(
-              item['fcm_push_token']
+              [item['fcm_push_token']]
             , "댓글 좋아요 알림"
             , `${item['fcm_nickname']}님이 댓글에 좋아요를 눌렀습니다.`
             , "좋아요 알림"
@@ -59,7 +59,7 @@ module.exports = {
     },
     fcmCommentSingle : async function(item){
         return await fcmFunc(
-              item['fcm_push_token']
+              [item['fcm_push_token']]
             , "댓글 알림"
             , `${item['fcm_nickname']}님이 게시물에 댓글을 남겼습니다.`
             , "댓글 알림"
@@ -79,7 +79,7 @@ module.exports = {
     },
     fcmPromiseAcceptSingle : async function(item){
         return await fcmFunc(
-              item['fcm_push_token']
+              [item['fcm_push_token']]
             , "약속 수락 알림"
             , `${item['fcm_nickname']}님이 약속을 수락했습니다.`
             , "약속 알림"
@@ -89,7 +89,7 @@ module.exports = {
     },
     fcmPromiseAfterAnHourSingle : async function(item){
         return await fcmFunc(
-              item['push_token']
+              [item['push_token']]
             , "약속 한 시간 전 알림"
             , `${item['nickname']}님과의 약속 잊지 않으셨죠? 출발할 때 알려주세요.`
             , "약속 알림"
@@ -99,7 +99,7 @@ module.exports = {
     },
     fcmPromiseSingle : async function(item){
         return await fcmFunc(
-            item['push_token']
+            [item['push_token']]
             , "약속 한 시간 전 알림"
             , `${item['nickname']}님이 약속 장소로 향하고 있습니다.`
             , "약속 알림"
@@ -109,7 +109,7 @@ module.exports = {
     },
     fcmPromiseDepartSingle : async function(item){
         return await fcmFunc(
-              item['push_token']
+              [item['push_token']]
             , "약속 출발"
             , `${item['nickname']}님과의 약속 어떠셨나요?`
             , "약속 알림"
