@@ -91,10 +91,12 @@ module.exports = function (req, res) {
 
             switch (req.innerBody['item']['type']) {
 
-                case 1,2 :
+                case 1 :
+                case 2:
                     await fcmUtil.fcmLikePostSingle(req.innerBody['item']);
                     break;
-                case 3,4:
+                case 3:
+                case 4:
                     await fcmUtil.fcmLikeCommentSingle(req.innerBody['item']);
                     break;
                 default:
