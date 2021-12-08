@@ -65,8 +65,7 @@ module.exports = function (req, res) {
 
             req.innerBody['item'] = await queryCreate(req, db_connection);
 
-            // 앱단 쪽 FCM 되면 풀어주면 됨
-            // await fcmUtil.fcmFollowSingle(req.innerBody['item']);
+            await fcmUtil.fcmFollowSingle(req.innerBody['item']);
 
             deleteBody(req);
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);

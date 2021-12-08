@@ -65,8 +65,7 @@ module.exports = function (req, res) {
 
             req.innerBody['item'] = await queryCreate(req, db_connection);
 
-            // FCM 기능 추후 반영 예정
-            // await fcmUtil.fcmCommentSingle(req.innerBody['item'])
+            await fcmUtil.fcmCommentSingle(req.innerBody['item'])
 
             deleteBody(req)
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);

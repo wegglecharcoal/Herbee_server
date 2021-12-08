@@ -89,19 +89,18 @@ module.exports = function (req, res) {
 
             req.innerBody['item'] = await queryUpdate(req, db_connection);
 
-            // 앱단 쪽 FCM 되면 풀어주면 됨
-            // switch (req.innerBody['item']['type']) {
-            //
-            //     case 1,2 :
-            //         await fcmUtil.fcmLikePostSingle(req.innerBody['item']);
-            //         break;
-            //     case 3,4:
-            //         await fcmUtil.fcmLikeCommentSingle(req.innerBody['item']);
-            //         break;
-            //     default:
-            //         break;
-            //
-            // }
+            switch (req.innerBody['item']['type']) {
+
+                case 1,2 :
+                    await fcmUtil.fcmLikePostSingle(req.innerBody['item']);
+                    break;
+                case 3,4:
+                    await fcmUtil.fcmLikeCommentSingle(req.innerBody['item']);
+                    break;
+                default:
+                    break;
+
+            }
 
 
             deleteBody(req)

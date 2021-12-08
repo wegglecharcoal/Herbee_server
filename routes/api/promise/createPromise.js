@@ -96,9 +96,7 @@ module.exports = function (req, res) {
             req.innerBody['fcm_nickname'] = chatRoomUserList[0]['fcm_nickname'];
             req.innerBody['fcm_filename'] = chatRoomUserList[0]['fcm_filename'];
 
-            // 앱단 쪽 FCM 되면 풀어주면 됨
-            // await fcmUtil.fcmPromiseCreateArray(req.innerBody);
-
+            await fcmUtil.fcmPromiseCreateArray(req.innerBody);
 
             deleteBody(req);
             await queryCreateUseHoney(req, db_connection);
