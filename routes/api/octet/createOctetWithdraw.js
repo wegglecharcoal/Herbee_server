@@ -106,13 +106,25 @@ async function octetFunction(req, db_connection) {
 
         let myBeeCoin = await querySelectOctetBeeCoin(req, db_connection);
 
-        if( myBeeCoin['octet_bee_coin'] >= req.paramBody['amount'] )
-            await octetUtil.octetCreateWithdraw(req.headers['user_uid'], req.paramBody['toAddress'], req.paramBody['amount'],
+        let reqId = `${req.headers['user_uid']}@${Math.floor(new Date().getTime()) + 1}`;
+
+        let isWithdrawSuccess = await querySelectOctetIsWithdrawSuccess(reqId, db_connection);
+
+        if(!isWithdrawSuccess && myBeeCoin['octet_bee_coin'] >= req.paramBody['amount'] ) {
+            await queryCreateBeeCoinWithdraw(req, db_connection);
+
+            await octetUtil.octetCreateWithdraw(reqId, req.paramBody['toAddress'], req.paramBody['amount'],
                 get_token_result === 'maintain' ? current_access_token['access_token'] : get_token_result);
+        }
+        else if(isWithdrawSuccess) {
+            errUtil.createCall(errCode.fail, `이전 출금 처리가 완료되지 않았습니다.`);
+            return;
+        }
         else {
             errUtil.createCall(errCode.fail, `소지한 Bee 코인 개수가 부족합니다.`);
             return;
         }
+
     }
     else {
         errUtil.createCall(errCode.fail, `유효하지 않은 지갑 주소 형식입니다.`);
@@ -121,12 +133,34 @@ async function octetFunction(req, db_connection) {
 
 }
 
+function queryCreateBeeCoinWithdraw(reqId, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_create_bee_coin_withdraw'
+        , [
+            reqId
+        ]
+    );
+}
+
 
 function querySelectOctetBeeCoin(req, db_connection) {
     const _funcName = arguments.callee.name;
 
     return mysqlUtil.querySingle(db_connection
         , 'call proc_select_octet_bee_coin'
+        , [
+            req.headers['user_uid']
+        ]
+    );
+}
+
+function querySelectOctetIsWithdrawSuccess(req, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.queryArray(db_connection
+        , 'call proc_select_octet_is_withdraw_success'
         , [
             req.headers['user_uid']
         ]
@@ -142,7 +176,6 @@ function querySelectOctetAccessToken(req, db_connection) {
         , []
     );
 }
-
 
 function queryUpdateOctetAccessToken(accessToken, db_connection) {
     const _funcName = arguments.callee.name;

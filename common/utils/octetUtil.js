@@ -32,12 +32,12 @@ module.exports = {
         );
     },
 
-    // 자신 주소 등록
-    octetCreateWithdraw : async function(user_uid, toAddress, amount, accessToken){
+    // 옥텟 출금
+    octetCreateWithdraw : async function(reqId, toAddress, amount, accessToken){
         data =  {
               "to" : toAddress
             , "amount" : amount
-            , "reqId" : `${user_uid}@${Math.floor(new Date().getTime()) + 1}`
+            , "reqId" : reqId
             , "passphrase" : `${process.env.OCTET_PASSPHRASE}`
             , "privateKey": `${process.env.OCTET_PRIVATEKEY}`
         }
