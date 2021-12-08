@@ -89,9 +89,9 @@ module.exports = function (req, res) {
 
             req.innerBody['item'] = await queryUpdate(req, db_connection);
 
-            switch (req.innerBody['item']['type']) {
+            switch (req.paramBody['type']) {
 
-                case 1 :
+                case 1:
                 case 2:
                     await fcmUtil.fcmLikePostSingle(req.innerBody['item']);
                     break;
