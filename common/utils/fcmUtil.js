@@ -143,6 +143,8 @@ async function fcmFunc(token, title, message, channel, fcm_type, filename){
             "content-available" : "true",
             "apns-priority" : "5",
             "badge count" : "0",
+            "android_channel_id" : channel,
+            "channel_id" : channel,
         },
     }).catch((e) => console.log(e));
 };
