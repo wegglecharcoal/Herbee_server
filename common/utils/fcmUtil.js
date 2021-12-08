@@ -14,9 +14,9 @@ axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 module.exports = {
 
-    fcmMsgSingle : async function(item){
+    fcmMsgArray : async function(item){
         return await fcmFunc(
-              item['fcm_push_token']
+              item['fcm_push_token_list']
             , "메시지 알림"
             , `${item['fcm_nickname']}님이 메시지를 보냈습니다.`
             , "메시지 알림"

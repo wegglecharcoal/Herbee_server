@@ -253,6 +253,9 @@ app.route('/block/phone/list')
 /**
  * Alert
  */
+app.route('/alert/send/msg')
+    .post( require('./alert/createAlertSendMsg') );
+
 app.route('/alert/history')
     .delete( require('./alert/deleteAlertHistory') );
 
