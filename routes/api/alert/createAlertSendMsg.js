@@ -61,7 +61,7 @@ module.exports = function (req, res) {
 
             req.innerBody['fcm_push_token_list'] = [];
             let chatRoomUserList = await querySelect(req, db_connection);
-            console.log("ASDADAASDADASDA: " + JSON.stringify(chatRoomUserList));
+            console.log("ASDADAASDADASDA141414: " + JSON.stringify(chatRoomUserList));
             for (let idx in chatRoomUserList) {
                 req.innerBody['fcm_push_token_list'].push(chatRoomUserList[idx]['push_token']);
             }
@@ -69,7 +69,7 @@ module.exports = function (req, res) {
             req.innerBody['fcm_nickname'] = chatRoomUserList[0]['fcm_nickname'];
             req.innerBody['fcm_filename'] = chatRoomUserList[0]['fcm_filename'];
 
-            console.log("ASDADAASDADASDA: " + JSON.stringify(req.innerBody['fcm_push_token_list']));
+            console.log("ASDADAASDADASDA1414: " + JSON.stringify(req.innerBody['fcm_push_token_list']));
 
             await fcmUtil.fcmMsgArray(req.innerBody);
 
