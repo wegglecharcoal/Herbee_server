@@ -89,19 +89,21 @@ module.exports = function (req, res) {
 
             req.innerBody['item'] = await queryUpdate(req, db_connection);
 
-            switch (req.paramBody['type']) {
+            if(req.paramBody['is_like'] === 1) {
+                switch (req.paramBody['type']) {
 
-                case 1:
-                case 2:
-                    await fcmUtil.fcmLikePostSingle(req.innerBody['item']);
-                    break;
-                case 3:
-                case 4:
-                    await fcmUtil.fcmLikeCommentSingle(req.innerBody['item']);
-                    break;
-                default:
-                    break;
+                    case 1:
+                    case 2:
+                        await fcmUtil.fcmLikePostSingle(req.innerBody['item']);
+                        break;
+                    case 3:
+                    case 4:
+                        await fcmUtil.fcmLikeCommentSingle(req.innerBody['item']);
+                        break;
+                    default:
+                        break;
 
+                }
             }
 
 
