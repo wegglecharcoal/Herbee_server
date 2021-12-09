@@ -59,18 +59,16 @@ module.exports = function (req, res) {
         mysqlUtil.connectPool( async function (db_connection) {
             req.innerBody = {};
 
-            let push_token_list = [];
+            req.innerBody['fcm_push_token_list'] = [];
             let chatRoomUserList = await querySelect(req, db_connection);
             console.log("ASDADAASDADASDA: " + JSON.stringify(chatRoomUserList));
             for (let idx in chatRoomUserList) {
-                push_token_list.push(chatRoomUserList[idx]['push_token']);
+                req.innerBody['fcm_push_token_list'].push(chatRoomUserList[idx]['push_token']);
             }
-            req.innerBody['fcm_push_token_list'] = push_token_list;
+
             req.innerBody['fcm_nickname'] = chatRoomUserList[0]['fcm_nickname'];
             req.innerBody['fcm_filename'] = chatRoomUserList[0]['fcm_filename'];
 
-            console.log("ASDADAASDADASDA: " + req.innerBody['fcm_nickname']);
-            console.log("ASDADAASDADASDA: " + req.innerBody['fcm_filename']);
             console.log("ASDADAASDADASDA: " + JSON.stringify(req.innerBody['fcm_push_token_list']));
 
             await fcmUtil.fcmMsgArray(req.innerBody);
