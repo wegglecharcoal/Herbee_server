@@ -77,6 +77,12 @@ module.exports = {
         return _isRealServer() ? process.env.REAL_AWS_MEDIA_CONVERT_S3_DESTINATION : process.env.DEV_AWS_MEDIA_CONVERT_S3_DESTINATION;
     },
 
+    /**
+     * fcm key
+     */
+    getFCMKey: function() {
+        return _isRealServer() ? process.env.REAL_FCM_KEY : process.env.DEV_FCM_KEY;
+    }
 }
 
 function _isRealServer(){
