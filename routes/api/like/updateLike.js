@@ -89,7 +89,8 @@ module.exports = function (req, res) {
 
             req.innerBody['item'] = await queryUpdate(req, db_connection);
 
-            if(req.paramBody['is_like'] === 1) {
+            if(req.paramBody['is_like'] === 1
+                && (parseInt(req.innerBody['item']['target_user_uid']) !== req.headers['user_uid']) ) {
                 switch (req.paramBody['type']) {
 
                     case 1:
