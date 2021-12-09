@@ -133,6 +133,7 @@ async function fcmFunc(token, title, message, channel, fcm_type, filename){
             "filename" : filename,
         },
         "notification": {
+            "icon" : 'ic_icon',
             "title": title,
             "body": message,
             "channel" : channel,
