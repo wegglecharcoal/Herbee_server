@@ -61,6 +61,7 @@ module.exports = function (req, res) {
 
             let push_token_list = [];
             let chatRoomUserList = await querySelect(req, db_connection);
+            console.log("ASDADAASDADASDA: " + JSON.stringify(chatRoomUserList));
             for (let idx in chatRoomUserList) {
                 push_token_list.push(chatRoomUserList[idx]['push_token']);
             }
