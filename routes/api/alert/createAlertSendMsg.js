@@ -63,7 +63,7 @@ module.exports = function (req, res) {
             let chatRoomUserList = await querySelect(req, db_connection);
             console.log("ASDADAASDADASDA141414: " + JSON.stringify(chatRoomUserList));
             for (let idx in chatRoomUserList) {
-                req.innerBody['fcm_push_token_list'].push(chatRoomUserList[idx]['push_token']);
+                req.innerBody['fcm_push_token_list'].push(chatRoomUserList[idx]['fcm_push_token']);
             }
 
             req.innerBody['fcm_nickname'] = chatRoomUserList[0]['fcm_nickname'];
