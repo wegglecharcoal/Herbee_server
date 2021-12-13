@@ -67,7 +67,7 @@ module.exports = function (req, res) {
 
             req.innerBody['fcm_nickname'] = chatRoomUserList[0]['fcm_nickname'];
             req.innerBody['fcm_filename'] = chatRoomUserList[0]['fcm_filename'];
-
+            req.innerBody['fcm_target_uid'] = req.paramBody['chat_room_uid'];
             await fcmUtil.fcmMsgArray(req.innerBody);
 
             deleteBody(req);

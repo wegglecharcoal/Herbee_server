@@ -64,7 +64,7 @@ module.exports = function (req, res) {
             paramUtil.checkParam_alreadyUse(req.innerBody['item'], '이미 팔로우 된 유저입니다.');
 
             req.innerBody['item'] = await queryCreate(req, db_connection);
-
+            req.innerBody['item']['fcm_target_uid'] = req.headers['user_uid'] ;
             await fcmUtil.fcmFollowSingle(req.innerBody['item']);
 
             deleteBody(req);

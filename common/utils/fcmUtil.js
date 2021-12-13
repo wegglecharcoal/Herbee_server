@@ -8,8 +8,11 @@ axios.defaults.headers.common['Authorization'] = `key=${funcUtil.getFCMKey()}`;
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 // fcm_type
-// 0: 댓글 등록 알림
-// 1: 대댓글 등록 알림
+// 0: 메시지 알림
+// 1: 팔로우 알림
+// 2: 좋아요 알림
+// 3: 댓글 알림
+// 4: 약속 알림
 
 
 module.exports = {
@@ -22,6 +25,8 @@ module.exports = {
             , "메시지"
             , "0"
             , item['fcm_filename']
+            , item['fcm_target_uid']
+            , null
         );
     },
     // 중복 처리 해결 해주어야 함 연속으로 눌렀을 때
@@ -33,6 +38,8 @@ module.exports = {
             , "팔로우"
             , "1"
             , item['fcm_filename']
+            , item['fcm_target_uid']
+            , null
         );
     },
     // 중복 처리 해결 해주어야 함 연속으로 눌렀을 때
@@ -44,6 +51,8 @@ module.exports = {
             , "좋아요"
             , "2"
             , item['fcm_filename']
+            , item['fcm_target_uid']
+            , item['fcm_type']
         );
     },
     // 중복 처리 해결 해주어야 함 연속으로 눌렀을 때
@@ -55,6 +64,8 @@ module.exports = {
             , "좋아요"
             , "2"
             , item['fcm_filename']
+            , item['fcm_target_uid']
+            , item['fcm_type']
         );
     },
     fcmCommentSingle : async function(item){
@@ -65,6 +76,8 @@ module.exports = {
             , "댓글"
             , "3"
             , item['fcm_filename']
+            , item['fcm_target_uid']
+            , item['fcm_type']
         );
     },
     fcmPromiseCreateArray : async function(item){
@@ -75,6 +88,7 @@ module.exports = {
             , "약속"
             , "4"
             , item['fcm_filename']
+            , item['fcm_target_uid']
         );
     },
     fcmPromiseAcceptSingle : async function(item){
@@ -85,6 +99,7 @@ module.exports = {
             , "약속"
             , "4"
             , item['fcm_filename']
+            , item['fcm_target_uid']
         );
     },
     fcmPromiseAfterAnHourSingle : async function(item){
@@ -95,6 +110,7 @@ module.exports = {
             , "약속"
             , "4"
             , item['filename']
+            , item['fcm_target_uid']
         );
     },
     fcmPromiseSingle : async function(item){
@@ -105,6 +121,7 @@ module.exports = {
             , "약속"
             , "4"
             , item['filename']
+            , item['fcm_target_uid']
         );
     },
     fcmPromiseDepartSingle : async function(item){
@@ -115,13 +132,14 @@ module.exports = {
             , "약속"
             , "4"
             , item['filename']
+            , item['fcm_target_uid']
         );
     },
 };
 
 
 
-async function fcmFunc(token, title, message, channel, fcm_type, filename){
+async function fcmFunc(token, title, message, channel, fcm_type, filename, target_uid, type){
     return  await axios.post('https://fcm.googleapis.com/fcm/send', {
         "registration_ids": token,
         "priority": "high",
@@ -131,6 +149,8 @@ async function fcmFunc(token, title, message, channel, fcm_type, filename){
             "channel" : channel,
             "fcm_type" : fcm_type,
             "filename" : filename,
+            "target_uid" : target_uid,
+            "type" : type
         },
         "notification": {
             "icon" : 'ic_icon',
@@ -139,6 +159,8 @@ async function fcmFunc(token, title, message, channel, fcm_type, filename){
             "channel" : channel,
             "fcm_type" : fcm_type,
             "filename" : filename,
+            "target_uid" : target_uid,
+            "type" : type,
             "sound" : "default",
             "badge": "1",
             "content-available" : "true",
