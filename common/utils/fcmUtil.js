@@ -89,6 +89,7 @@ module.exports = {
             , "4"
             , item['fcm_filename']
             , item['fcm_target_uid']
+            , null
         );
     },
     fcmPromiseAcceptSingle : async function(item){
