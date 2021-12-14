@@ -129,7 +129,7 @@ module.exports = {
     },
     fcmPromiseDepartSingle : async function(item){
         return await fcmFunc(
-              [item['push_token']]
+              [item['fcm_push_token']]
             , "약속 출발"
             , `${item['nickname']}님과의 약속 어떠셨나요?`
             , "약속"

@@ -4,10 +4,10 @@
 const axios = require('axios');
 const {log} = require("debug");
 
+const funcUtil = require('./funcUtil');
+
 // 7일을 '초'로 변환
 const SEVEN_DAYS_TIMESTAMP_SECOND = 604800;
-// const SEVEN_DAYS_TIMESTAMP_SECOND = 9999999999999999999999999;
-const TOKEN_SYMBOL = 'DDC'
 
 let data = {};
 axios.defaults.headers.common['Authorization'];
@@ -26,7 +26,7 @@ module.exports = {
 
         }
         return await octetPost(
-              `v1/${TOKEN_SYMBOL}/address`
+              `v1/${funcUtil.getOctetSymbol()}/address`
             , data
             , accessToken
         );
@@ -38,11 +38,11 @@ module.exports = {
               "to" : toAddress
             , "amount" : amount
             , "reqId" : reqId
-            , "passphrase" : `${process.env.OCTET_PASSPHRASE}`
-            , "privateKey": `${process.env.OCTET_PRIVATEKEY}`
+            , "passphrase" : `${funcUtil.getOctetPassPhrase()}`
+            , "privateKey": `${funcUtil.getOctetPrivateKey()}`
         }
         return await octetPost(
-            `v1/${TOKEN_SYMBOL}/transfer`
+            `v1/${funcUtil.getOctetSymbol()}/transfer`
             , data
             , accessToken
         );
@@ -51,7 +51,7 @@ module.exports = {
     // 주소 유효성 검증
     octetSelectAddressValidation : async function(address, accessToken){
         return await octetGet(
-            `v1/${TOKEN_SYMBOL}/address/${address}/validation`
+            `v1/${funcUtil.getOctetSymbol()}/address/${address}/validation`
             , null
             , accessToken
         );
@@ -94,19 +94,19 @@ async function octetCreateToken(accessToken) {
 
 async function octetPost(path, data, accessToken){
     setAccessToken(accessToken);
-    return  await axios.post(`https://dev.blockchainapi.pro/${path}`, data
+    return  await axios.post(`${funcUtil.getOctetApiPath()}${path}`, data
     ).catch((e) => console.log(e));
 };
 
 async function octetGet(path, data, accessToken){
     setAccessToken(accessToken);
-    return  await axios.get(`https://dev.blockchainapi.pro/${path}`, data
+    return  await axios.get(`${funcUtil.getOctetApiPath()}${path}`, data
     ).catch((e) => console.log(e));
 };
 
 async function octetPut(path, data, accessToken){
     setAccessToken(accessToken);
-    return  await axios.put(`https://dev.blockchainapi.pro/${path}`, data
+    return  await axios.put(`${funcUtil.getOctetApiPath()}${path}`, data
     ).catch((e) => console.log(e));
 };
 

@@ -82,7 +82,24 @@ module.exports = {
      */
     getFCMKey: function() {
         return _isRealServer() ? process.env.REAL_FCM_KEY : process.env.DEV_FCM_KEY;
+    },
+
+    /**
+     * Octet Coin
+     */
+    getOctetPassPhrase: function() {
+        return _isRealServer() ? process.env.REAL_OCTET_PASSPHRASE : process.env.DEV_OCTET_PASSPHRASE;
+    },
+    getOctetPrivateKey: function() {
+        return _isRealServer() ? process.env.REAL_OCTET_PRIVATEKEY : process.env.DEV_OCTET_PRIVATEKEY;
+    },
+    getOctetSymbol: function() {
+        return _isRealServer() ? process.env.REAL_OCTET_SYMBOL : process.env.DEV_OCTET_SYMBOL;
+    },
+    getOctetApiPath: function() {
+        return _isRealServer() ? process.env.REAL_OCTET_API_PATH : process.env.DEV_OCTET_API_PATH;
     }
+
 }
 
 function _isRealServer(){
