@@ -82,7 +82,7 @@ module.exports = {
     },
     fcmPromiseCreateArray : async function(item){
         return await fcmFunc(
-              [item['fcm_push_token_list']]
+              item['fcm_push_token_list']
             , "약속 생성 알림"
             , `${item['fcm_nickname']}님이 약속을 잡았습니다.`
             , "약속"
