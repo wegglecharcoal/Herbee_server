@@ -2,12 +2,12 @@
  * Created by gunucklee on 2021. 12. 14.
  *
  * @swagger
- * /api/private/octet/test:
+ * /api/public/octet/test:
  *   get:
  *     summary: test
  *     tags: [Octet]
  *     description: |
- *       path : /api/private/octet/test
+ *       path : /api/public/octet/test
  *
  *       * test
  *
