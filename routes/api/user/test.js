@@ -116,16 +116,18 @@ async function octetFunction(test, db_connection) {
     let current_access_token = await querySelectOctetAccessToken(test, db_connection);
 
     let get_token_result = await octetUtil.octetToken(current_access_token['access_token']);
-
+    console.log("OIWQJFOWEIF: " + get_token_result);
     if( get_token_result !== 'maintain'
         && get_token_result !== null && get_token_result !== undefined ) {
         await queryUpdateOctetAccessToken(get_token_result, db_connection);
     }
 
+    console.log("OIWQJFOWEIasdasdasdasF: " + test['uid']);
     let wallet_address = await octetUtil.octetCreateAddress(test['uid'],
         get_token_result === 'maintain' ? current_access_token['access_token'] : get_token_result);
     wallet_address['data']['uid'] = test['uid'];
 
+    console.log("asdasdasdqwerqq: " + wallet_address['data']['uid'] );
     await queryUpdateWalletAddress(wallet_address, db_connection);
 
 }
