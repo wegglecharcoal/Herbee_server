@@ -114,7 +114,7 @@ function queryUpdateWalletAddress(wallet_address, db_connection) {
 async function octetFunction(test, db_connection) {
 
     let current_access_token = await querySelectOctetAccessToken(test, db_connection);
-
+    console.log("OIWQasdasdasJFOWEIF: " + current_access_token);
     let get_token_result = await octetUtil.octetToken(current_access_token['access_token']);
     console.log("OIWQJFOWEIF: " + get_token_result);
     if( get_token_result !== 'maintain'

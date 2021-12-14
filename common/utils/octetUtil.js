@@ -63,9 +63,9 @@ module.exports = {
 
 
 async function octetToken(accessToken) {
-
+    console.log('asd;askldopaskdp' + funcUtil.getOctetApiPath());
     let tokenInfo = await octetGetToken(accessToken);
-
+    console.log("OIWasdasdasdasdaQasdasdasJFOWEIF: " + tokenInfo['data']['formatUnixTimestampSecond']);
     // 토큰 유효기간이 지나면 새 토큰 발행, 유효할 시 기존 토큰 활용
     if( tokenInfo['data']['formatUnixTimestampSecond'] < SEVEN_DAYS_TIMESTAMP_SECOND ) {
         accessToken = await octetCreateToken(accessToken);
