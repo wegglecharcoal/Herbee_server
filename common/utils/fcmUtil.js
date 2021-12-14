@@ -94,25 +94,24 @@ module.exports = {
     },
     fcmPromiseAcceptSingle : async function(item){
         return await fcmFunc(
-              [item['fcm_push_token']]
+              [item['fcm_push_token_other']]
             , "약속 수락 알림"
-            , `${item['fcm_nickname']}님이 약속을 수락했습니다.`
+            , `${item['fcm_nickname_me']}님이 약속을 수락했습니다.`
             , "약속"
             , "4"
-            , item['fcm_filename']
+            , item['fcm_filename_me']
             , item['fcm_target_uid']
-            , null
             , null
         );
     },
     fcmPromiseAfterAnHourSingle : async function(item){
         return await fcmFunc(
-              [item['fcm_push_token']]
+              [item['fcm_push_token_me']]
             , "약속 한 시간 전 알림"
-            , `${item['fcm_nickname']}님과의 약속 잊지 않으셨죠? 출발할 때 알려주세요.`
+            , `${item['fcm_nickname_other']}님과의 약속 잊지 않으셨죠? 출발할 때 알려주세요.`
             , "약속"
             , "4"
-            , item['fcm_filename']
+            , item['fcm_filename_other']
             , item['fcm_target_uid']
             , null
         );

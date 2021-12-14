@@ -63,10 +63,12 @@ module.exports = function (req, res) {
 
 
             req.innerBody['item'] = await queryCreate(req, db_connection);
+
+            await fcmUtil.fcmPromiseAcceptSingle(req.innerBody['item']);
+
             let promise_milli = new Date(req.innerBody['item']['promise_date']).getTime();
             let now_milli = new Date().getTime();
             let gap_milli = promise_milli - now_milli - HOUR_MILLI;
-
 
             // 약속 한 시간 전 리마인드 FCM 알림
             setTimeout(  function() {
