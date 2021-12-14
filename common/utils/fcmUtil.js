@@ -88,7 +88,7 @@ module.exports = {
             , "약속"
             , "4"
             , item['fcm_filename']
-            , null
+            , item['fcm_target_uid']
             , null
         );
     },
@@ -101,17 +101,20 @@ module.exports = {
             , "4"
             , item['fcm_filename']
             , item['fcm_target_uid']
+            , null
+            , null
         );
     },
     fcmPromiseAfterAnHourSingle : async function(item){
         return await fcmFunc(
-              [item['push_token']]
+              [item['fcm_push_token']]
             , "약속 한 시간 전 알림"
-            , `${item['nickname']}님과의 약속 잊지 않으셨죠? 출발할 때 알려주세요.`
+            , `${item['fcm_nickname']}님과의 약속 잊지 않으셨죠? 출발할 때 알려주세요.`
             , "약속"
             , "4"
-            , item['filename']
+            , item['fcm_filename']
             , item['fcm_target_uid']
+            , null
         );
     },
     fcmPromiseSingle : async function(item){

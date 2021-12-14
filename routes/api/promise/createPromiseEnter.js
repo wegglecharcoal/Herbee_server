@@ -40,9 +40,11 @@ const mysqlUtil = require('../../../common/utils/mysqlUtil');
 const sendUtil = require('../../../common/utils/sendUtil');
 const errUtil = require('../../../common/utils/errUtil');
 const logUtil = require('../../../common/utils/logUtil');
+const fcmUtil = require("../../../common/utils/fcmUtil");
 
 let file_name = fileUtil.name(__filename);
 
+const HOUR_MILLI = 3600000;
 module.exports = function (req, res) {
     const _funcName = arguments.callee.name;
 
@@ -61,6 +63,15 @@ module.exports = function (req, res) {
 
 
             req.innerBody['item'] = await queryCreate(req, db_connection);
+            let promise_milli = new Date(req.innerBody['item']['promise_date']).getTime();
+            let now_milli = new Date().getTime();
+            let gap_milli = promise_milli - now_milli - HOUR_MILLI;
+
+
+            // 약속 한 시간 전 리마인드 FCM 알림
+            setTimeout(  function() {
+                fcmUtil.fcmPromiseAfterAnHourSingle(req.innerBody['item']);
+            }, gap_milli);
 
             deleteBody(req);
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);
