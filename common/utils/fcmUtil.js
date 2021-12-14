@@ -88,7 +88,7 @@ module.exports = {
             , "약속"
             , "4"
             , item['fcm_filename']
-            , item['fcm_target_uid']
+            , null
             , null
         );
     },

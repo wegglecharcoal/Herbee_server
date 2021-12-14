@@ -95,6 +95,9 @@ module.exports = function (req, res) {
             req.innerBody['fcm_nickname'] = chatRoomUserList[0]['fcm_nickname'];
             req.innerBody['fcm_filename'] = chatRoomUserList[0]['fcm_filename'];
 
+            console.log('fawiejfwoeij: ' + JSON.stringify(req.innerBody['fcm_push_token_list']));
+            console.log('fawiejfwoeij2: ' + req.innerBody['fcm_nickname']);
+            console.log('fawiejfwoeij3: ' + req.innerBody['fcm_filename']);
             await fcmUtil.fcmPromiseCreateArray(req.innerBody);
 
             deleteBody(req);
