@@ -88,6 +88,7 @@ module.exports = function (req, res) {
             req.innerBody = {};
 
             let chatRoomUserList = await queryCreate(req, db_connection);
+            req.innerBody['fcm_push_token_list'] = [];
             for (let idx in chatRoomUserList) {
                 req.innerBody['fcm_push_token_list'].push(chatRoomUserList[idx]['fcm_push_token']);
             }
