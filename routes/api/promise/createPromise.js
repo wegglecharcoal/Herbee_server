@@ -87,12 +87,10 @@ module.exports = function (req, res) {
         mysqlUtil.connectPool(async function (db_connection) {
             req.innerBody = {};
 
-            let push_token_list = [];
             let chatRoomUserList = await queryCreate(req, db_connection);
             for (let idx in chatRoomUserList) {
-                push_token_list.push(chatRoomUserList[idx]['fcm_push_token']);
+                req.innerBody['fcm_push_token_list'].push(chatRoomUserList[idx]['fcm_push_token']);
             }
-            req.innerBody['fcm_push_token_list'] = push_token_list;
             req.innerBody['fcm_nickname'] = chatRoomUserList[0]['fcm_nickname'];
             req.innerBody['fcm_filename'] = chatRoomUserList[0]['fcm_filename'];
 
