@@ -111,7 +111,7 @@ async function octetFunction(req, db_connection) {
         let isWithdrawSuccess = await querySelectOctetIsWithdrawSuccess(req, db_connection);
 
         console.log('a3pio2j: ' + isWithdrawSuccess.length);
-        if(isWithdrawSuccess.length === 0 && myBeeCoin['octet_bee_coin'] >= req.paramBody['amount'] ) {
+        if(isWithdrawSuccess.length === 0 && parseInt(myBeeCoin['octet_bee_coin']) >= req.paramBody['amount'] ) {
             await queryCreateBeeCoinWithdraw(reqId, db_connection);
 
             await octetUtil.octetCreateWithdraw(reqId, req.paramBody['toAddress'], req.paramBody['amount'],
