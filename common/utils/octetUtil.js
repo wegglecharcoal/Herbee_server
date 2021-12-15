@@ -58,6 +58,16 @@ module.exports = {
     },
 
 
+    // 수수료
+    octetSelectFee : async function(accessToken){
+        return await octetGet(
+            `v1/ETH/fee`
+            , null
+            , accessToken
+        );
+    },
+
+
 
 };
 

@@ -326,6 +326,8 @@ app.route('/octet/walletAddress')
     .get( require('./octet/selectOctetWalletAddress') );
 app.route('/octet/exchange/rate')
     .get( require('./octet/selectOctetExchangeRate') );
+app.route('/octet/fee')
+    .get( require('./octet/selectOctetFee') );
 
 
 
