@@ -13,13 +13,23 @@
  *
  *     parameters:
  *       - in: query
+ *         name: type
+ *         default: 0
+ *         required: true
+ *         schema:
+ *           type: integer
+ *           example: 0
+ *         description: |
+ *           0: 팔로워 삭제
+ *           1: 팔로윙 삭제
+ *       - in: query
  *         name: user_uid
  *         default: 0
  *         required: true
  *         schema:
  *           type: integer
  *           example: 1
- *         description: 팔로우 삭제할 유저 uid
+ *         description: 삭제할 유저 uid
  *
  *     responses:
  *       200:
@@ -57,7 +67,7 @@ module.exports = function (req, res) {
             }
 
             await queryDelete(req, db_connection);
-            req.innerBody['success'] = '팔로우 삭제가 완료되었습니다.';
+            req.innerBody['success'] = '삭제가 완료되었습니다.';
 
             deleteBody(req)
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);
@@ -74,6 +84,7 @@ module.exports = function (req, res) {
 }
 
 function checkParam(req) {
+    paramUtil.checkParam_noReturn(req.paramBody, 'type');
     paramUtil.checkParam_noReturn(req.paramBody, 'user_uid');
 }
 
@@ -89,6 +100,7 @@ function queryCheck(req, db_connection) {
         , [
             req.headers['user_uid']
           , req.paramBody['user_uid']
+          , req.paramBody['type']
         ]
     );
 }
@@ -101,6 +113,7 @@ function queryDelete(req, db_connection) {
         , [
             req.headers['user_uid']
           , req.paramBody['user_uid']
+          , req.paramBody['type']
         ]
     );
 }
