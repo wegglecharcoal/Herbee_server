@@ -328,6 +328,8 @@ app.route('/octet/exchange/rate')
     .get( require('./octet/selectOctetExchangeRate') );
 app.route('/octet/fee')
     .get( require('./octet/selectOctetFee') );
+app.route('/octet/is/withdraw')
+    .get( require('./octet/selectOctetIsWithdraw') );
 
 
 

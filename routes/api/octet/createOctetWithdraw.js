@@ -49,6 +49,7 @@ const logUtil = require('../../../common/utils/logUtil');
 const fcmUtil = require('../../../common/utils/fcmUtil');
 const octetUtil = require("../../../common/utils/octetUtil");
 const errCode = require("../../../common/define/errCode");
+const upBitUtil = require("../../../common/utils/upBitUtil");
 
 let file_name = fileUtil.name(__filename);
 
@@ -110,12 +111,42 @@ async function octetFunction(req, db_connection) {
 
         let isWithdrawSuccess = await querySelectOctetIsWithdrawSuccess(req, db_connection);
 
-        if(isWithdrawSuccess.length === 0 && parseInt(myBeeCoin['own_bee_coin_amount']) >= req.paramBody['amount'] ) {
-            console.log('a3pio2j4: ' + isWithdrawSuccess.length);
+
+
+        // 수수료 계산
+        let fee = await octetUtil.octetSelectFee(get_token_result === 'maintain' ? current_access_token['access_token'] : get_token_result);
+
+
+
+        let eth = await upBitUtil.upBitSelectCoinPrice('KRW-ETH');
+
+
+
+        let fee_won = eth['data'][0]['trade_price'] * fee['data']['fastest'] * process.env.OCTET_GWEI * process.env.OCTET_MAX_GAS_COST;
+        let fee_bee_coin = Math.floor(fee_won * 0.1);
+
+        let own_bee_coin = await querySelectBeeCoin(req,db_connection);
+
+
+
+
+        if(isWithdrawSuccess.length === 0 && parseInt(myBeeCoin['own_bee_coin_amount']) >= req.paramBody['amount'] &&
+            own_bee_coin['own_bee_coin_amount'] > fee_bee_coin  ) {
+
             await queryCreateBeeCoinWithdraw(reqId, db_connection);
+
+            let fee_data = {}
+            fee_data['reqId'] = reqId;
+            fee_data['fee_bee_coin'] = fee_bee_coin;
+
+            await queryCreateBeeCoinWithdrawFee(fee_data, db_connection);
 
             await octetUtil.octetCreateWithdraw(reqId, req.paramBody['toAddress'], req.paramBody['amount'],
                 get_token_result === 'maintain' ? current_access_token['access_token'] : get_token_result);
+        }
+        else if(own_bee_coin['own_bee_coin_amount'] < fee_bee_coin  ) {
+            errUtil.createCall(errCode.fail, `수수료 비용이 부족합니다.`);
+            return;
         }
         else if(isWithdrawSuccess.length > 0) {
             errUtil.createCall(errCode.fail, `이전 출금 처리가 완료되지 않았습니다.`);
@@ -134,6 +165,35 @@ async function octetFunction(req, db_connection) {
 
 }
 
+
+// async function isFeeWithdraw(req, db_connection) {
+//
+//     let fee = await octetUtil.octetSelectFee(get_token_result === 'maintain' ? current_access_token['access_token'] : get_token_result);
+//
+//     let eth = await upBitUtil.upBitSelectCoinPrice('KRW-ETH');
+//
+//
+//     let fee_won = eth['data'][0]['trade_price'] * fee['data']['fastest'] * parseInt(process.env.OCTET_GWEI) * parseInt(process.env.OCTET_MAX_GAS_COST);
+//     let fee_bee_coin = Math.floor(fee_won * 0.1);
+//
+//     let own_bee_coin = await querySelectBeeCoin(req,db_connection);
+//
+//     return own_bee_coin['own_bee_coin_amount'] > fee_bee_coin ? 1 : 0;
+//
+// }
+
+
+function querySelectBeeCoin(req, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_select_octet_bee_coin'
+        , [
+            req.headers['user_uid']
+        ]
+    );
+}
+
 function queryCreateBeeCoinWithdraw(reqId, db_connection) {
     const _funcName = arguments.callee.name;
 
@@ -145,6 +205,18 @@ function queryCreateBeeCoinWithdraw(reqId, db_connection) {
     );
 }
 
+
+function queryCreateBeeCoinWithdrawFee(fee_data, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_create_bee_coin_withdraw_fee'
+        , [
+              fee_data['reqId']
+            , fee_data['fee_bee_coin']
+        ]
+    );
+}
 
 function querySelectOctetBeeCoin(req, db_connection) {
     const _funcName = arguments.callee.name;
