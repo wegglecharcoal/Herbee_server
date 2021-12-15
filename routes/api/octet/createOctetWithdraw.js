@@ -21,6 +21,7 @@
  *           required:
  *             - toAddress
  *             - amount
+ *             - feeBeeCoin
  *           properties:
  *             toAddress:
  *               type: string
@@ -32,6 +33,11 @@
  *               example: 10
  *               description: |
  *                 출금 Bee 코인 개수
+ *             feeBeeCoin:
+ *               type: number
+ *               example: 8920
+ *               description: |
+ *                 출금 Bee 코인 수수료
  *
  *     responses:
  *       400:
@@ -87,6 +93,7 @@ function deleteBody(req) {
 function checkParam(req) {
     paramUtil.checkParam_noReturn(req.paramBody, 'toAddress');
     paramUtil.checkParam_noReturn(req.paramBody, 'amount');
+    paramUtil.checkParam_noReturn(req.paramBody, 'feeBeeCoin');
 }
 
 
@@ -113,39 +120,25 @@ async function octetFunction(req, db_connection) {
 
 
 
-        // 수수료 계산
-        let fee = await octetUtil.octetSelectFee(get_token_result === 'maintain' ? current_access_token['access_token'] : get_token_result);
-
-
-
-        let eth = await upBitUtil.upBitSelectCoinPrice('KRW-ETH');
-
-
-
-        let fee_won = eth['data'][0]['trade_price'] * fee['data']['fastest'] * process.env.OCTET_GWEI * process.env.OCTET_MAX_GAS_COST;
-        let fee_bee_coin = Math.floor(fee_won * 0.1);
-
         let own_bee_coin = await querySelectBeeCoin(req,db_connection);
 
 
-
-
         if(isWithdrawSuccess.length === 0 && parseInt(myBeeCoin['own_bee_coin_amount']) >= req.paramBody['amount'] &&
-            own_bee_coin['own_bee_coin_amount'] > fee_bee_coin  ) {
+            own_bee_coin['own_bee_coin_amount'] > req.paramBody['feeBeeCoin']  ) {
 
             await queryCreateBeeCoinWithdraw(reqId, db_connection);
 
             let fee_data = {}
             fee_data['reqId'] = reqId;
-            fee_data['fee_bee_coin'] = fee_bee_coin;
+            fee_data['fee_bee_coin'] = req.paramBody['feeBeeCoin'];
 
             await queryCreateBeeCoinWithdrawFee(fee_data, db_connection);
 
             await octetUtil.octetCreateWithdraw(reqId, req.paramBody['toAddress'], req.paramBody['amount'],
                 get_token_result === 'maintain' ? current_access_token['access_token'] : get_token_result);
         }
-        else if(own_bee_coin['own_bee_coin_amount'] < fee_bee_coin  ) {
-            errUtil.createCall(errCode.fail, `수수료 비용이 부족합니다. 현재 수수료는 ${fee_bee_coin} BEE coin 입니다.`);
+        else if(own_bee_coin['own_bee_coin_amount'] < req.paramBody['feeBeeCoin']  ) {
+            errUtil.createCall(errCode.fail, `수수료 비용이 부족합니다. 현재 수수료는 ${req.paramBody['feeBeeCoin']} BEE coin 입니다.`);
             return;
         }
         else if(isWithdrawSuccess.length > 0) {
