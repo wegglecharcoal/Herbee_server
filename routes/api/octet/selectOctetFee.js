@@ -27,6 +27,7 @@ const sendUtil = require('../../../common/utils/sendUtil');
 const errUtil = require('../../../common/utils/errUtil');
 const logUtil = require('../../../common/utils/logUtil');
 const octetUtil = require("../../../common/utils/octetUtil");
+const upBitUtil = require("../../../common/utils/upBitUtil");
 
 let file_name = fileUtil.name(__filename);
 
@@ -44,7 +45,6 @@ module.exports = function (req, res) {
             req.innerBody = {};
 
             req.innerBody['item'] = await octetFunction(req, db_connection);
-
             deleteBody(req);
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);
 
@@ -98,6 +98,13 @@ async function octetFunction(req, db_connection) {
     }
 
     let fee = await octetUtil.octetSelectFee(get_token_result === 'maintain' ? current_access_token['access_token'] : get_token_result);
+
+    let eth = await upBitUtil.upBitSelectCoinPrice('KRW-ETH');
+
+
+    let fee_won = eth['data'][0]['trade_price'] * fee['data']['fastest'] * process.env.OCTET_GWEI * process.env.OCTET_MAX_GAS_COST;
+    let fee_bee_coin = Math.floor(fee_won * 0.1);
+    fee['data']['fee_bee_coin'] = fee_bee_coin;
 
     return fee['data'];
 

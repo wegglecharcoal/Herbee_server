@@ -145,7 +145,7 @@ async function octetFunction(req, db_connection) {
                 get_token_result === 'maintain' ? current_access_token['access_token'] : get_token_result);
         }
         else if(own_bee_coin['own_bee_coin_amount'] < fee_bee_coin  ) {
-            errUtil.createCall(errCode.fail, `수수료 비용이 부족합니다.`);
+            errUtil.createCall(errCode.fail, `수수료 비용이 부족합니다. 현재 수수료는 ${fee_bee_coin} BEE coin 입니다.`);
             return;
         }
         else if(isWithdrawSuccess.length > 0) {
