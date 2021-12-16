@@ -76,8 +76,8 @@ module.exports = function (req, res) {
             setTimeout(  async function() {
                 req.innerBody['item']['alert_type'] = 12;
                 req.innerBody['item']['content'] = `${req.innerBody['item']['fcm_nickname_other']}님과의 약속 잊지 않으셨죠? 출발할 때 알려주세요.`;
-                req.innerBody['item']['alert_source_uid'] = req.headers['user_uid'];
                 req.innerBody['item']['alert_target_uid'] = req.innerBody['item'] ['alert_source_uid'];
+                req.innerBody['item']['alert_source_uid'] = req.headers['user_uid'];
                 await queryCreateAlertHistory(req.innerBody['item'], db_connection);
                 await fcmUtil.fcmPromiseAfterAnHourSingle(req.innerBody['item']);
             }, gap_milli);

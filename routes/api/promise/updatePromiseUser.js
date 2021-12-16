@@ -167,8 +167,8 @@ module.exports = function (req, res) {
                         setTimeout(  async function() {
                             req.innerBody['item']['alert_type'] = 14;
                             req.innerBody['item']['content'] = `${req.innerBody['item']['fcm_nickname_other']}님과의 약속 어떠셨나요?`;
-                            req.innerBody['item']['alert_source_uid'] = req.headers['user_uid'];
                             req.innerBody['item']['alert_target_uid'] = req.innerBody['item'] ['alert_source_uid'];
+                            req.innerBody['item']['alert_source_uid'] = req.headers['user_uid'];
                             await queryCreateAlertHistory(req.innerBody['item'], db_connection);
                             await fcmUtil.fcmPromiseRetentionSingle(req.innerBody['item']);
                         }, DAY_MILLI);

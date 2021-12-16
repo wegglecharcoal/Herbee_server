@@ -168,7 +168,7 @@ function queryCreateAlertHistory(item, db_connection) {
             item['alert_source_uid']
             , item['alert_target_uid']
             , item['alert_type']
-            , `${item['fcm_nickname_me']}님이 ${item['type'] === 1 || item['type'] === 2 ? '게시물' : '댓글'}게시물에 좋아요를 눌렀습니다.`
+            , `${item['fcm_nickname_me']}님이 ${item['type'] === 1 || item['type'] === 2 ? '게시물' : '댓글'}에 좋아요를 눌렀습니다.`
         ]
     );
 }

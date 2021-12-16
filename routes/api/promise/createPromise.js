@@ -92,7 +92,8 @@ module.exports = function (req, res) {
             for (let idx in chatRoomUserList) {
                 chatRoomUserList[idx]['alert_type'] = 10;
                 req.innerBody['fcm_push_token_other_list'].push(chatRoomUserList[idx]['fcm_push_token_other']);
-                await queryCreateAlertHistory(chatRoomUserList[idx], db_connection);
+                if( chatRoomUserList[idx]['source_uid'] === chatRoomUserList[idx]['target_uid'] )
+                    await queryCreateAlertHistory(chatRoomUserList[idx], db_connection);
             }
             req.innerBody['fcm_nickname_me'] = chatRoomUserList[0]['fcm_nickname_me'];
             req.innerBody['fcm_filename_me'] = chatRoomUserList[0]['fcm_filename_me'];
