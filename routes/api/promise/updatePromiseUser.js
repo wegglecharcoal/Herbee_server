@@ -71,8 +71,11 @@ const mysqlUtil = require('../../../common/utils/mysqlUtil');
 const sendUtil = require('../../../common/utils/sendUtil');
 const errUtil = require('../../../common/utils/errUtil');
 const logUtil = require('../../../common/utils/logUtil');
+const fcmUtil = require('../../../common/utils/fcmUtil');
 
 let file_name = fileUtil.name(__filename);
+
+const DAY_MILLI = 86400000;
 
 module.exports = function (req, res) {
     const _funcName = arguments.callee.name;
@@ -124,22 +127,14 @@ module.exports = function (req, res) {
                     }
                 } break;
 
-                // 1:1 채팅일 시에 약속을 수락한다면 주최자에게 알림을 보내준다.
                 case 1: {
-                    // 앱단 쪽 FCM 되면 풀어주면 됨
-                    // if(req.innerBody['item']['type'] === 0) {
-                    //
-                        // await fcmUtil.fcmPromiseAcceptSingle(req.innerBody['item']);
-                    // }
 
                 } break;
 
                 // 1:1 채팅일 시에 약속을 출발한다면 상대방에게 알림을 보내준다.
                 case 2: {
-
-                    // 앱단 쪽 FCM 되면 풀어주면 됨
-                    // await fcmUtil.fcmPromiseAcceptSingle(req.innerBody['item']);
-
+                    if( req.innerBody['item'] === 0 )
+                        await fcmUtil.fcmPromiseDepartSingle(req.innerBody['item']);
                 } break;
 
 
@@ -162,6 +157,14 @@ module.exports = function (req, res) {
                         req.innerBody['success'] = '만남 꿀이 지급되었습니다.';
 
                     }
+
+                    // 1:1 채팅일 경우 만남 후 다음날 약속에 대한 후기 FCM 알림
+                    if( req.innerBody['item'] === 0 ) {
+                        setTimeout(  function() {
+                            fcmUtil.fcmPromiseRetentionSingle(req.innerBody['item']);
+                        }, DAY_MILLI);
+                    }
+
                 } break;
                 default: break;
             }
