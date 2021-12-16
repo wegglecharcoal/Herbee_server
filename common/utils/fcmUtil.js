@@ -1,9 +1,14 @@
 /**
  * Created by gunucklee on 2021. 08. 22.
  */
+
+const funcUtil = require('./funcUtil')
+
 const axios = require('axios');
 const {log} = require("debug");
-const funcUtil = require('./funcUtil')
+const sendUtil = require("../../../common/utils/sendUtil");
+const errUtil = require("../../../common/utils/errUtil");
+
 axios.defaults.headers.common['Authorization'] = `key=${funcUtil.getFCMKey()}`;
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
@@ -19,12 +24,12 @@ module.exports = {
 
     fcmMsgArray : async function(item){
         return await fcmFunc(
-              item['fcm_push_token_list']
+              item['fcm_push_token_other_list']
             , "메시지 알림"
-            , `${item['fcm_nickname']}님이 메시지를 보냈습니다.`
+            , `${item['fcm_nickname_me']}님이 메시지를 보냈습니다.`
             , "메시지"
             , "0"
-            , item['fcm_filename']
+            , item['fcm_filename_me']
             , item['fcm_target_uid']
             , null
         );
@@ -32,12 +37,12 @@ module.exports = {
     // 중복 처리 해결 해주어야 함 연속으로 눌렀을 때
     fcmFollowSingle : async function(item){
         return await fcmFunc(
-              [item['fcm_push_token']]
+              [item['fcm_push_token_other']]
             , "팔로우 알림"
-            , `${item['fcm_nickname']}님이 당신을 팔로우 했습니다.`
+            , `${item['fcm_nickname_me']}님이 당신을 팔로우 했습니다.`
             , "팔로우"
             , "1"
-            , item['fcm_filename']
+            , item['fcm_filename_me']
             , item['fcm_target_uid']
             , null
         );
@@ -45,12 +50,12 @@ module.exports = {
     // 중복 처리 해결 해주어야 함 연속으로 눌렀을 때
     fcmLikePostSingle : async function(item){
         return await fcmFunc(
-              [item['fcm_push_token']]
+              [item['fcm_push_token_other']]
             , "게시물 좋아요 알림"
-            , `${item['fcm_nickname']}님이 게시물에 좋아요를 눌렀습니다.`
+            , `${item['fcm_nickname_me']}님이 게시물에 좋아요를 눌렀습니다.`
             , "좋아요"
             , "2"
-            , item['fcm_filename']
+            , item['fcm_filename_me']
             , item['fcm_target_uid']
             , item['fcm_type']
         );
@@ -58,36 +63,36 @@ module.exports = {
     // 중복 처리 해결 해주어야 함 연속으로 눌렀을 때
     fcmLikeCommentSingle : async function(item){
         return await fcmFunc(
-              [item['fcm_push_token']]
+              [item['fcm_push_token_other']]
             , "댓글 좋아요 알림"
-            , `${item['fcm_nickname']}님이 댓글에 좋아요를 눌렀습니다.`
+            , `${item['fcm_nickname_me']}님이 댓글에 좋아요를 눌렀습니다.`
             , "좋아요"
             , "2"
-            , item['fcm_filename']
+            , item['fcm_filename_me']
             , item['fcm_target_uid']
             , item['fcm_type']
         );
     },
     fcmCommentSingle : async function(item){
         return await fcmFunc(
-              [item['fcm_push_token']]
+              [item['fcm_push_token_other']]
             , "댓글 알림"
-            , `${item['fcm_nickname']}님이 게시물에 댓글을 남겼습니다.`
+            , `${item['fcm_nickname_me']}님이 게시물에 댓글을 남겼습니다.`
             , "댓글"
             , "3"
-            , item['fcm_filename']
+            , item['fcm_filename_me']
             , item['fcm_target_uid']
             , item['fcm_type']
         );
     },
     fcmPromiseCreateArray : async function(item){
         return await fcmFunc(
-              item['fcm_push_token_list']
+              item['fcm_push_token_other_list']
             , "약속 생성 알림"
-            , `${item['fcm_nickname']}님이 약속을 잡았습니다.`
+            , `${item['fcm_nickname_me']}님이 약속을 잡았습니다.`
             , "약속"
             , "4"
-            , item['fcm_filename']
+            , item['fcm_filename_me']
             , item['fcm_target_uid']
             , null
         );
@@ -119,7 +124,7 @@ module.exports = {
     fcmPromiseDepartSingle : async function(item){
         return await fcmFunc(
             [item['fcm_push_token_other']]
-            , "약속 한 시간 전 알림"
+            , "약속 출발 알림"
             , `${item['fcm_nickname_me']}님이 약속 장소로 향하고 있습니다.`
             , "약속"
             , "4"
@@ -131,7 +136,7 @@ module.exports = {
     fcmPromiseRetentionSingle : async function(item){
         return await fcmFunc(
               [item['fcm_push_token_me']]
-            , "약속 출발"
+            , "약속 리텐션"
             , `${item['fcm_nickname_other']}님과의 약속 어떠셨나요?`
             , "약속"
             , "4"

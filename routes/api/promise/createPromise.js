@@ -88,12 +88,14 @@ module.exports = function (req, res) {
             req.innerBody = {};
 
             let chatRoomUserList = await queryCreate(req, db_connection);
-            req.innerBody['fcm_push_token_list'] = [];
+            req.innerBody['fcm_push_token_other_list'] = [];
             for (let idx in chatRoomUserList) {
-                req.innerBody['fcm_push_token_list'].push(chatRoomUserList[idx]['fcm_push_token']);
+                chatRoomUserList[idx]['alert_type'] = 10;
+                req.innerBody['fcm_push_token_other_list'].push(chatRoomUserList[idx]['fcm_push_token_other']);
+                await queryCreateAlertHistory(chatRoomUserList[idx], db_connection);
             }
-            req.innerBody['fcm_nickname'] = chatRoomUserList[0]['fcm_nickname'];
-            req.innerBody['fcm_filename'] = chatRoomUserList[0]['fcm_filename'];
+            req.innerBody['fcm_nickname_me'] = chatRoomUserList[0]['fcm_nickname_me'];
+            req.innerBody['fcm_filename_me'] = chatRoomUserList[0]['fcm_filename_me'];
             req.innerBody['fcm_target_uid'] = chatRoomUserList[0]['fcm_target_uid'];
 
             await fcmUtil.fcmPromiseCreateArray(req.innerBody);
@@ -112,10 +114,15 @@ module.exports = function (req, res) {
     }
 }
 
+
 function deleteBody(req) {
-    delete req.innerBody['push_token_list'];
-    delete req.innerBody['fcm_nickname'];
-    delete req.innerBody['fcm_filename'];
+    delete req.innerBody['fcm_nickname_me'];
+    delete req.innerBody['fcm_filename_me'];
+    delete req.innerBody['fcm_push_token_other'];
+    delete req.innerBody['fcm_target_uid'];
+    delete req.innerBody['alert_source_uid'];
+    delete req.innerBody['alert_target_uid'];
+    delete req.innerBody['alert_type'];
 }
 
 function checkParam(req) {
@@ -155,3 +162,18 @@ function queryCreateUseHoney(req, db_connection) {
         ]
     );
 }
+
+function queryCreateAlertHistory(item, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_create_alert_history'
+        , [
+              item['alert_source_uid']
+            , item['alert_target_uid']
+            , item['alert_type']
+            , `${item['fcm_nickname_me']}님이 약속을 잡았습니다.`
+        ]
+    );
+}
+

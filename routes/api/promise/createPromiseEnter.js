@@ -63,7 +63,9 @@ module.exports = function (req, res) {
 
 
             req.innerBody['item'] = await queryCreate(req, db_connection);
-
+            req.innerBody['item']['alert_type'] = 11;
+            req.innerBody['item']['content'] = `${req.innerBody['item']['fcm_nickname_me']}님이 약속을 수락했습니다.`;
+            await queryCreateAlertHistory(req.innerBody['item'], db_connection);
             await fcmUtil.fcmPromiseAcceptSingle(req.innerBody['item']);
 
             let promise_milli = new Date(req.innerBody['item']['promise_date']).getTime();
@@ -71,8 +73,13 @@ module.exports = function (req, res) {
             let gap_milli = promise_milli - now_milli - HOUR_MILLI;
 
             // 약속 한 시간 전 리마인드 FCM 알림
-            setTimeout(  function() {
-                fcmUtil.fcmPromiseAfterAnHourSingle(req.innerBody['item']);
+            setTimeout(  async function() {
+                req.innerBody['item']['alert_type'] = 12;
+                req.innerBody['item']['content'] = `${req.innerBody['item']['fcm_nickname_other']}님과의 약속 잊지 않으셨죠? 출발할 때 알려주세요.`;
+                req.innerBody['item']['alert_source_uid'] = req.headers['user_uid'];
+                req.innerBody['item']['alert_target_uid'] = req.innerBody['item'] ['alert_source_uid'];
+                await queryCreateAlertHistory(req.innerBody['item'], db_connection);
+                await fcmUtil.fcmPromiseAfterAnHourSingle(req.innerBody['item']);
             }, gap_milli);
 
             deleteBody(req);
@@ -89,7 +96,18 @@ module.exports = function (req, res) {
 }
 
 function deleteBody(req) {
+    delete req.innerBody['item']['fcm_push_token_me'];
+    delete req.innerBody['item']['fcm_nickname_me'];
+    delete req.innerBody['item']['fcm_filename_me'];
+    delete req.innerBody['item']['fcm_push_token_other'];
+    delete req.innerBody['item']['fcm_nickname_other'];
+    delete req.innerBody['item']['fcm_filename_other'];
+    delete req.innerBody['item']['fcm_target_uid'];
+    delete req.innerBody['item']['alert_source_uid'];
+    delete req.innerBody['item']['alert_target_uid'];
+    delete req.innerBody['item']['alert_type'];
 }
+
 
 function checkParam(req) {
     paramUtil.checkParam_noReturn(req.paramBody, 'promise_uid');
@@ -117,6 +135,20 @@ function queryCreate(req, db_connection) {
         , [
             req.headers['user_uid']
           , req.paramBody['promise_uid']
+        ]
+    );
+}
+
+function queryCreateAlertHistory(item, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_create_alert_history'
+        , [
+              item['alert_source_uid']
+            , item['alert_target_uid']
+            , item['alert_type']
+            , item['content']
         ]
     );
 }

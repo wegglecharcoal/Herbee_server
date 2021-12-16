@@ -59,16 +59,20 @@ module.exports = function (req, res) {
         mysqlUtil.connectPool( async function (db_connection) {
             req.innerBody = {};
 
-            req.innerBody['fcm_push_token_list'] = [];
+            req.innerBody['fcm_push_token_other_list'] = [];
             let chatRoomUserList = await querySelect(req, db_connection);
             for (let idx in chatRoomUserList) {
-                req.innerBody['fcm_push_token_list'].push(chatRoomUserList[idx]['fcm_push_token']);
+                chatRoomUserList[idx]['alert_type'] = 0;
+                req.innerBody['fcm_push_token_other_list'].push(chatRoomUserList[idx]['fcm_push_token_other']);
+                await queryCreateAlertHistory(chatRoomUserList[idx], db_connection);
             }
 
-            req.innerBody['fcm_nickname'] = chatRoomUserList[0]['fcm_nickname'];
-            req.innerBody['fcm_filename'] = chatRoomUserList[0]['fcm_filename'];
+            req.innerBody['fcm_nickname_me'] = chatRoomUserList[0]['fcm_nickname_me'];
+            req.innerBody['fcm_filename_me'] = chatRoomUserList[0]['fcm_filename_me'];
             req.innerBody['fcm_target_uid'] = req.paramBody['chat_room_uid'];
             await fcmUtil.fcmMsgArray(req.innerBody);
+
+
 
             deleteBody(req);
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);
@@ -99,6 +103,20 @@ function querySelect(req, db_connection) {
         , [
             req.headers['user_uid']
           , req.paramBody['chat_room_uid']
+        ]
+    );
+}
+
+function queryCreateAlertHistory(item, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_create_alert_history'
+        , [
+              item['alert_source_uid']
+            , item['alert_target_uid']
+            , item['alert_type']
+            , `${item['fcm_nickname_me']}님이 메시지를 보냈습니다.`
         ]
     );
 }

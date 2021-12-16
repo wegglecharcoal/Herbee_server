@@ -133,8 +133,12 @@ module.exports = function (req, res) {
 
                 // 1:1 채팅일 시에 약속을 출발한다면 상대방에게 알림을 보내준다.
                 case 2: {
-                    if( req.innerBody['item'] === 0 )
+                    if( req.innerBody['item'] === 0 ) {
+                        req.innerBody['item']['alert_type'] = 13;
+                        req.innerBody['item']['content'] = `${req.innerBody['item']['fcm_nickname_me']}님이 약속 장소로 향하고 있습니다.`;
+                        await queryCreateAlertHistory(req.innerBody['item'], db_connection);
                         await fcmUtil.fcmPromiseDepartSingle(req.innerBody['item']);
+                    }
                 } break;
 
 
@@ -160,8 +164,13 @@ module.exports = function (req, res) {
 
                     // 1:1 채팅일 경우 만남 후 다음날 약속에 대한 후기 FCM 알림
                     if( req.innerBody['item'] === 0 ) {
-                        setTimeout(  function() {
-                            fcmUtil.fcmPromiseRetentionSingle(req.innerBody['item']);
+                        setTimeout(  async function() {
+                            req.innerBody['item']['alert_type'] = 14;
+                            req.innerBody['item']['content'] = `${req.innerBody['item']['fcm_nickname_other']}님과의 약속 어떠셨나요?`;
+                            req.innerBody['item']['alert_source_uid'] = req.headers['user_uid'];
+                            req.innerBody['item']['alert_target_uid'] = req.innerBody['item'] ['alert_source_uid'];
+                            await queryCreateAlertHistory(req.innerBody['item'], db_connection);
+                            await fcmUtil.fcmPromiseRetentionSingle(req.innerBody['item']);
                         }, DAY_MILLI);
                     }
 
@@ -189,8 +198,17 @@ function checkParam(req) {
 }
 
 function deleteBody(req) {
+    delete req.innerBody['item']['fcm_push_token_me'];
+    delete req.innerBody['item']['fcm_nickname_me'];
+    delete req.innerBody['item']['fcm_filename_me'];
+    delete req.innerBody['item']['fcm_push_token_other'];
+    delete req.innerBody['item']['fcm_nickname_other'];
+    delete req.innerBody['item']['fcm_filename_other'];
+    delete req.innerBody['item']['fcm_target_uid'];
+    delete req.innerBody['item']['alert_source_uid'];
+    delete req.innerBody['item']['alert_target_uid'];
+    delete req.innerBody['item']['alert_type'];
 }
-
 
 function queryBlockCheck(req, db_connection) {
     const _funcName = arguments.callee.name;
@@ -321,6 +339,21 @@ function queryDeletePromise(user, db_connection) {
         , [
               user['user_uid']
             , user['promise_uid']
+        ]
+    );
+}
+
+
+function queryCreateAlertHistory(item, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_create_alert_history'
+        , [
+            item['alert_source_uid']
+            , item['alert_target_uid']
+            , item['alert_type']
+            , item['content']
         ]
     );
 }

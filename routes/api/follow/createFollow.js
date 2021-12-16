@@ -67,6 +67,9 @@ module.exports = function (req, res) {
             req.innerBody['item']['fcm_target_uid'] = req.headers['user_uid'] ;
             await fcmUtil.fcmFollowSingle(req.innerBody['item']);
 
+            req.innerBody['item']['alert_type'] = 1;
+            await queryCreateAlertHistory(req.innerBody['item'], db_connection);
+
             deleteBody(req);
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);
 
@@ -86,9 +89,12 @@ function checkParam(req) {
 }
 
 function deleteBody(req) {
-    delete req.innerBody['item']['fcm_nickname'];
-    delete req.innerBody['item']['fcm_push_token'];
-    delete req.innerBody['item']['fcm_filename'];
+    delete req.innerBody['item']['fcm_nickname_me'];
+    delete req.innerBody['item']['fcm_filename_me'];
+    delete req.innerBody['item']['fcm_push_token_other'];
+    delete req.innerBody['item']['alert_source_uid'];
+    delete req.innerBody['item']['alert_target_uid'];
+    delete req.innerBody['item']['alert_type'];
 }
 
 function queryCreate(req, db_connection) {
@@ -115,3 +121,17 @@ function queryCheck(req, db_connection) {
     );
 }
 
+
+function queryCreateAlertHistory(item, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_create_alert_history'
+        , [
+              item['alert_source_uid']
+            , item['alert_target_uid']
+            , item['alert_type']
+            , `${item['fcm_nickname_me']}님이 당신을 팔로우 했습니다.`
+        ]
+    );
+}
