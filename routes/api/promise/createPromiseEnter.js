@@ -82,7 +82,7 @@ module.exports = function (req, res) {
                 await fcmUtil.fcmPromiseAfterAnHourSingle(req.innerBody['item']);
             }, gap_milli);
 
-            deleteBody(req);
+            // deleteBody(req);
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);
 
         }, function (err) {

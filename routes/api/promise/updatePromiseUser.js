@@ -178,7 +178,7 @@ module.exports = function (req, res) {
                 default: break;
             }
 
-            deleteBody(req);
+            // deleteBody(req);
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);
 
         }, function (err) {
