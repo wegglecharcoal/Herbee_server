@@ -116,26 +116,28 @@ module.exports = {
             , null
         );
     },
-    fcmPromiseSingle : async function(item){
-        return await fcmFunc(
-            [item['push_token']]
-            , "약속 한 시간 전 알림"
-            , `${item['nickname']}님이 약속 장소로 향하고 있습니다.`
-            , "약속"
-            , "4"
-            , item['filename']
-            , item['fcm_target_uid']
-        );
-    },
     fcmPromiseDepartSingle : async function(item){
         return await fcmFunc(
-              [item['fcm_push_token']]
-            , "약속 출발"
-            , `${item['nickname']}님과의 약속 어떠셨나요?`
+            [item['fcm_push_token_other']]
+            , "약속 한 시간 전 알림"
+            , `${item['fcm_nickname_me']}님이 약속 장소로 향하고 있습니다.`
             , "약속"
             , "4"
-            , item['filename']
+            , item['fcm_filename_me']
             , item['fcm_target_uid']
+            , null
+        );
+    },
+    fcmPromiseRetentionSingle : async function(item){
+        return await fcmFunc(
+              [item['fcm_push_token_me']]
+            , "약속 출발"
+            , `${item['fcm_nickname_other']}님과의 약속 어떠셨나요?`
+            , "약속"
+            , "4"
+            , item['fcm_filename_other']
+            , item['fcm_target_uid']
+            , null
         );
     },
 };
