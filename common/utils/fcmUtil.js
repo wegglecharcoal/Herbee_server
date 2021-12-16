@@ -6,8 +6,6 @@ const funcUtil = require('./funcUtil')
 
 const axios = require('axios');
 const {log} = require("debug");
-const sendUtil = require("../../../common/utils/sendUtil");
-const errUtil = require("../../../common/utils/errUtil");
 
 axios.defaults.headers.common['Authorization'] = `key=${funcUtil.getFCMKey()}`;
 axios.defaults.headers.post['Content-Type'] = 'application/json';
