@@ -69,7 +69,7 @@ const errUtil = require('../../../common/utils/errUtil');
 const logUtil = require('../../../common/utils/logUtil');
 
 const fcmUtil = require('../../../common/utils/fcmUtil');
-// ㅇ
+// ㅇㅇ
 let file_name = fileUtil.name(__filename);
 
 module.exports = function (req, res) {
