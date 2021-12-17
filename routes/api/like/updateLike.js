@@ -93,7 +93,7 @@ module.exports = function (req, res) {
                 && (parseInt(req.innerBody['item']['target_user_uid']) !== req.headers['user_uid']) ) {
 
                 req.innerBody['item']['alert_type'] = 2;
-
+// s
                 switch (req.paramBody['type']) {
 
                     case 1:
