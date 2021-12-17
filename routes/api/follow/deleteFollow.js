@@ -20,8 +20,8 @@
  *           type: integer
  *           example: 0
  *         description: |
- *           0: 팔로워 삭제
- *           1: 팔로윙 삭제
+ *           0: 팔로윙 삭제
+ *           1: 팔로워 삭제
  *       - in: query
  *         name: user_uid
  *         default: 0
