@@ -117,6 +117,7 @@ function queryCheck(req, db_connection) {
         , [
             req.headers['user_uid']
           , req.paramBody['user_uid']
+          , 0
         ]
     );
 }
