@@ -69,7 +69,7 @@ const errUtil = require('../../../common/utils/errUtil');
 const logUtil = require('../../../common/utils/logUtil');
 
 const fcmUtil = require('../../../common/utils/fcmUtil');
-// ㅇㅇ
+
 let file_name = fileUtil.name(__filename);
 
 module.exports = function (req, res) {
@@ -93,7 +93,7 @@ module.exports = function (req, res) {
                 && (parseInt(req.innerBody['item']['target_user_uid']) !== req.headers['user_uid']) ) {
 
                 req.innerBody['item']['alert_type'] = 2;
-// s
+
                 switch (req.paramBody['type']) {
 
                     case 1:
