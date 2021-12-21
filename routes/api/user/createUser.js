@@ -175,6 +175,13 @@ module.exports = function (req, res) {
             const nickname_data = await queryCheckNickname(req, db_connection);
             paramUtil.checkParam_alreadyUse(nickname_data, '이미 사용 중인 닉네임 입니다.');
 
+            req.paramBody['recommender_code'] = recommenderCode();
+            let recommender_code_data = await quertCheckRecommenderCode(req, db_connection);
+
+            while(recommender_code_data) {
+                req.paramBody['recommender_code'] = recommenderCode();
+                recommender_code_data = await quertCheckRecommenderCode(req, db_connection);
+            }
 
             req.innerBody['item'] = await queryCreate(req, db_connection);
 
@@ -242,6 +249,7 @@ function queryCreate(req, db_connection) {
           , req.paramBody['gender']
           , req.paramBody['is_alert']
           , req.paramBody['is_alert_marketing']
+          , req.paramBody['recommender_code']
         ]
     );
 }
@@ -309,6 +317,19 @@ function queryCheckNickname(req, db_connection) {
     );
 }
 
+
+function quertCheckRecommenderCode(req, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_select_recommender_code_check'
+        , [
+            req.paramBody['recommender_code']
+        ]
+    );
+}
+
+
 function querySelectOctetAccessToken(req, db_connection) {
     const _funcName = arguments.callee.name;
 
@@ -362,4 +383,12 @@ async function octetFunction(req, db_connection) {
 
     await queryUpdateWalletAddress(wallet_address, db_connection);
 
+}
+
+function recommenderCode(){
+    let code = "";
+    let cases = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    for( let i=0; i < 6; i++ )
+        code += cases.charAt(Math.floor(Math.random() * cases.length));
+    return code;
 }
