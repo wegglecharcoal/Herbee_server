@@ -9,6 +9,9 @@ const checkHoneyAvailable = require('../middleware/checkHoneyAvailable');
 /**
  * User
  */
+app.route('/user/recommender/code')
+    .post( require('./user/createUserRecommenderCode') );
+
 app.route('/user')
     .put( require('./user/updateUser') )
     .delete( require('./user/deleteUser') );

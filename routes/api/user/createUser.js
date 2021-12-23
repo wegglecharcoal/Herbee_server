@@ -130,6 +130,7 @@
  *                 * 1: true
  *               enum: [0,1]
  *
+ *
  *     responses:
  *       200:
  *         description: 결과 정보
@@ -175,12 +176,14 @@ module.exports = function (req, res) {
             const nickname_data = await queryCheckNickname(req, db_connection);
             paramUtil.checkParam_alreadyUse(nickname_data, '이미 사용 중인 닉네임 입니다.');
 
+
+            // 추천인 코드 생성기
             req.paramBody['recommender_code'] = recommenderCode();
-            let recommender_code_data = await quertCheckRecommenderCode(req, db_connection);
+            let recommender_code_data = await queryCheckRecommenderCode(req, db_connection);
 
             while(recommender_code_data) {
                 req.paramBody['recommender_code'] = recommenderCode();
-                recommender_code_data = await quertCheckRecommenderCode(req, db_connection);
+                recommender_code_data = await queryCheckRecommenderCode(req, db_connection);
             }
 
             req.innerBody['item'] = await queryCreate(req, db_connection);
@@ -318,7 +321,7 @@ function queryCheckNickname(req, db_connection) {
 }
 
 
-function quertCheckRecommenderCode(req, db_connection) {
+function queryCheckRecommenderCode(req, db_connection) {
     const _funcName = arguments.callee.name;
 
     return mysqlUtil.querySingle(db_connection

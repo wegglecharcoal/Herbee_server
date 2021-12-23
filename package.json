@@ -26,7 +26,6 @@
     "swagger-jsdoc": "^6.0.0-rc.5",
     "swagger-ui-express": "^4.1.5",
     "@bootpay/server-rest-client": "^1.0.7",
-    "aligoapi": "^1.1.3",
-    "@google-cloud/pubsub": "~2.18.4"
+    "aligoapi": "^1.1.3"
   }
 }

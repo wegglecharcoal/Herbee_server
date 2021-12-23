@@ -98,9 +98,9 @@ function queryCheck(req, db_connection) {
     return mysqlUtil.querySingle(db_connection
         , 'call proc_select_follow_check'
         , [
-            req.headers['user_uid']
-          , req.paramBody['user_uid']
-          , req.paramBody['type']
+              req.headers['user_uid']
+            , req.paramBody['user_uid']
+            , req.paramBody['type']
         ]
     );
 }
@@ -111,9 +111,9 @@ function queryDelete(req, db_connection) {
     return mysqlUtil.querySingle(db_connection
         , 'call proc_delete_follow'
         , [
-            req.headers['user_uid']
-          , req.paramBody['user_uid']
-          , req.paramBody['type']
+              req.headers['user_uid']
+            , req.paramBody['user_uid']
+            , req.paramBody['type']
         ]
     );
 }
