@@ -1,15 +1,35 @@
 /**
- * Created by gunucklee on 2021. 12. 06.
+ * Created by gunucklee on 2021. 12. 23.
  *
  * @swagger
  * /api/private/honey/subscribe:
  *   put:
- *     summary: 구독하기
+ *     summary: 구독
  *     tags: [Honey]
  *     description: |
  *       path : /api/private/honey/subscribe
  *
  *       * 구독하기
+ *
+ *     parameters:
+ *       - in: body
+ *         name: body
+ *         description: |
+ *           구독하기
+ *         schema:
+ *           type: object
+ *           required:
+ *             - is_subscribe
+ *           properties:
+ *             is_subscribe:
+ *               type: number
+ *               example: 1
+ *               description: |
+ *                 구독 여부
+ *                 * 0: 구독 취소
+ *                 * 1: 구독
+ *               enum: [0,1]
+ *
  *
  *     responses:
  *       200:
@@ -60,6 +80,7 @@ module.exports = function (req, res) {
 }
 
 function checkParam(req) {
+    paramUtil.checkParam_noReturn(req.paramBody, 'is_subscribe');
 }
 
 function deleteBody(req) {
@@ -73,6 +94,7 @@ function queryUpdate(req, db_connection) {
         , 'call proc_update_honey_subscribe'
         , [
             req.headers['user_uid']
+          , req.paramBody['is_subscribe']
         ]
     );
 }
