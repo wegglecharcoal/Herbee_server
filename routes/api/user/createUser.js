@@ -327,7 +327,8 @@ function queryCheckRecommenderCode(req, db_connection) {
     return mysqlUtil.querySingle(db_connection
         , 'call proc_select_recommender_code_check'
         , [
-            req.paramBody['recommender_code']
+              req.headers['user_uid']
+            , req.paramBody['recommender_code']
         ]
     );
 }
