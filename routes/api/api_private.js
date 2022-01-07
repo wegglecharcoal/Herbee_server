@@ -336,8 +336,7 @@ app.route('/octet/fee')
     .get( require('./octet/selectOctetFee') );
 app.route('/octet/is/withdraw')
     .get( require('./octet/selectOctetIsWithdraw') );
-
-
-
+app.route('/octet/wallet/address/validation')
+    .get( require('./octet/selectOctetWalletAddressValidation') );
 
 module.exports = app;
