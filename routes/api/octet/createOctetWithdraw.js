@@ -134,7 +134,7 @@ async function octetFunction(req, db_connection) {
 
             await queryCreateBeeCoinWithdrawFee(fee_data, db_connection);
 
-            await octetUtil.octetCreateWithdraw(reqId, req.paramBody['toAddress'], req.paramBody['amount'],
+            await octetUtil.octetCreateWithdraw(reqId, req.paramBody['toAddress'], req.paramBody['amount'] - fee_data['fee_bee_coin'],
                 get_token_result === 'maintain' ? current_access_token['access_token'] : get_token_result);
         }
         else if(own_bee_coin['own_bee_coin_amount'] < req.paramBody['feeBeeCoin']  ) {
