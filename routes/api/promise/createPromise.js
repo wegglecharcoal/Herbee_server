@@ -4,10 +4,12 @@
  * @swagger 
  * /api/private/promise:
  *   post:
- *     summary: 약속 하기
+ *     summary: 약속 하기  * 추가 헤더
  *     tags: [Promise]
  *     description: |
  *       path : /api/private/promise
+ *       * 추가 헤더: Manual_code = "H1-002"
+ *       * 필요한 꿀 갯수 = 5개
  *
  *       * 약속 하기
  *

@@ -4,10 +4,12 @@
  * @swagger
  * /api/private/chatRoom/general:
  *   post:
- *     summary: 일반 채팅방 생성
+ *     summary: 일반 채팅방 생성  * 추가 헤더
  *     tags: [ChatRoom]
  *     description: |
  *       path : /api/private/chatRoom/general
+ *       * 추가 헤더: Manual_code = "H1-001"
+ *       * 필요한 꿀 갯수 = 3개
  *
  *       * 일반 채팅방 생성
  *

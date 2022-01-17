@@ -4,10 +4,12 @@
  * @swagger
  * /api/private/chatRoom/retry:
  *   put:
- *     summary: 다시 대화하기
+ *     summary: 다시 대화하기  * 추가 헤더
  *     tags: [ChatRoom]
  *     description: |
  *       path : /api/private/chatRoom/retry
+ *       * 추가 헤더: Manual_code = "H1-003"
+ *       * 필요한 꿀 갯수 = 10개
  *
  *       * 다시 대화하기
  *

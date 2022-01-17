@@ -4,10 +4,12 @@
  * @swagger
  * /api/private/chatRoom/gathering:
  *   post:
- *     summary: 모임 채팅방 생성
+ *     summary: 모임 채팅방 생성  * 추가 헤더
  *     tags: [ChatRoom]
  *     description: |
  *       path : /api/private/chatRoom/gathering
+ *       * 추가 헤더: Manual_code = "H1-004"
+ *       * 필요한 꿀 갯수 = 5개
  *
  *       * 모임 채팅방 생성
  *

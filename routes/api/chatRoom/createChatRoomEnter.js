@@ -4,10 +4,12 @@
  * @swagger
  * /api/private/chatRoom/enter:
  *   post:
- *     summary: 모임 채팅방 참여
+ *     summary: 모임 채팅방 참여  * 추가 헤더
  *     tags: [ChatRoom]
  *     description: |
  *       path : /api/private/chatRoom/enter
+ *       * 추가 헤더: Manual_code = "H1-005"
+ *       * 필요한 꿀 갯수 = 1개
  *
  *       * 모임 채팅방 참여
  *
