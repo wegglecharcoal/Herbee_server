@@ -88,6 +88,8 @@ module.exports = function (req, res) {
             req.innerBody = {};
 
             req.innerBody['item'] = await queryCreate(req, db_connection);
+            console.log("ASDIOASK: " + JSON.stringify(req.innerBody['item']));
+
             req.innerBody['fcm_push_token_other_list'] = [];
             for (let idx in req.innerBody['item']) {
                 req.innerBody['item'][idx]['alert_type'] = 10;
