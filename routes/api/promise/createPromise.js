@@ -105,6 +105,8 @@ module.exports = function (req, res) {
 
             deleteBody(req);
             await queryCreateUseHoney(req, db_connection);
+
+            console.log("vagepoigjwogij: " + JSON.stringify(req.innerBody['item']));
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);
 
         }, function (err) {
