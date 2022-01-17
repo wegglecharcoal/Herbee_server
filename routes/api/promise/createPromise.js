@@ -87,17 +87,17 @@ module.exports = function (req, res) {
         mysqlUtil.connectPool(async function (db_connection) {
             req.innerBody = {};
 
-            let chatRoomUserList = await queryCreate(req, db_connection);
+            req.innerBody['item'] = await queryCreate(req, db_connection);
             req.innerBody['fcm_push_token_other_list'] = [];
-            for (let idx in chatRoomUserList) {
-                chatRoomUserList[idx]['alert_type'] = 10;
-                req.innerBody['fcm_push_token_other_list'].push(chatRoomUserList[idx]['fcm_push_token_other']);
-                if( chatRoomUserList[idx]['source_uid'] === chatRoomUserList[idx]['target_uid'] )
-                    await queryCreateAlertHistory(chatRoomUserList[idx], db_connection);
+            for (let idx in req.innerBody['item']) {
+                req.innerBody['item'][idx]['alert_type'] = 10;
+                req.innerBody['fcm_push_token_other_list'].push(req.innerBody['item'][idx]['fcm_push_token_other']);
+                if( req.innerBody['item'][idx]['source_uid'] === req.innerBody['item'][idx]['target_uid'] )
+                    await queryCreateAlertHistory(req.innerBody['item'][idx], db_connection);
             }
-            req.innerBody['fcm_nickname_me'] = chatRoomUserList[0]['fcm_nickname_me'];
-            req.innerBody['fcm_filename_me'] = chatRoomUserList[0]['fcm_filename_me'];
-            req.innerBody['fcm_target_uid'] = chatRoomUserList[0]['fcm_target_uid'];
+            req.innerBody['fcm_nickname_me'] = req.innerBody['item'][0]['fcm_nickname_me'];
+            req.innerBody['fcm_filename_me'] = req.innerBody['item'][0]['fcm_filename_me'];
+            req.innerBody['fcm_target_uid'] = req.innerBody['item'][0]['fcm_target_uid'];
 
             await fcmUtil.fcmPromiseCreateArray(req.innerBody);
 
@@ -117,6 +117,13 @@ module.exports = function (req, res) {
 
 
 function deleteBody(req) {
+    for (let idx in req.innerBody['item']) {
+        delete req.innerBody['item'][idx]['fcm_target_uid'];
+        delete req.innerBody['item'][idx]['fcm_filename_me'];
+        delete req.innerBody['item'][idx]['fcm_push_token_other'];
+        delete req.innerBody['item'][idx]['alert_source_uid'];
+        delete req.innerBody['item'][idx]['alert_target_uid'];
+    }
     delete req.innerBody['fcm_nickname_me'];
     delete req.innerBody['fcm_filename_me'];
     delete req.innerBody['fcm_push_token_other'];
