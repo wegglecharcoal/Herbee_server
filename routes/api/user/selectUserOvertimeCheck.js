@@ -136,7 +136,7 @@ function queryCheckPromiseAccept(req, db_connection) {
 function queryCheckPromiseMeet(req, db_connection) {
     const _funcName = arguments.callee.name;
 
-    return mysqlUtil.querySingle(db_connection
+    return mysqlUtil.queryArray(db_connection
         , 'call proc_select_user_overtime_promise_meet_check'
         , [
             req.headers['user_uid']
