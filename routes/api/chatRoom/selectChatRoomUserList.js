@@ -54,7 +54,7 @@ module.exports = function (req, res) {
             req.innerBody = {};
 
             req.innerBody['item'] = await querySelect(req, db_connection);
-
+            req.innerBody['count_room_user'] = await querySelectCount(req, db_connection);
 
             deleteBody(req)
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);
@@ -81,6 +81,17 @@ function querySelect(req, db_connection) {
 
     return mysqlUtil.queryArray(db_connection
         , 'call proc_select_chatRoom_user_list'
+        , [
+            req.paramBody['chat_room_uid']
+        ]
+    );
+}
+
+function querySelectCount(req, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.queryArray(db_connection
+        , 'call proc_select_chatRoom_user_list_count'
         , [
             req.paramBody['chat_room_uid']
         ]
