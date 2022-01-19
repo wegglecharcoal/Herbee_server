@@ -54,7 +54,8 @@ module.exports = function (req, res) {
             req.innerBody = {};
 
             req.innerBody['item'] = await querySelect(req, db_connection);
-            req.innerBody['count_room_user'] = await querySelectCount(req, db_connection);
+            let count_data = await querySelectCount(req, db_connection);
+            req.innerBody['count_room_user'] = count_data['count_room_user'];
 
             deleteBody(req)
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);
