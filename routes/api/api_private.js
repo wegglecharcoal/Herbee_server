@@ -73,8 +73,13 @@ app.route('/lifestyle/same/topic/list')
 app.route('/lifestyle/popular/topic/list')
     .get( require('./lifestyle/selectLifestylePopularTopicList') );
 
+
+// 추후 업데이트되면 지워야할 Path API
 app.route('/lifestyle/realTime/list')
-    .get( require('./lifestyle/selectLifestyleRealTimeList') );
+    .get( require('./lifestyle/selectLifestyleRecentList') );
+
+app.route('/lifestyle/recent/list')
+    .get( require('./lifestyle/selectLifestyleRecentList') );
 
 /**
  * LocalReview

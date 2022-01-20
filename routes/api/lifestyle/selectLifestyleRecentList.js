@@ -1,15 +1,15 @@
 /**
- * Created by gunucklee on 2021. 10. 26.
+ * Created by gunucklee on 2022. 01. 20.
  *
  * @swagger
- * /api/private/lifestyle/realTime/list:
+ * /api/private/lifestyle/recent/list:
  *   get:
- *     summary: 실시간 접속 중 목록
+ *     summary: 최근 등록된 게시물
  *     tags: [Lifestyle]
  *     description: |
- *       path : /api/private/lifestyle/realTime/list
+ *       path : /api/private/lifestyle/recent/list
  *
- *       * 인기주제 목록
+ *       * 최근 등록된 게시물
  *
  *     parameters:
  *       - in: query
@@ -104,7 +104,7 @@ function querySelect(req, db_connection) {
     const _funcName = arguments.callee.name;
 
     return mysqlUtil.queryArray(db_connection
-        , 'call proc_select_lifestyle_realTime_list'
+        , 'call proc_select_lifestyle_recent_list'
         , [
             req.paramBody['latitude']
           , req.paramBody['longitude']
