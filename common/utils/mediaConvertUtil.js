@@ -11,14 +11,22 @@ const sendUtil = require('./sendUtil');
 const errUtil = require('./errUtil');
 const errCode = require('../define/errCode');
 
-module.exports =  function (final_name, video_width, video_height) {
+module.exports =  function (file_size, final_name, video_width, video_height) {
 
     const MEDIACONVERT = 'ConvertSuccess';
+    const BITRATE = 1600000;
     const extname = path.extname(final_name);
 
 
-
     if(extname === '.mp4') {
+
+        let bitrate_value = BITRATE;
+        if(file_size > 30)
+            bitrate_value = BITRATE * ( 30 / file_size );
+
+        if(bitrate_value < 500000) {
+            bitrate_value = 500000;
+        }
 
         AWS.config.update({
             accessKeyId: funcUtil.getAWSAccessKeyID(),
@@ -71,7 +79,7 @@ module.exports =  function (final_name, video_width, video_height) {
                                         "H264Settings": {
                                             "ParNumerator": 16,
                                             "ParDenominator": 9,
-                                            "Bitrate": 1500000
+                                            "Bitrate": bitrate_value
                                         }
                                     },
                                     "AfdSignaling": "NONE",
@@ -99,7 +107,28 @@ module.exports =  function (final_name, video_width, video_height) {
                                         "AudioType": 0
                                     }
                                 ],
+                                // "NameModifier": "test1111"
                                 "NameModifier": "ConvertSuccess"
+                            },
+                            {
+                                "ContainerSettings": {
+                                    "Container": "RAW"
+                                },
+                                "VideoDescription": {
+                                    "Width": 574,
+                                    "Height": 1024,
+                                    "CodecSettings": {
+                                        "Codec": "FRAME_CAPTURE",
+                                        "FrameCaptureSettings": {
+                                            "FramerateNumerator": 30,
+                                            "FramerateDenominator": 90,
+                                            "MaxCaptures": 2,
+                                            "Quality": 80
+                                        }
+                                    }
+                                },
+                                "Extension": "jpg",
+                                "NameModifier": "Thumbnail"
                             }
                         ],
                         "OutputGroupSettings": {
@@ -117,11 +146,8 @@ module.exports =  function (final_name, video_width, video_height) {
                                 "DefaultSelection": "DEFAULT"
                             }
                         },
-                        "VideoSelector": {
-                            "Rotate": "AUTO"
-                        },
+                        "VideoSelector": {},
                         "TimecodeSource": "ZEROBASED",
-                        // "FileInput": "s3://weggle-bucket/2a737e2ea36d9dabaab1a904e1c06beb.mp4"
                         "FileInput": "null"
                     }
                 ]

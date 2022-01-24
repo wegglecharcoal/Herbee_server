@@ -19,7 +19,7 @@ AWS.config.update({
 
 const s3 = new AWS.S3();
 
-const MAX_LENGTH_MB=30
+const MAX_LENGTH_MB=2000
 
 const fileOptions = {
     storage: multerS3({

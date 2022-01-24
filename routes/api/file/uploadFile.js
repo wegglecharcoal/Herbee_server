@@ -53,17 +53,31 @@ module.exports = async function (req, res) {
         if( req.file ) {
 
             let final_name = req.file.key;
+            let originalname = req.file.originalname;
 
             req.innerBody = {};
 
 
             if(req.file.originalname.includes('.mp4')) {
-                final_name = mediaConvertUtil(final_name);
+                final_name = replaceName(req.file.key);
+
+                let originalnameArray = originalname.split("_");
+
+                let video_width = originalnameArray[originalnameArray.length -2];
+                let video_height = originalnameArray[originalnameArray.length -1];
+                let file_size = req.file.size / (1024 * 1024);
+
+                video_height = video_height.replace('.mp4', '');
+
+                final_name = mediaConvertUtil(file_size, final_name, parseInt(video_width), parseInt(video_height));
+
+                req.innerBody['thumbnail'] = final_name.replace('ConvertSuccess.mp4', 'Thumbnail.0000001.jpg');
             }
 
             req.innerBody['filename'] = final_name
 
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);
+
         }
         else {
             let _err = errUtil.initError(errCode.empty, '이미지 파일이 존재하지 않습니다.');
@@ -77,4 +91,12 @@ module.exports = async function (req, res) {
         let _err = errUtil.get(e);
         sendUtil.sendErrorPacket(req, res, _err);
     }
+}
+
+
+function replaceName(filename) {
+    let fileArray = filename.split("_");
+    filename =filename.replace('_'+ fileArray[fileArray.length -2], '');
+    filename =filename.replace('_' + fileArray[fileArray.length -1], '');
+    return filename;
 }
