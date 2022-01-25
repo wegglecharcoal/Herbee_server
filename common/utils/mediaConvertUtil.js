@@ -146,130 +146,6 @@ module.exports =  function (file_size, final_name, video_width, video_height) {
                                 "DefaultSelection": "DEFAULT"
                             }
                         },
-                        "VideoSelector": {},
-                        "TimecodeSource": "ZEROBASED",
-                        "FileInput": "null"
-                    }
-                ]
-            },
-            "AccelerationSettings": {
-                "Mode": "DISABLED"
-            },
-            "StatusUpdateInterval": "SECONDS_60",
-            "Priority": 0,
-            "HopDestinations": []
-        }
-
-
-        const paramsRotate = {
-            "Queue": funcUtil.getAWSMediaConvertQueue(),
-            "UserMetadata": {
-                "Customer": "Amazon"
-            },
-            "Role": funcUtil.getAWSMediaConvertRole(),
-            "Settings": {
-                "TimecodeConfig": {
-                    "Source": "ZEROBASED"
-                },
-                "OutputGroups": [
-                    {
-                        "CustomName": "grege",
-                        "Name": "File Group",
-                        "Outputs": [
-                            {
-                                "ContainerSettings": {
-                                    "Container": "MP4",
-                                    "Mp4Settings": {
-                                        "CslgAtom": "EXCLUDE",
-                                        "FreeSpaceBox": "EXCLUDE",
-                                        "MoovPlacement": "NORMAL"
-                                    }
-                                },
-                                "VideoDescription": {
-                                    "Width": 574,
-                                    "ScalingBehavior": "DEFAULT",
-                                    "Height": 1024,
-                                    "VideoPreprocessors": {
-                                        "Deinterlacer": {
-                                            "Algorithm": "INTERPOLATE",
-                                            "Mode": "DEINTERLACE",
-                                            "Control": "NORMAL"
-                                        }
-                                    },
-                                    "TimecodeInsertion": "DISABLED",
-                                    "AntiAlias": "ENABLED",
-                                    "Sharpness": 50,
-                                    "CodecSettings": {
-                                        "Codec": "H_264",
-                                        "H264Settings": {
-                                            "ParNumerator": 16,
-                                            "ParDenominator": 9,
-                                            "Bitrate": bitrate_value
-                                        }
-                                    },
-                                    "AfdSignaling": "NONE",
-                                    "DropFrameTimecode": "ENABLED",
-                                    "RespondToAfd": "NONE",
-                                    "ColorMetadata": "INSERT"
-                                },
-                                "AudioDescriptions": [
-                                    {
-                                        "AudioTypeControl": "FOLLOW_INPUT",
-                                        "CodecSettings": {
-                                            "Codec": "AAC",
-                                            "AacSettings": {
-                                                "AudioDescriptionBroadcasterMix": "NORMAL",
-                                                "Bitrate": 160000,
-                                                "RateControlMode": "CBR",
-                                                "CodecProfile": "LC",
-                                                "CodingMode": "CODING_MODE_2_0",
-                                                "RawFormat": "NONE",
-                                                "SampleRate": 48000,
-                                                "Specification": "MPEG4"
-                                            }
-                                        },
-                                        "LanguageCodeControl": "FOLLOW_INPUT",
-                                        "AudioType": 0
-                                    }
-                                ],
-                                "NameModifier": "ConvertSuccess"
-                            },
-                            {
-                                "ContainerSettings": {
-                                    "Container": "RAW"
-                                },
-                                "VideoDescription": {
-                                    "Width": 574,
-                                    "Height": 1024,
-                                    "CodecSettings": {
-                                        "Codec": "FRAME_CAPTURE",
-                                        "FrameCaptureSettings": {
-                                            "FramerateNumerator": 30,
-                                            "FramerateDenominator": 90,
-                                            "MaxCaptures": 2,
-                                            "Quality": 80
-                                        }
-                                    }
-                                },
-                                "Extension": "jpg",
-                                "NameModifier": "Thumbnail"
-                            }
-                        ],
-                        "OutputGroupSettings": {
-                            "Type": "FILE_GROUP_SETTINGS",
-                            "FileGroupSettings": {
-                                "Destination": funcUtil.getAWSMediaConvertS3Destination()
-                            }
-                        }
-                    }
-                ],
-                "Inputs": [
-                    {
-                        "AudioSelectors": {
-                            "Audio Selector 1": {
-                                "DefaultSelection": "DEFAULT"
-                            }
-                        },
                         "VideoSelector": {
                             "Rotate": "AUTO"
                         },
@@ -287,7 +163,7 @@ module.exports =  function (file_size, final_name, video_width, video_height) {
         }
 
         console.log("asdiajdoqwijdqowij: " + final_name)
-        const data = convertFunc(final_name, (video_width > video_height) ? paramsRotate : params);
+        const data = convertFunc(final_name, params);
 
         if(data) {
             let basename = path.basename(final_name, extname);
