@@ -33,8 +33,11 @@ const fileUtil = require('../../../common/utils/fileUtil');
 const errUtil = require('../../../common/utils/errUtil');
 const logUtil = require('../../../common/utils/logUtil');
 const errCode = require('../../../common/define/errCode');
+const funcUtil = require('../../../common/utils/funcUtil');
 
 const mediaConvertUtil = require('../../../common/utils/mediaConvertUtil');
+
+const getMediaDimensions = require('get-media-dimensions');
 
 let file_name = fileUtil.name(__filename);
 
@@ -53,28 +56,21 @@ module.exports = async function (req, res) {
         if( req.file ) {
 
             let final_name = req.file.key;
-            let originalname = req.file.originalname;
 
             req.innerBody = {};
 
-
             if(req.file.originalname.includes('.mp4')) {
-                final_name = replaceName(req.file.key);
 
-                let originalnameArray = originalname.split("_");
-
-                let video_width = originalnameArray[originalnameArray.length -2];
-                let video_height = originalnameArray[originalnameArray.length -1];
                 let file_size = req.file.size / (1024 * 1024);
 
-                video_height = video_height.replace('.mp4', '');
+                const file_dimensions = await getMediaDimensions(`${funcUtil.getFilePath()}${req.file.key}`, 'video');
 
-                final_name = mediaConvertUtil(file_size, final_name, parseInt(video_width), parseInt(video_height));
+                final_name = mediaConvertUtil(file_size, final_name);
 
-                req.innerBody['thumbnail'] = final_name.replace('ConvertSuccess.mp4', 'Thumbnail.0000001.jpg');
+                req.innerBody['thumbnail'] = final_name.replace('ConvertSuccess.mp4', file_dimensions['duration'] >= 4? 'Thumbnail.0000001.jpg' : 'Thumbnail.0000000.jpg');
             }
 
-            req.innerBody['filename'] = final_name
+            req.innerBody['filename'] = final_name;
 
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);
 
@@ -93,10 +89,3 @@ module.exports = async function (req, res) {
     }
 }
 
-
-function replaceName(filename) {
-    let fileArray = filename.split("_");
-    filename =filename.replace('_'+ fileArray[fileArray.length -2], '');
-    filename =filename.replace('_' + fileArray[fileArray.length -1], '');
-    return filename;
-}

@@ -11,7 +11,7 @@ const sendUtil = require('./sendUtil');
 const errUtil = require('./errUtil');
 const errCode = require('../define/errCode');
 
-module.exports =  function (file_size, final_name, video_width, video_height) {
+module.exports =  function (file_size, final_name) {
 
     const MEDIACONVERT = 'ConvertSuccess';
     const BITRATE = 1600000;
@@ -161,8 +161,6 @@ module.exports =  function (file_size, final_name, video_width, video_height) {
             "Priority": 0,
             "HopDestinations": []
         }
-
-        console.log("asdiajdoqwijdqowij: " + final_name)
         const data = convertFunc(final_name, params);
 
         if(data) {
@@ -183,19 +181,12 @@ module.exports =  function (file_size, final_name, video_width, video_height) {
 
 
 async function convertFunc(final_name,convertParams) {
-
-    // Create a promise on a MediaConvert object
     console.log(JSON.stringify(convertParams));
 
-    // params.Settings.OutputGroups[0].Outputs[0].NameModifier = final_name;
     convertParams.Settings.Inputs[0].FileInput = `${funcUtil.getAWSMediaConvertS3StartingPoint()}${final_name}`;
-
-    // params["OutputGroups"][0]["Outputs"][0]["NameModifier"] = final_name;
-
 
     const endpointPromise = new AWS.MediaConvert().createJob(convertParams).promise();
 
-    // Handle promise's fulfilled/rejected status
     endpointPromise.then(
         function(data) {
             console.log("Job created! ", data);

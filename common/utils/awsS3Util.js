@@ -72,9 +72,4 @@ function uploadFile(req, res, next){
     })
 }
 
-
-
-
-
-
 exports.uploadFile = uploadFile;
