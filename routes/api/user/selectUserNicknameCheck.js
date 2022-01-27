@@ -51,7 +51,7 @@ module.exports = function (req, res) {
             // 한글 버전
             // paramUtil.checkParam_alreadyUse(nickname_data, '이미 사용 중인 닉네임 입니다.');
             // 영어 버전
-            paramUtil.checkParam_alreadyUse(nickname_data, 'This nickname is already use other user.');
+            paramUtil.checkParam_alreadyUse(nickname_data, 'This nickname is already use by other user.');
 
             // 한글 버전
             // req.innerBody['success'] = '사용 가능한 닉네임 입니다.';
