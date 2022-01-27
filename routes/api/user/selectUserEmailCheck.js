@@ -49,7 +49,7 @@ module.exports = function (req, res) {
 
             const email_data = await queryCheck(req, db_connection);
             // 한글 버전
-            paramUtil.checkParam_alreadyUse(email_data, '이미 사용 중인 이메일입니다.');
+            // paramUtil.checkParam_alreadyUse(email_data, '이미 사용 중인 이메일입니다.');
             // 영어 버전
             paramUtil.checkParam_alreadyUse(email_data, 'This email is already use other user');
 
