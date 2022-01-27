@@ -60,7 +60,11 @@ function uploadFile(req, res, next){
             console.log('awsS3Util, multer err.stack : '+err.stack);
 
             if( err.code === 'LIMIT_FILE_SIZE' ){
-                sendUtil.sendErrorPacket(req, res, errUtil.initError(err.path, `최대 업로드 가능한 파일 사이즈는 ${MAX_LENGTH_MB}mb 입니다.`));
+                // 한글 버전 (추후 반영 예정)
+                // sendUtil.sendErrorPacket(req, res, errUtil.initError(err.path, `최대 업로드 가능한 파일 사이즈는 ${MAX_LENGTH_MB}mb 입니다.`));
+
+                // 영어 버전
+                sendUtil.sendErrorPacket(req, res, errUtil.initError(err.path, `The maximum uploadable file size is ${MAX_LENGTH_MB}mb.`));
             }
             else {
                 sendUtil.sendErrorPacket(req, res, err);

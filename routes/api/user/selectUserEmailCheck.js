@@ -47,11 +47,16 @@ module.exports = function (req, res) {
         mysqlUtil.connectPool(async function (db_connection) {
             req.innerBody = {};
 
-            console.log("dmdfskdo");
             const email_data = await queryCheck(req, db_connection);
-            paramUtil.checkParam_alreadyUse(email_data, '이미 가입한 이메일 입니다.');
+            // 한글 버전
+            paramUtil.checkParam_alreadyUse(email_data, '이미 사용 중인 이메일입니다.');
+            // 영어 버전
+            paramUtil.checkParam_alreadyUse(email_data, 'This email is already use other user');
 
-            req.innerBody['success'] = '사용 가능한 이메일입니다.'
+            // 한글 버전
+            // req.innerBody['success'] = '사용 가능한 이메일입니다.'
+            // 영어 버전
+            req.innerBody['success'] = 'This email is available';
 
             deleteBody(req)
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);

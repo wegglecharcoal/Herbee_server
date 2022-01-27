@@ -52,21 +52,30 @@ module.exports = function (req, res) {
 
             req.innerBody['item'] = await queryCheckUser(req, db_connection);
             if (!req.innerBody['item']) {
-                errUtil.createCall(errCode.empty, `참여하지 않은 채팅방입니다.`);
+                // 한글 버전
+                // errUtil.createCall(errCode.empty, `참여하지 않은 채팅방입니다.`);
+                // 영어 버전
+                errUtil.createCall(errCode.empty, `The chat room that i didn't participate in.`);
                 return;
             }
 
             req.innerBody['item'] = await queryCheckIsHead(req, db_connection);
 
             if (req.innerBody['item']) {
-                errUtil.createCall(errCode.fail, `다른 유저가 방에 있습니다. 모임 채팅방은 방장이 혼자 있을 때만 나갈 수 있습니다.`);
+                // 한글 버전
+                // errUtil.createCall(errCode.fail, `다른 유저가 방에 있습니다. 모임 채팅방은 방장이 혼자 있을 때만 나갈 수 있습니다.`);
+                // 영어 버전
+                errUtil.createCall(errCode.fail, `Another user is in the room. You can only go out of the gathering chat room when the room manager is alone.`);
                 return;
             }
 
 
 
             await queryDelete(req, db_connection);
-            req.innerBody['success'] = '채팅방에서 나갔습니다.';
+            // 한글 버전
+            // req.innerBody['success'] = '채팅방에서 나갔습니다.';
+            // 영어 버전
+            req.innerBody['success'] = 'left the chat room.';
 
             deleteBody(req)
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);

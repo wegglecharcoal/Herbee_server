@@ -62,12 +62,18 @@ module.exports = function (req, res) {
 
             req.innerBody['item'] = await queryCheck(req, db_connection);
             if (!req.innerBody['item']) {
-                errUtil.createCall(errCode.empty, `팔로우되어 있지 않은 유저입니다.`);
+                // 한글 버전
+                // errUtil.createCall(errCode.empty, `팔로우되어 있지 않은 유저입니다.`);
+                // 영어 버전
+                errUtil.createCall(errCode.empty, `A user who is not followed.`);
                 return;
             }
 
             await queryDelete(req, db_connection);
-            req.innerBody['success'] = '삭제가 완료되었습니다.';
+            // 한글 버전
+            // req.innerBody['success'] = '삭제가 완료되었습니다.';
+            // 영어 버전
+            req.innerBody['success'] = 'Success to delete.';
 
             deleteBody(req)
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);

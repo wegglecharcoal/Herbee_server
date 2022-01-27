@@ -69,13 +69,19 @@ module.exports = function (req, res) {
 
             let chatRoomCheck = await queryCheckChatRoom(req, db_connection);
             if (!chatRoomCheck) {
-                errUtil.createCall(errCode.fail, `존재하지 않는 채팅방입니다. 확인 후 다시 시도해주세요.`);
+                // 한글 버전
+                // errUtil.createCall(errCode.fail, `존재하지 않는 채팅방입니다. 확인 후 다시 시도해주세요.`);
+                // 영어 버전
+                errUtil.createCall(errCode.fail, `It's a chat room that doesn't exist. Please check and try again.`);
                 return;
             }
 
             let retryCheck = await queryCheckRetry(req, db_connection);
             if (!retryCheck) {
-                errUtil.createCall(errCode.fail, `다시 대화하기 시도 횟수가 넘었습니다. 다시 대화하기는 최대 3회만 가능합니다.`);
+                // 한글 버전
+                // errUtil.createCall(errCode.fail, `다시 대화하기 시도 횟수가 넘었습니다. 다시 대화하기는 최대 3회만 가능합니다.`);
+                // 영어 버전
+                errUtil.createCall(errCode.fail, `The number of attempts to talk again has exceeded. You can only talk again up to three times.`);
                 return;
             }
 

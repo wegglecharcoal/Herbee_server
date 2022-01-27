@@ -53,7 +53,10 @@ module.exports = function (req, res) {
 
             let check = await queryCheck(req, db_connection);
             if (!check) {
-                errUtil.createCall(errCode.fail, `약속 주최자만 약속을 변경할 수 있는 권한이 주어집니다.`);
+                // 한글 버전
+                // errUtil.createCall(errCode.fail, `약속 주최자만 약속을 변경할 수 있는 권한이 주어집니다.`);
+                // 영어 버전
+                errUtil.createCall(errCode.fail, `Only the promise organizer is given the right to change the promise.`);
                 return;
             }
 
@@ -61,11 +64,17 @@ module.exports = function (req, res) {
             req.innerBody['item'] = await queryDelete(req, db_connection);
 
             if (req.innerBody['item']) {
-                errUtil.createCall(errCode.fail, `삭제에 실패하였습니다.`);
+                // 한글 버전
+                // errUtil.createCall(errCode.fail, `삭제에 실패하였습니다.`);
+                // 영어 버전
+                errUtil.createCall(errCode.fail, `Failed to delete the promise.`);
                 return;
             }
 
-            req.innerBody['success'] = '약속 삭제가 완료되었습니다.';
+            // 한글 버전
+            // req.innerBody['success'] = '약속 삭제가 완료되었습니다.';
+            // 영어 버전
+            errUtil.createCall(errCode.fail, `Failed to delete the promise.`);
 
             deleteBody(req);
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);

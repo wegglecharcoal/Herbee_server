@@ -60,12 +60,19 @@ module.exports = function (req, res) {
 
             req.innerBody['item'] = await queryCheck(req, db_connection);
             if (!req.innerBody['item']) {
-                errUtil.createCall(errCode.empty, `방장 권한이 없습니다.`);
+                // 한글 버전
+                // errUtil.createCall(errCode.empty, `방장 권한이 없습니다.`);
+                // 영어 버전
+                errUtil.createCall(errCode.empty, `You don't have the authority to be the room manager.`);
+
                 return;
             }
 
             await queryDelete(req, db_connection);
-            req.innerBody['success'] = '강퇴가 완료되었습니다.';
+            // 한글 버전
+            // req.innerBody['success'] = '강퇴가 완료되었습니다.';
+            // 영어 버전
+            req.innerBody['success'] = 'Success to kicked out';
 
             deleteBody(req)
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);

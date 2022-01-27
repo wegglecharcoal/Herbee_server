@@ -54,12 +54,19 @@ module.exports = function (req, res) {
             req.innerBody = {};
             let check = await queryCheckUser(req, db_connection);
             if (!check) {
-                errUtil.createCall(errCode.empty, `참여하지 않은 채팅방입니다.`);
+                // 한글 버전
+                // errUtil.createCall(errCode.empty, `참여하지 않은 채팅방입니다.`);
+                // 영어 버전
+                errUtil.createCall(errCode.empty, `This is the chat room that I didn't participate in.`);
                 return;
             }
 
             req.innerBody['item'] = await queryDelete(req, db_connection);
-            req.innerBody['success'] = '다시 대화하기를 거절했습니다.';
+
+            // 한글 버전
+            // req.innerBody['success'] = '다시 대화하기를 거절했습니다.';
+            // 영어버전
+            req.innerBody['success'] = 'refused to chat again';
 
             req.innerBody['manual_code'] = 'H2-002';
             let refund_honey = await querySelectHoneySystem(req, db_connection);

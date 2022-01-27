@@ -105,7 +105,10 @@ module.exports = function (req, res) {
             req.innerBody = {};
 
             let check = await queryCheck(req, db_connection);
-            paramUtil.checkParam_alreadyUse(check,'이미 해당 동네 후기가 등록되어 있습니다.');
+            // 한글 버전
+            // paramUtil.checkParam_alreadyUse(check,'이미 해당 동네 후기가 등록되어 있습니다.');
+            // 영어 버전
+            paramUtil.checkParam_alreadyUse(check,'A review of the local review has already been registered.');
 
             req.innerBody['item'] = await queryCreate(req, db_connection);
 

@@ -48,9 +48,16 @@ module.exports = function (req, res) {
             req.innerBody = {};
 
             const nickname_data = await queryCheck(req, db_connection);
-            paramUtil.checkParam_alreadyUse(nickname_data, '이미 사용 중인 닉네임 입니다.');
+            // 한글 버전
+            // paramUtil.checkParam_alreadyUse(nickname_data, '이미 사용 중인 닉네임 입니다.');
+            // 영어 버전
+            paramUtil.checkParam_alreadyUse(nickname_data, 'This nickname is already use other user.');
 
-            req.innerBody['success'] = '사용 가능한 닉네임 입니다.'
+            // 한글 버전
+            // req.innerBody['success'] = '사용 가능한 닉네임 입니다.';
+            // 영어 버전
+            req.innerBody['success'] = 'This nickname is available';
+
 
             deleteBody(req)
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);

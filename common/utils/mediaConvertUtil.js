@@ -170,7 +170,14 @@ module.exports =  function (file_size, final_name) {
             return final_name;
         }
 
-        errUtil.createCall(errCode.fail, `영상 업로드 중 오류가 발생되었습니다. 다시 시도해주세요.!`);
+
+
+
+        // 한글 버전 (추후 반영 예정)
+        // errUtil.createCall(errCode.fail, `영상 업로드 중 오류가 발생되었습니다. 다시 시도해주세요.!`);
+
+        // 영어 버전
+        errUtil.createCall(errCode.fail, `An error occurred while uploading the video. Please try again!`);
         return;
     }
     return final_name;

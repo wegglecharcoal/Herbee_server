@@ -61,7 +61,10 @@ module.exports = function (req, res) {
             req.innerBody = {};
 
             req.innerBody['item'] = await queryCheck(req, db_connection);
-            paramUtil.checkParam_alreadyUse(req.innerBody['item'], '이미 참여한 채팅방입니다.');
+            // 한글 버전
+            // paramUtil.checkParam_alreadyUse(req.innerBody['item'], '이미 참여한 채팅방입니다.');
+            // 영어 버전
+            paramUtil.checkParam_alreadyUse(req.innerBody['item'], 'This is the chat room that I already participated in.');
 
             req.innerBody['item'] = await queryCreate(req, db_connection);
 

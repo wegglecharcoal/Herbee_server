@@ -93,7 +93,10 @@ module.exports = function (req, res) {
 
             let check = await queryCheck(req, db_connection);
             if (!check) {
-                errUtil.createCall(errCode.fail, `약속 주최자만 약속을 변경할 수 있는 권한이 주어집니다.`);
+                // 한글 버전
+                // errUtil.createCall(errCode.fail, `약속 주최자만 약속을 변경할 수 있는 권한이 주어집니다.`);
+                // 영어 버전
+                errUtil.createCall(errCode.fail, `Only the promise organizer is given the right to change the promise.`);
                 return;
             }
 

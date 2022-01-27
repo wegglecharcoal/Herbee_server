@@ -32,25 +32,44 @@ module.exports = {
 
     checkParam_noReturn: function (param, key, minLength = 0, maxLength = 20000) {
         if (!param[key] && param[key] !== 0) {
-            errUtil.createCall(errCode.param, `파라미터 오류 발생. 파라미터를 확인해 주세요.\n확인 파라미터 : ${key}`);
+            // 한글 버전
+            // errUtil.createCall(errCode.param, `파라미터 오류 발생. 파라미터를 확인해 주세요.\n확인 파라미터 : ${key}`);
+            // 영어 버전
+            errUtil.createCall(errCode.param, `Parameter error occurred. Please check the parameters.\nConfirmation: ${key}`);
         }
         else if (param[key].length <= minLength) {
-            errUtil.createCall(errCode.param, `파라미터 오류 발생. ${minLength}자 이상 입력해 주세요.\n확인 파라미터 : ${key}`);
+            // 한글 버전
+            // errUtil.createCall(errCode.param, `파라미터 오류 발생. ${minLength}자 이상 입력해 주세요.\n확인 파라미터 : ${key}`);
+            // 영어 버전
+            errUtil.createCall(errCode.param, `Parameter error occurred. Please enter more than ${minLength} characters.\\n Verification parameter: ${key}`);
         }
         else if (param[key].length > maxLength) {
-            errUtil.createCall(errCode.param, `파라미터 오류 발생. ${maxLength}자 이상 입력 하실 수 없습니다.\n확인 파라미터 : ${key}`);
+            // 한글 버전
+            // errUtil.createCall(errCode.param, `파라미터 오류 발생. ${maxLength}자 이상 입력 하실 수 없습니다.\n확인 파라미터 : ${key}`);
+            // 영어 버전
+            errUtil.createCall(errCode.param, `Parameter error occurred. You cannot enter more than ${maxLength} characters.\n Verification parameter: ${key}`);
         }
     },
 
+
     checkHeader_noReturn: function (param, key, minLength = 0, maxLength = 20000) {
         if (!param[key]) {
-            errUtil.createCall(errCode.param, `헤더 파라미터 오류 발생. 헤더 파라미터를 확인해 주세요.\n확인 헤더 파라미터 : ${key}`);
+            // 한글 버전
+            // errUtil.createCall(errCode.param, `헤더 파라미터 오류 발생. 헤더 파라미터를 확인해 주세요.\n확인 헤더 파라미터 : ${key}`);
+            // 영어 버전
+            errUtil.createCall(errCode.param, `Header parameter error. Please check the header parameter.\nConfirm header parameter: ${key}`);
         }
         else if (param[key].length <= minLength) {
-            errUtil.createCall(errCode.param, `헤더 파라미터 오류 발생. ${minLength}자 이상 입력해 주세요.\n확인 헤더 파라미터 : ${key}`);
+            // 한글 버전
+            // errUtil.createCall(errCode.param, `헤더 파라미터 오류 발생. ${minLength}자 이상 입력해 주세요.\n확인 헤더 파라미터 : ${key}`);
+            // 영어 버전
+            errUtil.createCall(errCode.param, `Header parameter error occurred. Please enter more than ${minLength} characters.\nConfirm header parameter: ${key}`);
         }
         else if (param[key].length > maxLength) {
-            errUtil.createCall(errCode.param, `헤더 파라미터 오류 발생. ${maxLength}자 이상 입력 하실 수 없습니다.\n확인 헤더 파라미터 : ${key}`);
+            // 한글 버전
+            // errUtil.createCall(errCode.param, `헤더 파라미터 오류 발생. ${maxLength}자 이상 입력 하실 수 없습니다.\n확인 헤더 파라미터 : ${key}`);
+            // 영어 버전
+            errUtil.createCall(errCode.param, `Header parameter error occurred. You cannot enter more than ${maxLength} characters.\nConfirm header parameter: ${key}`);
         }
     },
 

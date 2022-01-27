@@ -99,7 +99,10 @@ module.exports = function (req, res) {
                 if(!check) {
                     await queryCreateBlockUser(req, db_connection);
                 }
-                req.innerBody['success'] = '해당 유저 차단을 완료했습니다.';
+                // 한글 버전
+                // req.innerBody['success'] = '해당 유저 차단을 완료했습니다.';
+                // 영어 버전
+                req.innerBody['success'] = `The user's blocking has been completed.`;
             }
 
             switch (req.paramBody['status']){
@@ -107,7 +110,10 @@ module.exports = function (req, res) {
                 // 주최자 외에 모든 사람이 거절한다면 꿀을 환불 해주어야 함
                 case 0: {
                     let check = await queryPromiseEnterCheck(req, db_connection);
-                    paramUtil.checkParam_alreadyUse(check,'이미 해당 약속에 참여했기 때문에 거절을 수행할 수 없습니다.');
+                    // 한글 버전
+                    // paramUtil.checkParam_alreadyUse(check,'이미 해당 약속에 참여했기 때문에 거절을 수행할 수 없습니다.');
+                    // 영어 버전
+                    paramUtil.checkParam_alreadyUse(check,'Rejection cannot be performed because you have already participated in the promise.');
 
                     await queryCreatePromiseRefuse(req, db_connection);
 
@@ -123,7 +129,10 @@ module.exports = function (req, res) {
                         user['promise_uid'] = req.paramBody['promise_uid'];
                         await queryDeletePromise(user, db_connection);
 
-                        req.innerBody['success'] = '환불 꿀이 지급되었습니다.';
+                        // 한글 버전
+                        // req.innerBody['success'] = '환불 꿀이 지급되었습니다.';
+                        // 영어 버전
+                        req.innerBody['success'] = 'Refund honey has been given.';
                     }
                 } break;
 
@@ -135,7 +144,10 @@ module.exports = function (req, res) {
                 case 2: {
                     if( req.innerBody['item'] === 0 ) {
                         req.innerBody['item']['alert_type'] = 13;
-                        req.innerBody['item']['content'] = `${req.innerBody['item']['fcm_nickname_me']}님이 약속 장소로 향하고 있습니다.`;
+                        // 한글 버전
+                        // req.innerBody['item']['content'] = `${req.innerBody['item']['fcm_nickname_me']}님이 약속 장소로 향하고 있습니다.`;
+                        // 영어 버전
+                        req.innerBody['item']['content'] = `${req.innerBody['item']['fcm_nickname_me']} is heading to the meeting place.`;
                         await queryCreateAlertHistory(req.innerBody['item'], db_connection);
                         await fcmUtil.fcmPromiseDepartSingle(req.innerBody['item']);
                     }
@@ -158,7 +170,10 @@ module.exports = function (req, res) {
                             await queryCreate(price_user_list[idx], db_connection);
                         }
 
-                        req.innerBody['success'] = '만남 꿀이 지급되었습니다.';
+                        // 한글 버전
+                        // req.innerBody['success'] = '만남 꿀이 지급되었습니다.';
+                        // 영어 버전
+                        req.innerBody['success'] = 'meeting honey has been given.';
 
                     }
 

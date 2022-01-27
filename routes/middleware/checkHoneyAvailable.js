@@ -28,16 +28,26 @@ module.exports = function (req, res, next) {
 
                 let ownHoney = await querySelectOwnHoney(req, db_connection);
                 if(!ownHoney || 0 >= ownHoney['own_honey_amount'] ) {
-                    errUtil.createCall(errCode.empty, `꿀이 부족합니다.`);
+                    // 한글 버전
+                    // errUtil.createCall(errCode.empty, `꿀이 부족합니다.`);
+                    // 영어 버전
+                    errUtil.createCall(errCode.empty, `not enough honey.`);
+
                 }
 
                 let systemHoney = await querySelectSystemHoney(req, db_connection);
                 if(!systemHoney) {
-                    errUtil.createCall(errCode.empty, `찾을려는 꿀 종류가 존재하지 않습니다. 확인 해주세요.`);
+                    // 한글 버전
+                    // errUtil.createCall(errCode.empty, `찾을려는 꿀 종류가 존재하지 않습니다. 확인 해주세요.`);
+                    // 영어 버전
+                    errUtil.createCall(errCode.empty, `There is no kind of honey to find. Please check it.`);
                 }
 
                 if(systemHoney['honey_amount'] > ownHoney['own_honey_amount']) {
-                    errUtil.createCall(errCode.empty, `사용할 수 있는 꿀이 모자라요 ㅠㅠ`);
+                    // 한글 버전
+                    // errUtil.createCall(errCode.empty, `사용할 수 있는 꿀이 모자라요 ㅠㅠ`);
+                    // 영어 버전
+                    errUtil.createCall(errCode.empty, `not enough honey T_T`);
                 }
 
             }
@@ -58,7 +68,11 @@ module.exports = function (req, res, next) {
 
 function checkParam(req) {
     if(!paramUtil.checkParam_return(req.headers, 'manual_code')) {
-        errUtil.createCall(errCode.auth, `꿀 메뉴얼 코드가 비어있습니다. 헤더에 'manual_code' 코드 값을 넣어주세요.`);
+        // 한글 버전
+        // errUtil.createCall(errCode.auth, `꿀 메뉴얼 코드가 비어있습니다. 헤더에 'manual_code' 코드 값을 넣어주세요.`);
+        // 영어 버전
+        errUtil.createCall(errCode.auth, `The honey manual code is empty. Please put the 'manual_code' code value in the header.`);
+
     }
 }
 

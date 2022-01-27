@@ -60,7 +60,10 @@ module.exports = function (req, res) {
             req.innerBody = {};
 
             let check = await queryCheck(req, db_connection);
-            paramUtil.checkParam_alreadyUse(check,'이미 차단되어있는 유저입니다.');
+            // 한글 버전
+            // paramUtil.checkParam_alreadyUse(check,'이미 차단되어있는 유저입니다.');
+            // 영어 버전
+            paramUtil.checkParam_alreadyUse(check,'A user who is already blocked.');
 
             req.innerBody['item'] = await queryCreate(req, db_connection);
 

@@ -25,13 +25,19 @@ module.exports = function (req, res) {
 
             if(req.paramBody['id']) {
                  let check = await querySelectDepositHistoryCheck(req, db_connection);
-                 paramUtil.checkParam_alreadyUse(check,'이미 해당 기록이 등록되어 있습니다.');
+                 // 한글 버전
+                 // paramUtil.checkParam_alreadyUse(check,'이미 해당 기록이 등록되어 있습니다.');
+                 // 영어 버전
+                 paramUtil.checkParam_alreadyUse(check,'The history is already registered.');
 
                 await queryCreateDepositHistory(req, db_connection);
             }
             else {
                 let check = await querySelectWithdrawHistoryCheck(req, db_connection);
-                paramUtil.checkParam_alreadyUse(check,'이미 해당 기록이 등록되어 있습니다.');
+                // 한글 버전
+                // paramUtil.checkParam_alreadyUse(check,'이미 해당 기록이 등록되어 있습니다.');
+                // 영어 버전
+                paramUtil.checkParam_alreadyUse(check,'The history is already registered.');
 
                 await queryCreateWithdrawHistory(req, db_connection);
             }

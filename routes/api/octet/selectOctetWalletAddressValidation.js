@@ -55,7 +55,10 @@ module.exports = function (req, res) {
         mysqlUtil.connectPool(async function (db_connection) {
             req.innerBody = {};
 
-            req.innerBody['result'] = await octetFunction(req, db_connection) ? "유효한 지갑 주소입니다." : "유효하지 않은 지갑 주소 형식입니다.";
+            // 한글 버전
+            // req.innerBody['result'] = await octetFunction(req, db_connection) ? "유효한 지갑 주소입니다." : "유효하지 않은 지갑 주소 형식입니다.";
+            // 영어 버전
+            req.innerBody['result'] = await octetFunction(req, db_connection) ? "This is a valid wallet address." : "This is an invalid wallet address format.";
 
             deleteBody(req);
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);

@@ -40,7 +40,10 @@ module.exports = function (req, res) {
 
             req.innerBody['item'] = await querySelect(req, db_connection);
             if (!req.innerBody['item']) {
-                errUtil.createCall(errCode.empty, `회원가입하지 않은 유저입니다.`);
+                // 한글 버전
+                // errUtil.createCall(errCode.empty, `회원가입하지 않은 유저입니다.`);
+                // 영어 버전
+                errUtil.createCall(errCode.empty, `This user isn't sign in`);
                 return;
             }
 

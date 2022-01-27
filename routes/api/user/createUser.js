@@ -168,13 +168,24 @@ module.exports = function (req, res) {
 
 
             const user_data = await queryCheck(req, db_connection);
-            paramUtil.checkParam_alreadyUse(user_data, '이미 회원가입한 유저 입니다.');
+            // 한글 버전
+            // paramUtil.checkParam_alreadyUse(user_data, '이미 회원가입한 유저 입니다.');
+            // 영어 버전
+            paramUtil.checkParam_alreadyUse(user_data, 'already signed up');
+
 
             const email_data = await queryCheckEmail(req, db_connection);
-            paramUtil.checkParam_alreadyUse(email_data, '이미 가입한 이메일 입니다.');
+            // 한글 버전
+            // paramUtil.checkParam_alreadyUse(email_data, '이미 가입한 이메일 입니다.');
+            // 영어 버전
+            paramUtil.checkParam_alreadyUse(email_data, 'This is an email that another user has already signed up for.');
+
 
             const nickname_data = await queryCheckNickname(req, db_connection);
-            paramUtil.checkParam_alreadyUse(nickname_data, '이미 사용 중인 닉네임 입니다.');
+            // 한글 버전
+            // paramUtil.checkParam_alreadyUse(nickname_data, '이미 사용 중인 닉네임 입니다.');
+            // 영어 버전
+            paramUtil.checkParam_alreadyUse(nickname_data, 'This is a nickname that another user has already signed up for.');
 
 
             // 추천인 코드 생성기

@@ -59,7 +59,10 @@ module.exports = function (req, res) {
             req.innerBody = {};
 
             let check = await queryCheck(req, db_connection);
-            paramUtil.checkParam_alreadyUse(check,'이미 해당 약속에 참여했습니다.');
+            // 한글 버전
+            // paramUtil.checkParam_alreadyUse(check,'이미 해당 약속에 참여했습니다.');
+            // 영어 버전
+            paramUtil.checkParam_alreadyUse(check,'You have already participated in the promise.');
 
 
             req.innerBody['item'] = await queryCreate(req, db_connection);

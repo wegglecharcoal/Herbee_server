@@ -57,7 +57,10 @@ module.exports = function (req, res) {
 
             let check = await queryCheck(req, db_connection);
             if (check) {
-                errUtil.createCall(errCode.empty, `아직 진행 중인 채팅방입니다. 채팅방을 종료 이후 다시 시도해주세요.`);
+                // 한글 버전
+                // errUtil.createCall(errCode.empty, `아직 진행 중인 채팅방입니다. 채팅방을 종료 이후 다시 시도해주세요.`);
+                // 영어 버전
+                errUtil.createCall(errCode.empty, `This chat room is still conversation. Please try again after end conversation the chat room.`);
                 return;
             }
 

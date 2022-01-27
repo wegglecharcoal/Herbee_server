@@ -69,7 +69,10 @@ module.exports = function (req, res) {
 
             req.innerBody['item'] = await queryCheck(req, db_connection);
             if (!req.innerBody['item']) {
-                errUtil.createCall(errCode.empty, `방장 권한이 없습니다.`);
+                // 한글 버전
+                // errUtil.createCall(errCode.empty, `방장 권한이 없습니다.`);
+                // 영어 버전
+                errUtil.createCall(errCode.empty, `You don't have the authority to be the room manager.`);
                 return;
             }
 

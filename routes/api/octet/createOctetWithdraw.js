@@ -138,21 +138,34 @@ async function octetFunction(req, db_connection) {
                 get_token_result === 'maintain' ? current_access_token['access_token'] : get_token_result);
         }
         else if(own_bee_coin['own_bee_coin_amount'] < req.paramBody['feeBeeCoin']  ) {
-            errUtil.createCall(errCode.fail, `수수료 비용이 부족합니다. 현재 수수료는 ${req.paramBody['feeBeeCoin']} BEE coin 입니다.`);
+            // 한글 버전
+            // errUtil.createCall(errCode.fail, `수수료 비용이 부족합니다. 현재 수수료는 ${req.paramBody['feeBeeCoin']} BEE coin 입니다.`);
+            // 영어 버전
+            errUtil.createCall(errCode.fail, `you don't have enough coins for the fee. The current fee is ${req.paramBody['feeBeeCoin']} BEE coins.`);
+
             return;
         }
         else if(isWithdrawSuccess.length > 0) {
-            errUtil.createCall(errCode.fail, `이전 출금 처리가 완료되지 않았습니다.`);
+            // 한글 버전
+            // errUtil.createCall(errCode.fail, `이전 출금 처리가 완료되지 않았습니다.`);
+            // 영어 버전
+            errUtil.createCall(errCode.fail, `Previous withdrawal processing has not been completed.`);
             return;
         }
         else {
-            errUtil.createCall(errCode.fail, `소지한 Bee 코인 개수가 부족합니다.`);
+            // 한글 버전
+            // errUtil.createCall(errCode.fail, `소지한 Bee 코인 개수가 부족합니다.`);
+            // 영어 버전
+            errUtil.createCall(errCode.fail, `you don't have enough BEE coin.`);
             return;
         }
 
     }
     else {
-        errUtil.createCall(errCode.fail, `유효하지 않은 지갑 주소 형식입니다.`);
+        // 한글 버전
+        // errUtil.createCall(errCode.fail, `유효하지 않은 지갑 주소 형식입니다.`);
+        // 영어 버전
+        errUtil.createCall(errCode.fail, `This is an invalid wallet address format.`);
         return;
     }
 
