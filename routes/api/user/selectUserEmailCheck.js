@@ -51,7 +51,7 @@ module.exports = function (req, res) {
             // 한글 버전
             // paramUtil.checkParam_alreadyUse(email_data, '이미 사용 중인 이메일입니다.');
             // 영어 버전
-            paramUtil.checkParam_alreadyUse(email_data, 'This email is already use by other user');
+            paramUtil.checkParam_alreadyUse(email_data, 'This email is already used by other users');
 
             // 한글 버전
             // req.innerBody['success'] = '사용 가능한 이메일입니다.'

@@ -55,7 +55,7 @@ const logUtil = require('../../../common/utils/logUtil');
 const fcmUtil = require('../../../common/utils/fcmUtil');
 const octetUtil = require("../../../common/utils/octetUtil");
 const errCode = require("../../../common/define/errCode");
-const upBitUtil = require("../../../common/utils/upBitUtil");
+const coinExchangeUtil = require("../../../common/utils/coinExchangeUtil");
 
 let file_name = fileUtil.name(__filename);
 
@@ -176,7 +176,7 @@ async function octetFunction(req, db_connection) {
 //
 //     let fee = await octetUtil.octetSelectFee(get_token_result === 'maintain' ? current_access_token['access_token'] : get_token_result);
 //
-//     let eth = await upBitUtil.upBitSelectCoinPrice('KRW-ETH');
+//     let eth = await coinExchangeUtil.upBitSelectCoinPrice('KRW-ETH');
 //
 //
 //     let fee_won = eth['data'][0]['trade_price'] * fee['data']['fastest'] * parseInt(process.env.OCTET_GWEI) * parseInt(process.env.OCTET_MAX_GAS_COST);
@@ -267,3 +267,24 @@ function queryUpdateOctetAccessToken(accessToken, db_connection) {
     );
 }
 
+
+function querySelectBeeCoinRate(coin_rate, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_select_bee_coin_rate'
+        , [
+        ]
+    );
+}
+
+function queryUpdateBeeCoinRate(coin_rate, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_update_bee_coin_rate'
+        , [
+            coin_rate
+        ]
+    );
+}

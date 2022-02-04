@@ -27,7 +27,7 @@ const sendUtil = require('../../../common/utils/sendUtil');
 const errUtil = require('../../../common/utils/errUtil');
 const logUtil = require('../../../common/utils/logUtil');
 const octetUtil = require("../../../common/utils/octetUtil");
-const upBitUtil = require("../../../common/utils/upBitUtil");
+const coinExchangeUtil = require("../../../common/utils/coinExchangeUtil");
 
 let file_name = fileUtil.name(__filename);
 
@@ -86,6 +86,27 @@ function queryUpdateOctetAccessToken(accessToken, db_connection) {
     );
 }
 
+function querySelectBeeCoinRate(coin_rate, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_select_bee_coin_rate'
+        , [
+        ]
+    );
+}
+
+function queryUpdateBeeCoinRate(coin_rate, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_update_bee_coin_rate'
+        , [
+            coin_rate
+        ]
+    );
+}
+
 async function octetFunction(req, db_connection) {
 
     let current_access_token = await querySelectOctetAccessToken(req, db_connection);
@@ -99,11 +120,22 @@ async function octetFunction(req, db_connection) {
 
     let fee = await octetUtil.octetSelectFee(get_token_result === 'maintain' ? current_access_token['access_token'] : get_token_result);
 
-    let eth = await upBitUtil.upBitSelectCoinPrice('KRW-ETH');
+    let eth = await coinExchangeUtil.upBitSelectCoinPrice('KRW-ETH');
 
+    let bee_coin_info = await coinExchangeUtil.lBankSelectCoinRate('bee_usdt');
+
+    if(bee_coin_info === 'false') {
+        let db_bee_coin_info = await querySelectBeeCoinRate(bee_coin_info, db_connection);
+        bee_coin_info = db_bee_coin_info['coin_rate'];
+    } else {
+        await queryUpdateBeeCoinRate(bee_coin_info, db_connection);
+    }
+
+    let bee_coin_rate = ((10 / (bee_coin_info * 1000))).toFixed(1);
 
     let fee_won = eth['data'][0]['trade_price'] * fee['data']['fastest'] * process.env.OCTET_GWEI * process.env.OCTET_MAX_GAS_COST;
-    let fee_bee_coin = Math.floor(fee_won * 0.1);
+
+    let fee_bee_coin = Math.floor(fee_won * bee_coin_rate);
     fee['data']['fee_bee_coin'] = fee_bee_coin;
 
     return fee['data'];

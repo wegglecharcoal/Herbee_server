@@ -77,7 +77,7 @@ module.exports = function (req, res) {
                 // 한글 버전
                 // errUtil.createCall(errCode.empty, `이미 추천인 코드를 입력했습니다`);
                 // 영어 버전
-                errUtil.createCall(errCode.empty, `You already entered the recommended code.`);
+                errUtil.createCall(errCode.empty, `You have already entered the recommended code.`);
                 return;
             }
 

@@ -38,7 +38,7 @@ const sendUtil = require('../../../common/utils/sendUtil');
 const errUtil = require('../../../common/utils/errUtil');
 const logUtil = require('../../../common/utils/logUtil');
 const octetUtil = require("../../../common/utils/octetUtil");
-const upBitUtil = require("../../../common/utils/upBitUtil");
+const coinExchangeUtil = require("../../../common/utils/coinExchangeUtil");
 
 let file_name = fileUtil.name(__filename);
 
