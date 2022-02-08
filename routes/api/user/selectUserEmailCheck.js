@@ -31,6 +31,7 @@ const mysqlUtil = require('../../../common/utils/mysqlUtil');
 const sendUtil = require('../../../common/utils/sendUtil');
 const errUtil = require('../../../common/utils/errUtil');
 const logUtil = require('../../../common/utils/logUtil');
+const errCode = require("../../../common/define/errCode");
 
 let file_name = fileUtil.name(__filename);
 
@@ -48,10 +49,7 @@ module.exports = function (req, res) {
             req.innerBody = {};
 
             const email_data = await queryCheck(req, db_connection);
-            // 한글 버전
-            // paramUtil.checkParam_alreadyUse(email_data, '이미 사용 중인 이메일입니다.');
-            // 영어 버전
-            paramUtil.checkParam_alreadyUse(email_data, 'This email is already used by other users');
+            paramUtil.checkParam_alreadyUse(email_data, errCode.already_email,'Error code: 510 [이미 가입한 이메일 입니다.]');
 
             req.innerBody['success'] = '사용 가능한 이메일입니다.'
 

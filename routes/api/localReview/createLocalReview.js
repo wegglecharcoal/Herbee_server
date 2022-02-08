@@ -88,6 +88,7 @@ const mysqlUtil = require('../../../common/utils/mysqlUtil');
 const sendUtil = require('../../../common/utils/sendUtil');
 const errUtil = require('../../../common/utils/errUtil');
 const logUtil = require('../../../common/utils/logUtil');
+const errCode = require("../../../common/define/errCode");
 
 let file_name = fileUtil.name(__filename);
 
@@ -105,10 +106,8 @@ module.exports = function (req, res) {
             req.innerBody = {};
 
             let check = await queryCheck(req, db_connection);
-            // 한글 버전
-            // paramUtil.checkParam_alreadyUse(check,'이미 해당 동네 후기가 등록되어 있습니다.');
-            // 영어 버전
-            paramUtil.checkParam_alreadyUse(check,'A review of the local review has already been registered.');
+
+            paramUtil.checkParam_alreadyUse(check, errCode.already_local_review,'Error code: 505 [이미 해당 동네 후기가 등록되어 있습니다.]');
 
             req.innerBody['item'] = await queryCreate(req, db_connection);
 

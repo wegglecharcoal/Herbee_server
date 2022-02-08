@@ -41,6 +41,7 @@ const sendUtil = require('../../../common/utils/sendUtil');
 const errUtil = require('../../../common/utils/errUtil');
 const logUtil = require('../../../common/utils/logUtil');
 const fcmUtil = require("../../../common/utils/fcmUtil");
+const errCode = require("../../../common/define/errCode");
 
 let file_name = fileUtil.name(__filename);
 
@@ -59,11 +60,8 @@ module.exports = function (req, res) {
             req.innerBody = {};
 
             let check = await queryCheck(req, db_connection);
-            // 한글 버전
-            // paramUtil.checkParam_alreadyUse(check,'이미 해당 약속에 참여했습니다.');
-            // 영어 버전
-            paramUtil.checkParam_alreadyUse(check,'You have already participated in the promise.');
 
+            paramUtil.checkParam_alreadyUse(check, errCode.already_promise_enter,'Error code: 507 [이미 해당 약속에 참여했습니다.]');
 
             req.innerBody['item'] = await queryCreate(req, db_connection);
             req.innerBody['item']['alert_type'] = 11;

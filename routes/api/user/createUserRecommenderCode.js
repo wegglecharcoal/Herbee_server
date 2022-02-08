@@ -67,17 +67,11 @@ module.exports = function (req, res) {
             let checkAlreadyRecommend = await queryCheckRecommenderCodeAlready(req, db_connection);
 
             if(!checkCodeExist) {
-                // 한글 버전
-                // errUtil.createCall(errCode.empty, `추천 코드가 존재하지 않습니다. 다시 시도해주세요.`);
-                // 영어 버전
-                errUtil.createCall(errCode.empty, `Recommendation code does not exist. Please try again.`);
+                errUtil.createCall(errCode.non_exist_recommender_code, `Error code: 306 [추천 코드가 존재하지 않습니다. 다시 시도해주세요.]`);
                 return;
             }
             else if(checkAlreadyRecommend['recommendee_code'] !== null) {
-                // 한글 버전
-                // errUtil.createCall(errCode.empty, `이미 추천인 코드를 입력했습니다`);
-                // 영어 버전
-                errUtil.createCall(errCode.empty, `You have already entered the recommended code.`);
+                errUtil.createCall(errCode.already_recommendee_code, `Error code: 512 [이미 추천인 코드를 입력했습니다]`);
                 return;
             }
 

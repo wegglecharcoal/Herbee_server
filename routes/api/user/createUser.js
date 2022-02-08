@@ -168,25 +168,14 @@ module.exports = function (req, res) {
 
 
             const user_data = await queryCheck(req, db_connection);
-            // 한글 버전
-            // paramUtil.checkParam_alreadyUse(user_data, '이미 회원가입한 유저 입니다.');
-            // 영어 버전
-            paramUtil.checkParam_alreadyUse(user_data, 'already signed up');
+            paramUtil.checkParam_alreadyUse(user_data, errCode.already_sign_up,'Error code: 509 [이미 회원가입한 유저 입니다.]');
 
 
             const email_data = await queryCheckEmail(req, db_connection);
-            // 한글 버전
-            // paramUtil.checkParam_alreadyUse(email_data, '이미 가입한 이메일 입니다.');
-            // 영어 버전
-            paramUtil.checkParam_alreadyUse(email_data, 'This is an email that another user has already signed up for.');
-
+            paramUtil.checkParam_alreadyUse(email_data, errCode.already_email,'Error code: 510 [이미 가입한 이메일 입니다.]');
 
             const nickname_data = await queryCheckNickname(req, db_connection);
-            // 한글 버전
-            // paramUtil.checkParam_alreadyUse(nickname_data, '이미 사용 중인 닉네임 입니다.');
-            // 영어 버전
-            paramUtil.checkParam_alreadyUse(nickname_data, 'This is a nickname that another user has already signed up for.');
-
+            paramUtil.checkParam_alreadyUse(nickname_data, errCode.already_nickname,'Error code: 511 [이미 사용 중인 닉네임 입니다.]');
 
             // 추천인 코드 생성기
             req.paramBody['recommender_code'] = recommenderCode();

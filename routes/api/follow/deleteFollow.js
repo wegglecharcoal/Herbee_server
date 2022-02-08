@@ -62,10 +62,7 @@ module.exports = function (req, res) {
 
             req.innerBody['item'] = await queryCheck(req, db_connection);
             if (!req.innerBody['item']) {
-                // 한글 버전
-                // errUtil.createCall(errCode.empty, `팔로우되어 있지 않은 유저입니다.`);
-                // 영어 버전
-                errUtil.createCall(errCode.empty, `A user who is not followed.`);
+                errUtil.createCall(errCode.non_exist_follow, `Error code: 305 [팔로우되어 있지 않은 유저입니다.]`);
                 return;
             }
 

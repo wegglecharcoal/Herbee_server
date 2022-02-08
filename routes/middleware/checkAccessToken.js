@@ -26,10 +26,7 @@ module.exports = function (req, res, next) {
 
             req.innerBody['item'] = await queryCheck(req, db_connection);
             if(!req.innerBody['item']) {
-                // 한글 버전
-                // errUtil.createCall(errCode.auth, `해당 유저의 접속 토큰이 유효하지 않습니다. 다시 로그인 해주세요.`);
-                // 영어 버전
-                errUtil.createCall(errCode.auth, `The user's access token is not valid. Please log in again.`);
+                errUtil.createCall(errCode.invalid_access_token, `Error code: 702 [해당 유저의 접속 토큰이 유효하지 않습니다. 다시 로그인 해주세요.]`);
             }
 
             next();
@@ -47,10 +44,7 @@ module.exports = function (req, res, next) {
 function checkParam(req) {
 
     if(!paramUtil.checkParam_return(req.headers, 'access_token')) {
-        // 한글 버전
-        // errUtil.createCall(errCode.auth, `접속 토큰이 존재하지 않습니다. 다시 로그인 해주세요.`);
-        // 영어 버전
-        errUtil.createCall(errCode.auth, `Access token does not exist. Please log in again.`);
+        errUtil.createCall(errCode.invalid_access_token, `Error code: 308 [접속 토큰이 존재하지 않습니다. 다시 로그인 해주세요.]`);
     }
 
     let token = req.headers['access_token'];
@@ -62,11 +56,7 @@ function checkParam(req) {
     }
     // 세션이 만료되거나 인증이 되지 않으면 에러를 발생시켜서 에러를 catch
     catch (ex) {
-        // 한글 버전
-        // errUtil.createCall(errCode.auth, `접속 토큰이 유효하지 않습니다. msg : ${ex.message}`);
-        // 영어 버전
-        errUtil.createCall(errCode.auth, `The access token is not valid.. msg : ${ex.message}`);
-
+        errUtil.createCall(errCode.invalid_access_token, `Error code: 702 [해당 유저의 접속 토큰이 유효하지 않습니다. 다시 로그인 해주세요.]`);
     }
 }
 

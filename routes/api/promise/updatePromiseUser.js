@@ -72,6 +72,7 @@ const sendUtil = require('../../../common/utils/sendUtil');
 const errUtil = require('../../../common/utils/errUtil');
 const logUtil = require('../../../common/utils/logUtil');
 const fcmUtil = require('../../../common/utils/fcmUtil');
+const errCode = require("../../../common/define/errCode");
 
 let file_name = fileUtil.name(__filename);
 
@@ -113,6 +114,7 @@ module.exports = function (req, res) {
                     // paramUtil.checkParam_alreadyUse(check,'이미 해당 약속에 참여했기 때문에 거절을 수행할 수 없습니다.');
                     // 영어 버전
                     paramUtil.checkParam_alreadyUse(check,'Rejection cannot be performed because you have already participated in the promise.');
+                    paramUtil.checkParam_alreadyUse(check, errCode.fail_refuse_promise,'Error code: 208 [이미 해당 약속에 참여했기 때문에 거절을 수행할 수 없습니다.]');
 
                     await queryCreatePromiseRefuse(req, db_connection);
 

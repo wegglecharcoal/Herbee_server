@@ -24,21 +24,13 @@ module.exports = function (req, res) {
             req.innerBody = {};
 
             if(req.paramBody['id']) {
-                 let check = await querySelectDepositHistoryCheck(req, db_connection);
-                 // 한글 버전
-                 // paramUtil.checkParam_alreadyUse(check,'이미 해당 기록이 등록되어 있습니다.');
-                 // 영어 버전
-                 paramUtil.checkParam_alreadyUse(check,'The history is already registered.');
-
+                let check = await querySelectDepositHistoryCheck(req, db_connection);
+                paramUtil.checkParam_alreadyUse(check, errCode.already_history,'Error code: 506 [이미 해당 기록이 등록되어 있습니다.]');
                 await queryCreateDepositHistory(req, db_connection);
             }
             else {
                 let check = await querySelectWithdrawHistoryCheck(req, db_connection);
-                // 한글 버전
-                // paramUtil.checkParam_alreadyUse(check,'이미 해당 기록이 등록되어 있습니다.');
-                // 영어 버전
-                paramUtil.checkParam_alreadyUse(check,'The history is already registered.');
-
+                paramUtil.checkParam_alreadyUse(check, errCode.already_history,'Error code: 506 [이미 해당 기록이 등록되어 있습니다.]');
                 await queryCreateWithdrawHistory(req, db_connection);
             }
 

@@ -61,10 +61,8 @@ module.exports = function (req, res) {
             req.innerBody = {};
 
             req.innerBody['item'] = await queryCheck(req, db_connection);
-            // 한글 버전
-            // paramUtil.checkParam_alreadyUse(req.innerBody['item'], '이미 팔로우 된 유저입니다.');
-            // 영어 버전
-            paramUtil.checkParam_alreadyUse(req.innerBody['item'], 'Already been followed.');
+
+            paramUtil.checkParam_alreadyUse(req.innerBody['item'],errCode.already_follow, 'Error code: 501 [이미 팔로우 된 유저입니다.]');
 
             req.innerBody['item'] = await queryCreate(req, db_connection);
             req.innerBody['item']['fcm_target_uid'] = req.headers['user_uid'] ;

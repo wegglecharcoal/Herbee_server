@@ -28,26 +28,16 @@ module.exports = function (req, res, next) {
 
                 let ownHoney = await querySelectOwnHoney(req, db_connection);
                 if(!ownHoney || 0 >= ownHoney['own_honey_amount'] ) {
-                    // 한글 버전
-                    // errUtil.createCall(errCode.empty, `꿀이 부족합니다.`);
-                    // 영어 버전
-                    errUtil.createCall(errCode.empty, `not enough honey.`);
-
+                    errUtil.createCall(errCode.non_enough_honey_1, `Error code: 403 [소지한 꿀 개수가 부족합니다.]`);
                 }
 
                 let systemHoney = await querySelectSystemHoney(req, db_connection);
                 if(!systemHoney) {
-                    // 한글 버전
-                    // errUtil.createCall(errCode.empty, `찾을려는 꿀 종류가 존재하지 않습니다. 확인 해주세요.`);
-                    // 영어 버전
-                    errUtil.createCall(errCode.empty, `There is no kind of honey to find. Please check it.`);
+                    errUtil.createCall(errCode.non_exist_honey_kind, `Error code: 309 [찾을려는 꿀 종류가 존재하지 않습니다. 확인 해주세요.]`);
                 }
 
                 if(systemHoney['honey_amount'] > ownHoney['own_honey_amount']) {
-                    // 한글 버전
-                    // errUtil.createCall(errCode.empty, `사용할 수 있는 꿀이 모자라요 ㅠㅠ`);
-                    // 영어 버전
-                    errUtil.createCall(errCode.empty, `not enough honey T-T`);
+                    errUtil.createCall(errCode.non_enough_honey_2, `Error code: 457 [사용할 수 있는 꿀이 모자라요 ㅠㅠ]`);
                 }
 
             }
@@ -68,11 +58,7 @@ module.exports = function (req, res, next) {
 
 function checkParam(req) {
     if(!paramUtil.checkParam_return(req.headers, 'manual_code')) {
-        // 한글 버전
-        // errUtil.createCall(errCode.auth, `꿀 메뉴얼 코드가 비어있습니다. 헤더에 'manual_code' 코드 값을 넣어주세요.`);
-        // 영어 버전
-        errUtil.createCall(errCode.auth, `The honey manual code is empty. Please put the 'manual_code' code value in the header.`);
-
+        errUtil.createCall(errCode.non_exist_manual_code, `Error code: 310 [꿀 메뉴얼 코드가 비어있습니다. 헤더에 'manual_code' 코드 값을 넣어주세요.]`);
     }
 }
 

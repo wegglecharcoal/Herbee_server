@@ -53,10 +53,7 @@ module.exports = function (req, res) {
             req.innerBody['item'] = await queryDelete(req, db_connection);
 
             if (req.innerBody['item']) {
-                // 한글 버전
-                // errUtil.createCall(errCode.fail, `라이프스타일 삭제에 실패하였습니다.`);
-                // 영어 버전
-                errUtil.createCall(errCode.fail, `Failed to delete the lifestyle.`);
+                errUtil.createCall(errCode.fail_delete_lifestyle, `Error code: 205 [라이프스타일 삭제에 실패하였습니다.]`);
                 return
             }
 

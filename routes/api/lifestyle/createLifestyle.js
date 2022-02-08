@@ -98,6 +98,7 @@ const mysqlUtil = require('../../../common/utils/mysqlUtil');
 const sendUtil = require('../../../common/utils/sendUtil');
 const errUtil = require('../../../common/utils/errUtil');
 const logUtil = require('../../../common/utils/logUtil');
+const errCode = require("../../../common/define/errCode");
 
 let file_name = fileUtil.name(__filename);
 
@@ -115,10 +116,8 @@ module.exports = function (req, res) {
             req.innerBody = {};
 
             let check = await queryCheck(req, db_connection);
-            // 한글 버전
-            // paramUtil.checkParam_alreadyUse(check,'이미 해당 라이프스타일이 등록되어 있습니다.');
-            // 영어 버전
-            paramUtil.checkParam_alreadyUse(check,'The lifestyle is already registered.');
+
+            paramUtil.checkParam_alreadyUse(check, errCode.already_lifestyle,'Error code: 504 [이미 해당 라이프스타일이 등록되어 있습니다.]');
 
             req.innerBody['item'] = await queryCreateLifestyle(req, db_connection);
 

@@ -71,19 +71,13 @@ module.exports = function (req, res) {
             switch (req.paramBody['type']) {
                 case 0:
                     if(check['own_honey_amount'] < req.paramBody['amount']) {
-                        // 한글 버전
-                        // errUtil.createCall(errCode.fail, `소지한 꿀 개수가 부족합니다.`);
-                        // 영어 버전
-                        errUtil.createCall(errCode.fail, `you don't have enough honey.`);
+                        errUtil.createCall(errCode.non_enough_honey_1, `Error code: 403 [소지한 꿀 개수가 부족합니다.]`);
                         return;
                     }
                     break;
                 case 1:
                     if(check['own_bee_coin_amount'] < req.paramBody['amount']) {
-                        // 한글 버전
-                        // errUtil.createCall(errCode.fail, `소지한 BEE coin 개수가 부족합니다.`);
-                        // 영어 버전
-                        errUtil.createCall(errCode.fail, `you don't have enough BEE coin.`);
+                        errUtil.createCall(errCode.non_enough_bee_coin, `Error code: 404 [소지한 BEE coin 개수가 부족합니다.]`);
                         return;
                     }
                     break;

@@ -53,11 +53,8 @@ module.exports = function (req, res) {
             req.innerBody['item'] = await queryDelete(req, db_connection);
             console.log("ASD:" + JSON.stringify(req.innerBody['item']))
             if (req.innerBody['item']) {
-                // 한글 버전
-                // errUtil.createCall(errCode.fail, `삭제에 실패하였습니다.`);
-                // 영어 버전
-                errUtil.createCall(errCode.fail, `Failed to delete the local review.`);
-                return
+                errUtil.createCall(errCode.fail_delete_local_review, `Error code: 206 [동네후기 삭제에 실패하였습니다]`);
+                return;
             }
 
             req.innerBody['success'] = '동네 후기 삭제가 완료되었습니다.';

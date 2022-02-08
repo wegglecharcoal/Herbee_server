@@ -74,10 +74,7 @@ app.use(function(req,res,next) {
     console.log(`===== req.originalUrl.indexOf: ${req.originalUrl.indexOf('/api')}`);
 
     if( req.originalUrl.indexOf('/api') === 0) {
-        // 한글 버전
-        // sendUtil.sendErrorPacket(req, res, errUtil.initError(errCode.path, `존재 하지 않는 url 경로 입니다. 요청 url: ${req.originalUrl}`));
-        // 영어 버전
-        sendUtil.sendErrorPacket(req, res, errUtil.initError(errCode.path, `It is a url path that does not exist. Request url:: ${req.originalUrl}`));
+        sendUtil.sendErrorPacket(req, res, errUtil.initError(errCode.non_exist_url, `존재 하지 않는 url 경로 입니다. 요청 url: ${req.originalUrl}`));
     }
     else {
         next();

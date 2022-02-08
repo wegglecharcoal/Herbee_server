@@ -31,6 +31,7 @@ const mysqlUtil = require('../../../common/utils/mysqlUtil');
 const sendUtil = require('../../../common/utils/sendUtil');
 const errUtil = require('../../../common/utils/errUtil');
 const logUtil = require('../../../common/utils/logUtil');
+const errCode = require("../../../common/define/errCode");
 
 let file_name = fileUtil.name(__filename);
 
@@ -48,10 +49,7 @@ module.exports = function (req, res) {
             req.innerBody = {};
 
             const nickname_data = await queryCheck(req, db_connection);
-            // 한글 버전
-            // paramUtil.checkParam_alreadyUse(nickname_data, '이미 사용 중인 닉네임 입니다.');
-            // 영어 버전
-            paramUtil.checkParam_alreadyUse(nickname_data, 'This nickname is already used by other users.');
+            paramUtil.checkParam_alreadyUse(nickname_data, errCode.already_nickname,'Error code: 511 [이미 사용 중인 닉네임 입니다.]');
 
             req.innerBody['success'] = '사용 가능한 닉네임 입니다.';
 
