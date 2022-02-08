@@ -96,7 +96,8 @@ function querySelect(req, db_connection) {
     return mysqlUtil.queryArray(db_connection
         , 'call proc_select_feed_info_list'
         , [
-            req.paramBody['user_uid']
+            req.headers['user_uid']
+          , req.paramBody['user_uid']
           , req.paramBody['offset']
         ]
     );
