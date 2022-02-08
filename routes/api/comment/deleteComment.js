@@ -53,17 +53,11 @@ module.exports = function (req, res) {
 
             req.innerBody['item'] = await queryDelete(req, db_connection);
             if (!req.innerBody['item']) {
-                // 한글 버전
-                // errUtil.createCall(errCode.param, `댓글 삭제에 실패하였습니다.`);
-                // 영어 버전
-                errUtil.createCall(errCode.param, `Failed to delete the comment.`);
+                errUtil.createCall(errCode.fail_delete_comment, `Error code: 203 [댓글 삭제에 실패하였습니다.]`);
                 return
             }
-            // 한글 버전
-            // req.innerBody['success'] = '댓글 삭제가 완료되었습니다.';
-            // 영어 버전
-            req.innerBody['success'] = 'Success to delete the comment.';
 
+            req.innerBody['success'] = '댓글 삭제가 완료되었습니다.';
 
             deleteBody(req);
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);

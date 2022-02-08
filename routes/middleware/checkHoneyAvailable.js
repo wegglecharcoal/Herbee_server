@@ -47,7 +47,7 @@ module.exports = function (req, res, next) {
                     // 한글 버전
                     // errUtil.createCall(errCode.empty, `사용할 수 있는 꿀이 모자라요 ㅠㅠ`);
                     // 영어 버전
-                    errUtil.createCall(errCode.empty, `not enough honey T_T`);
+                    errUtil.createCall(errCode.empty, `not enough honey T-T`);
                 }
 
             }

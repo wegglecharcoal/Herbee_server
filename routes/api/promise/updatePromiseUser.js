@@ -99,10 +99,9 @@ module.exports = function (req, res) {
                 if(!check) {
                     await queryCreateBlockUser(req, db_connection);
                 }
-                // 한글 버전
-                // req.innerBody['success'] = '해당 유저 차단을 완료했습니다.';
-                // 영어 버전
-                req.innerBody['success'] = `The user's blocking has been completed.`;
+
+                req.innerBody['success'] = '해당 유저 차단을 완료했습니다.';
+
             }
 
             switch (req.paramBody['status']){
@@ -129,10 +128,8 @@ module.exports = function (req, res) {
                         user['promise_uid'] = req.paramBody['promise_uid'];
                         await queryDeletePromise(user, db_connection);
 
-                        // 한글 버전
-                        // req.innerBody['success'] = '환불 꿀이 지급되었습니다.';
-                        // 영어 버전
-                        req.innerBody['success'] = 'Refund honey has been given.';
+                        req.innerBody['success'] = '환불 꿀이 지급되었습니다.';
+
                     }
                 } break;
 
@@ -144,10 +141,9 @@ module.exports = function (req, res) {
                 case 2: {
                     if( req.innerBody['item'] === 0 ) {
                         req.innerBody['item']['alert_type'] = 13;
-                        // 한글 버전
-                        // req.innerBody['item']['content'] = `${req.innerBody['item']['fcm_nickname_me']}님이 약속 장소로 향하고 있습니다.`;
-                        // 영어 버전
-                        req.innerBody['item']['content'] = `${req.innerBody['item']['fcm_nickname_me']} is heading to the meeting place.`;
+
+                        req.innerBody['item']['content'] = `${req.innerBody['item']['fcm_nickname_me']}님이 약속 장소로 향하고 있습니다.`;
+
                         await queryCreateAlertHistory(req.innerBody['item'], db_connection);
                         await fcmUtil.fcmPromiseDepartSingle(req.innerBody['item']);
                     }
@@ -170,10 +166,7 @@ module.exports = function (req, res) {
                             await queryCreate(price_user_list[idx], db_connection);
                         }
 
-                        // 한글 버전
-                        // req.innerBody['success'] = '만남 꿀이 지급되었습니다.';
-                        // 영어 버전
-                        req.innerBody['success'] = 'meeting honey has been given.';
+                        req.innerBody['success'] = '만남 꿀이 지급되었습니다.';
 
                     }
 

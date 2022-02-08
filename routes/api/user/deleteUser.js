@@ -43,10 +43,7 @@ module.exports = function (req, res) {
 
 
             if(req.innerBody['item']) {
-                // 한글 버전
-                // req.innerBody['success'] = '회원탈퇴가 완료되었습니다.';
-                // 영어 버전
-                req.innerBody['success'] = 'Success to delete Account';
+                req.innerBody['success'] = '회원탈퇴가 완료되었습니다.';
             }
 
             deleteBody();

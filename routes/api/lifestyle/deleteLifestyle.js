@@ -54,16 +54,13 @@ module.exports = function (req, res) {
 
             if (req.innerBody['item']) {
                 // 한글 버전
-                // errUtil.createCall(errCode.fail, `삭제에 실패하였습니다.`);
+                // errUtil.createCall(errCode.fail, `라이프스타일 삭제에 실패하였습니다.`);
                 // 영어 버전
                 errUtil.createCall(errCode.fail, `Failed to delete the lifestyle.`);
                 return
             }
 
-            // 한글 버전
-            // req.innerBody['success'] = '라이프스타일 삭제가 완료되었습니다.';
-            // 영어 버전
-            req.innerBody['success'] = 'Success to delete the lifestyle';
+            req.innerBody['success'] = '라이프스타일 삭제가 완료되었습니다.';
 
             deleteBody(req);
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);

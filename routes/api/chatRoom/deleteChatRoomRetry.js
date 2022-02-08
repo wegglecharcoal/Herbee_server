@@ -63,10 +63,7 @@ module.exports = function (req, res) {
 
             req.innerBody['item'] = await queryDelete(req, db_connection);
 
-            // 한글 버전
-            // req.innerBody['success'] = '다시 대화하기를 거절했습니다.';
-            // 영어버전
-            req.innerBody['success'] = 'refused to chat again';
+            req.innerBody['success'] = '다시 대화하기를 거절했습니다.';
 
             req.innerBody['manual_code'] = 'H2-002';
             let refund_honey = await querySelectHoneySystem(req, db_connection);

@@ -60,12 +60,9 @@ module.exports = function (req, res) {
                 return
             }
 
-            // 한글 버전
-            // req.innerBody['success'] = '동네 후기 삭제가 완료되었습니다.';
-            // 영어 버전
-            req.innerBody['success'] = 'Success to delete the local review';
+            req.innerBody['success'] = '동네 후기 삭제가 완료되었습니다.';
 
-            deleteBody(req)
+            deleteBody(req);
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);
 
         }, function (err) {

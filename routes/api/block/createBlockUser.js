@@ -43,6 +43,7 @@ const mysqlUtil = require('../../../common/utils/mysqlUtil');
 const sendUtil = require('../../../common/utils/sendUtil');
 const errUtil = require('../../../common/utils/errUtil');
 const logUtil = require('../../../common/utils/logUtil');
+const errCode = require('../../../common/define/errCode');
 
 let file_name = fileUtil.name(__filename);
 
@@ -60,14 +61,13 @@ module.exports = function (req, res) {
             req.innerBody = {};
 
             let check = await queryCheck(req, db_connection);
-            // 한글 버전
-            // paramUtil.checkParam_alreadyUse(check,'이미 차단되어있는 유저입니다.');
-            // 영어 버전
-            paramUtil.checkParam_alreadyUse(check,'A user who is already blocked.');
+
+            paramUtil.checkParam_alreadyUse(check, errCode.already_block,'Error code: 501 [이미 차단되어있는 유저입니다.]');
+
 
             req.innerBody['item'] = await queryCreate(req, db_connection);
 
-            deleteBody(req)
+            deleteBody(req);
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);
 
         }, function (err) {

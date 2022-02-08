@@ -76,11 +76,7 @@ module.exports = async function (req, res) {
 
         }
         else {
-            // 한글 버전 (추후 반영 예정)
-            // let _err = errUtil.initError(errCode.empty, '이미지 파일이 존재하지 않습니다.');
-
-            // 영어버전
-            let _err = errUtil.initError(errCode.empty, 'The image file does not exist.');
+            let _err = errUtil.initError(errCode.non_exist_file, 'Error code: 304 [파일이 존재하지 않습니다.]');
             sendUtil.sendErrorPacket(req, res, _err);
         }
 

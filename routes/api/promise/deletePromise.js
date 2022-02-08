@@ -65,16 +65,13 @@ module.exports = function (req, res) {
 
             if (req.innerBody['item']) {
                 // 한글 버전
-                // errUtil.createCall(errCode.fail, `삭제에 실패하였습니다.`);
+                // errUtil.createCall(errCode.fail, `약속 삭제에 실패하였습니다.`);
                 // 영어 버전
                 errUtil.createCall(errCode.fail, `Failed to delete the promise.`);
                 return;
             }
 
-            // 한글 버전
-            // req.innerBody['success'] = '약속 삭제가 완료되었습니다.';
-            // 영어 버전
-            errUtil.createCall(errCode.fail, `Failed to delete the promise.`);
+            req.innerBody['success'] = '약속 삭제가 완료되었습니다.';
 
             deleteBody(req);
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);

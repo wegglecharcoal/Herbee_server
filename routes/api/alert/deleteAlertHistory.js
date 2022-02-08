@@ -51,10 +51,7 @@ module.exports = function (req, res) {
             req.innerBody = {};
 
             await queryDelete(req, db_connection);
-            // 한글 버전
-            // req.innerBody['success'] = '알림 히스토리 삭제가 완료되었습니다.';
-            // 영어 버전
-            req.innerBody['success'] = 'Success to delete the alert history';
+            req.innerBody['success'] = '알림 히스토리 삭제가 완료되었습니다.';
 
             deleteBody(req)
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);

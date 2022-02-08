@@ -53,11 +53,7 @@ module.exports = function (req, res) {
             // 영어 버전
             paramUtil.checkParam_alreadyUse(nickname_data, 'This nickname is already used by other users.');
 
-            // 한글 버전
-            // req.innerBody['success'] = '사용 가능한 닉네임 입니다.';
-            // 영어 버전
-            req.innerBody['success'] = 'This nickname is available';
-
+            req.innerBody['success'] = '사용 가능한 닉네임 입니다.';
 
             deleteBody(req)
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);

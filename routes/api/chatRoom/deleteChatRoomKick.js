@@ -69,10 +69,7 @@ module.exports = function (req, res) {
             }
 
             await queryDelete(req, db_connection);
-            // 한글 버전
-            // req.innerBody['success'] = '강퇴가 완료되었습니다.';
-            // 영어 버전
-            req.innerBody['success'] = 'Success to kicked out';
+            req.innerBody['success'] = '강퇴가 완료되었습니다.';
 
             deleteBody(req)
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);

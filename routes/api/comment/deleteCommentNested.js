@@ -54,19 +54,11 @@ module.exports = function (req, res) {
 
             req.innerBody['item'] = await queryDelete(req, db_connection);
             if (!req.innerBody['item']) {
-                // 한글 버전
-                // errUtil.createCall(errCode.param, `대댓글 삭제에 실패하였습니다.`);
-                // 영어 버전
-                errUtil.createCall(errCode.param, `Failed to delete the nested comment.`);
-
-
+                errUtil.createCall(errCode.fail_delete_nested_comment, `Error code: 204 [대댓글 삭제에 실패하였습니다.]`);
                 return
             }
 
-            // 한글 버전
-            // req.innerBody['success'] = '대댓글 삭제가 완료되었습니다.'
-            // 영어 버전
-            req.innerBody['success'] = 'Success to delete the nested comment.';
+            req.innerBody['success'] = '대댓글 삭제가 완료되었습니다.';
 
             deleteBody(req)
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);

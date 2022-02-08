@@ -68,10 +68,7 @@ module.exports = function (req, res) {
             req.innerBody = {};
             req.innerBody['item'] = await queryCheckUser(req, db_connection);
             if (!req.innerBody['item']) {
-                // 한글 버전
-                // errUtil.createCall(errCode.empty, `참여하지 않은 채팅방입니다.`);
-                // 영어 버전
-                errUtil.createCall(errCode.empty, `This is the chat room that I didn't participate in.`);
+                errUtil.createCall(errCode.non_participating_chatRoom, `Error code: 451 [참여하지 않은 채팅방입니다.]`);
                 return;
             }
 
@@ -82,20 +79,14 @@ module.exports = function (req, res) {
                 let isHead = await queryCheckIsHead(req, db_connection);
 
                 if (!isHead) {
-                    // 한글 버전
-                    // errUtil.createCall(errCode.fail, `방장 권한이 없습니다. 확인 후 다시 시도해주세요.`);
-                    // 영어 버전
-                    errUtil.createCall(errCode.fail, `You don't have the authority to be the room manager. Please check and try again.`);
+                    errUtil.createCall(errCode.non_authority_room_manager, `Error code: 452 [방장 권한이 없습니다. 확인 후 다시 시도해주세요.]`);
                     return;
                 }
 
                 let isAlone = await queryCheckIsAlone(req, db_connection);
 
                 if (isAlone['is_alone'] !== 1) {
-                    // 한글 버전
-                    // errUtil.createCall(errCode.fail, `모임 채팅방은 혼자 있을 경우에만 채팅방에서 나갈 수 있습니다.`);
-                    // 영어 버전
-                    errUtil.createCall(errCode.fail, `The meeting chat room can only be left the chat room if you are alone.`);
+                    errUtil.createCall(errCode.fail_exit_chatRoom, `Error code: 202 [모임 채팅방은 혼자 있을 경우에만 채팅방에서 나갈 수 있습니다.]`);
                     return;
                 }
 
@@ -118,10 +109,7 @@ module.exports = function (req, res) {
 
             await queryDelete(req, db_connection);
 
-            // 한글 버전
-            // req.innerBody['success'] = '채팅방에서 나갔습니다.';
-            // 영어 버전
-            req.innerBody['success'] = 'left the chat room.';
+            req.innerBody['success'] = '채팅방에서 나갔습니다.';
 
             deleteBody(req)
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);
