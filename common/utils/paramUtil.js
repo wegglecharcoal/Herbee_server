@@ -32,50 +32,32 @@ module.exports = {
 
     checkParam_noReturn: function (param, key, minLength = 0, maxLength = 20000) {
         if (!param[key] && param[key] !== 0) {
-            // 한글 버전
-            // errUtil.createCall(errCode.param, `파라미터 오류 발생. 파라미터를 확인해 주세요.\n확인 파라미터 : ${key}`);
-            // 영어 버전
-            errUtil.createCall(errCode.param, `Parameter error occurred. Please check the parameters.\nConfirmation: ${key}`);
+            errUtil.createCall(errCode.param, `Error code: 301 [파라미터 오류 발생. 파라미터를 확인해 주세요.\n확인 파라미터 : ${key}]`);
         }
         else if (param[key].length <= minLength) {
-            // 한글 버전
-            // errUtil.createCall(errCode.param, `파라미터 오류 발생. ${minLength}자 이상 입력해 주세요.\n확인 파라미터 : ${key}`);
-            // 영어 버전
-            errUtil.createCall(errCode.param, `Parameter error occurred. Please enter more than ${minLength} characters.\\n Verification parameter: ${key}`);
+            errUtil.createCall(errCode.param, `Error code: 401 [파라미터 오류 발생. ${minLength}자 이상 입력해 주세요.\n확인 파라미터 : ${key}]`);
         }
         else if (param[key].length > maxLength) {
-            // 한글 버전
-            // errUtil.createCall(errCode.param, `파라미터 오류 발생. ${maxLength}자 이상 입력 하실 수 없습니다.\n확인 파라미터 : ${key}`);
-            // 영어 버전
-            errUtil.createCall(errCode.param, `Parameter error occurred. You cannot enter more than ${maxLength} characters.\n Verification parameter: ${key}`);
+            errUtil.createCall(errCode.param, `Error code: 102 [파라미터 오류 발생. ${maxLength}자 이상 입력 하실 수 없습니다.\n확인 파라미터 : ${key}]`);
         }
     },
 
 
     checkHeader_noReturn: function (param, key, minLength = 0, maxLength = 20000) {
         if (!param[key]) {
-            // 한글 버전
-            // errUtil.createCall(errCode.param, `헤더 파라미터 오류 발생. 헤더 파라미터를 확인해 주세요.\n확인 헤더 파라미터 : ${key}`);
-            // 영어 버전
-            errUtil.createCall(errCode.param, `Header parameter error. Please check the header parameter.\nConfirm header parameter: ${key}`);
+            errUtil.createCall(errCode.param, `Error code: 302 [헤더 파라미터 오류 발생. 헤더 파라미터를 확인해 주세요.\n확인 헤더 파라미터 : ${key}]`);
         }
         else if (param[key].length <= minLength) {
-            // 한글 버전
-            // errUtil.createCall(errCode.param, `헤더 파라미터 오류 발생. ${minLength}자 이상 입력해 주세요.\n확인 헤더 파라미터 : ${key}`);
-            // 영어 버전
-            errUtil.createCall(errCode.param, `Header parameter error occurred. Please enter more than ${minLength} characters.\nConfirm header parameter: ${key}`);
+            errUtil.createCall(errCode.param, `Error code: 402 [헤더 파라미터 오류 발생. ${minLength}자 이상 입력해 주세요.\n확인 헤더 파라미터 : ${key}]`);
         }
         else if (param[key].length > maxLength) {
-            // 한글 버전
-            // errUtil.createCall(errCode.param, `헤더 파라미터 오류 발생. ${maxLength}자 이상 입력 하실 수 없습니다.\n확인 헤더 파라미터 : ${key}`);
-            // 영어 버전
-            errUtil.createCall(errCode.param, `Header parameter error occurred. You cannot enter more than ${maxLength} characters.\nConfirm header parameter: ${key}`);
+            errUtil.createCall(errCode.param, `Error code: 103 [헤더 파라미터 오류 발생. ${maxLength}자 이상 입력 하실 수 없습니다.\n확인 헤더 파라미터 : ${key}]`);
         }
     },
 
-    checkParam_alreadyUse: function (item, errMsg) {
+    checkParam_alreadyUse: function (item, errCode, errMsg) {
         if(item) {
-            errUtil.createCall(errCode.already, errMsg);
+            errUtil.createCall(errCode, errMsg);
         }
     }
 
