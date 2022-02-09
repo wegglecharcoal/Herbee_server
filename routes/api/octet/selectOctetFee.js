@@ -120,7 +120,7 @@ async function octetFunction(req, db_connection) {
 
     let fee = await octetUtil.octetSelectFee(get_token_result === 'maintain' ? current_access_token['access_token'] : get_token_result);
 
-    let eth = await coinExchangeUtil.upBitSelectCoinPrice('KRW-ETH');
+    let eth = await coinExchangeUtil.lBankSelectCoinRate('eth_usdt');
 
     let bee_coin_info = await coinExchangeUtil.lBankSelectCoinRate('bee_usdt');
 
@@ -131,11 +131,11 @@ async function octetFunction(req, db_connection) {
         await queryUpdateBeeCoinRate(bee_coin_info, db_connection);
     }
 
-    let bee_coin_rate = ((10 / (bee_coin_info * 1000))).toFixed(1);
+    let fee_dollar = eth * fee['data']['fastest'] * process.env.OCTET_GWEI * process.env.OCTET_MAX_GAS_COST;
 
-    let fee_won = eth['data'][0]['trade_price'] * fee['data']['fastest'] * process.env.OCTET_GWEI * process.env.OCTET_MAX_GAS_COST;
+    let fee_bee_coin = Math.round(fee_dollar / bee_coin_info);
 
-    let fee_bee_coin = Math.floor(fee_won * bee_coin_rate);
+
     fee['data']['fee_bee_coin'] = fee_bee_coin;
 
     return fee['data'];

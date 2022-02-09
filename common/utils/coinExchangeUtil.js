@@ -19,7 +19,7 @@ module.exports = {
     // Bee Coin 비율
     lBankSelectCoinRate : async function(coin_name){
         let coin_info = await lBankGet(
-            `v2/ticker/24hr.do?symbol=${coin_name}`//?coin_name=bee_usdt
+            `v2/ticker/24hr.do?symbol=${coin_name}`//?coin_name=bee_usdt || ?coin_name=eth_usdt
             , null
         );
 
