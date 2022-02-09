@@ -43,7 +43,7 @@ module.exports = {
     non_exist_file:                 304,         //	파일 존재 X
     non_exist_follow:               305,         //	팔로우 X
     non_exist_recommender_code:     306,         //	추천 코드 X
-    non_exist_user:                 307,         //	회원가입 X
+    non_exist_user:                 403,         //	회원가입 X @@@@@@@@@@ 추후 다시 307로 변경
     non_exist_access_token:         308,         //	접속 토큰 X
     non_exist_honey_kind:           309,         //	꿀 종류 X
     non_exist_manual_code:          310,         //	메뉴얼 코드 X
