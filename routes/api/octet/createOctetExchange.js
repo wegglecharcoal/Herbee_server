@@ -51,6 +51,7 @@ const logUtil = require('../../../common/utils/logUtil');
 const fcmUtil = require('../../../common/utils/fcmUtil');
 const octetUtil = require("../../../common/utils/octetUtil");
 const errCode = require("../../../common/define/errCode");
+const coinExchangeUtil = require("../../../common/utils/coinExchangeUtil");
 
 let file_name = fileUtil.name(__filename);
 
@@ -85,6 +86,15 @@ module.exports = function (req, res) {
                     break;
             }
 
+            let bee_coin_info = await coinExchangeUtil.lBankSelectCoinRate('bee_usdt');
+            if(bee_coin_info === 'false') {
+                let db_bee_coin_info = await querySelectBeeCoinRate(bee_coin_info, db_connection);
+                bee_coin_info = db_bee_coin_info['coin_rate'];
+            } else {
+                await queryUpdateBeeCoinRate(bee_coin_info, db_connection);
+            }
+
+            req.innerBody['bee_coin_exchange_rate'] = Math.round(bee_coin_info * 100);
             req.innerBody['item'] =  await createOctetExchange(req, db_connection);
 
             deleteBody(req);
@@ -118,6 +128,8 @@ function createOctetExchange(req, db_connection) {
               req.headers['user_uid']
             , req.paramBody['type']
             , req.paramBody['amount']
+            , req.innerBody['bee_coin_exchange_rate']
+
         ]
     );
 }
@@ -129,6 +141,28 @@ function selectExchangeCheck(req, db_connection) {
         , 'call proc_select_honey_octet_bee_coin'
         , [
               req.headers['user_uid']
+        ]
+    );
+}
+
+
+function querySelectBeeCoinRate(coin_rate, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_select_bee_coin_rate'
+        , [
+        ]
+    );
+}
+
+function queryUpdateBeeCoinRate(coin_rate, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_update_bee_coin_rate'
+        , [
+            coin_rate
         ]
     );
 }
