@@ -50,7 +50,7 @@ module.exports = {
     non_exist_url:                  311,         //	url 경로 X
     non_enough_param_length:        401,         //	파라미터 길이 부족
     non_enough_header_param_length: 402,         //	헤더 파라미터 길이 부족
-    non_enough_honey_1:             403,         //	꿀 소지 개수 부족_1
+    non_enough_honey_1:             307,         //	꿀 소지 개수 부족_1 @@@@@@@@@@ 추후 다시 403로 변경
     non_enough_bee_coin:            404,         //	BEE coin 소지 개수 부족
     non_enough_fee:                 405,         //	수수료 비용 부족
     non_participating_chatRoom:     451,         //	채팅방 미참여
