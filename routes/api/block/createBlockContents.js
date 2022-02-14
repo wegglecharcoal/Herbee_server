@@ -9,7 +9,7 @@
  *     description: |
  *       path : /api/private/block/contents
  *
- *       * 유저 차단
+ *       * 콘텐츠 차단 타입
  *       - 1: 라이프스타일 차단
  *       - 2: 동네후기 차단
  *       - 3: 댓글 차단
