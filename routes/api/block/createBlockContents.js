@@ -9,7 +9,7 @@
  *     description: |
  *       path : /api/private/block/contents
  *
- *       * 콘텐츠 차단 타입
+ *       * 콘텐츠 차단 타
  *       - 1: 라이프스타일 차단
  *       - 2: 동네후기 차단
  *       - 3: 댓글 차단
@@ -29,12 +29,12 @@
  *             - type
  *           properties:
  *             target_uid:
- *               type: string
+ *               type: number
  *               example: 6
  *               description: |
  *                 차단 당하는 콘텐츠 uid
  *             type:
- *               type: string
+ *               type: number
  *               example: 3
  *               description: |
  *                 콘텐츠 차단 타입
