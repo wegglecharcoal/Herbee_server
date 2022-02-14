@@ -255,6 +255,9 @@ app.route('/block/phone')
 app.route('/block/user')
     .post( require('./block/createBlockUser') );
 
+app.route('/block/contents')
+    .post( require('./block/createBlockContents') );
+
 app.route('/block/user')
     .delete( require('./block/deleteBlockUser') );
 
