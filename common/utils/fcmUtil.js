@@ -20,12 +20,14 @@ axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 module.exports = {
 
+
+
     fcmMsgArray : async function(item){
         return await fcmFunc(
               item['fcm_push_token_other_list']
-            , (!item['language'] || item['language'] === 'kr') ? "메시지 알림" : "message notification"
-            , (!item['language'] || item['language'] === 'kr') ? `${item['fcm_nickname_me']}님이 메시지를 보냈습니다.` : `${item['fcm_nickname_me']} sent me a message.`
-            , (!item['language'] || item['language'] === 'kr') ? "메시지" : "message"
+            , item['title']
+            , item['message']
+            , item['channel']
             , "0"
             , item['fcm_filename_me']
             , item['fcm_target_uid']
@@ -48,7 +50,7 @@ module.exports = {
             , `${item['fcm_nickname_me']} followed you.`
 
             // 한글 버전
-            , "팔로우"
+            // , "팔로우"
             // 영어 버전
             , "follow"
 

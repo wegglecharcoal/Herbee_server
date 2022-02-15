@@ -25,9 +25,14 @@
  *               type: integer
  *               description: |
  *                 채팅방 uid
+ *             user_list:
+ *               type: string
+ *               description: |
+ *                 현재 채팅방에 접속 중인 유저 리스트 (해당 유저들에겐 알림 X)
  *
  *           example:
  *             chat_room_uid: 1
+ *             user_list: '1,3,5'
  *
  *     responses:
  *       200:
@@ -59,22 +64,7 @@ module.exports = function (req, res) {
         mysqlUtil.connectPool( async function (db_connection) {
             req.innerBody = {};
 
-            req.innerBody['fcm_push_token_other_list'] = [];
-            let chatRoomUserList = await querySelect(req, db_connection);
-            if(chatRoomUserList.length > 0) {
-                for (let idx in chatRoomUserList) {
-                    chatRoomUserList[idx]['alert_type'] = 0;
-                    req.innerBody['fcm_push_token_other_list'].push(chatRoomUserList[idx]['fcm_push_token_other']);
-                    chatRoomUserList[idx]['language'] = req.paramBody['language'];
-                    await queryCreateAlertHistory(chatRoomUserList[idx], db_connection);
-                }
-
-                req.innerBody['language'] = req.paramBody['language'];
-                req.innerBody['fcm_nickname_me'] = chatRoomUserList[0]['fcm_nickname_me'];
-                req.innerBody['fcm_filename_me'] = chatRoomUserList[0]['fcm_filename_me'];
-                req.innerBody['fcm_target_uid'] = req.paramBody['chat_room_uid'];
-                await fcmUtil.fcmMsgArray(req.innerBody);
-            }
+            await fcmFunction(req, db_connection);
 
             deleteBody(req);
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);
@@ -92,7 +82,6 @@ module.exports = function (req, res) {
 
 function checkParam(req) {
     paramUtil.checkParam_noReturn(req.paramBody, 'chat_room_uid');
-    paramUtil.checkParam_noReturn(req.paramBody, 'language');
 }
 
 function deleteBody(req) {
@@ -106,6 +95,7 @@ function querySelect(req, db_connection) {
         , [
             req.headers['user_uid']
           , req.paramBody['chat_room_uid']
+          , req.paramBody['user_list']
         ]
     );
 }
@@ -122,4 +112,43 @@ function queryCreateAlertHistory(item, db_connection) {
             , `${item['fcm_nickname_me']}님이 메시지를 보냈습니다.`
         ]
     );
+}
+async function fcmFunction(req, db_connection) {
+
+    let herbee_language_types = process.env.HERBEE_LANGUAGE_TYPES;
+    let herbee_language_list = herbee_language_types.split(',');
+
+    let chatRoomUserList = await querySelect(req, db_connection);
+
+    req.innerBody['fcm_nickname_me'] = chatRoomUserList[0]['fcm_nickname_me'];
+    req.innerBody['fcm_filename_me'] = chatRoomUserList[0]['fcm_filename_me'];
+    req.innerBody['fcm_target_uid'] = req.paramBody['chat_room_uid'];
+
+    for (let idx in herbee_language_list) {
+
+        req.innerBody['fcm_push_token_other_list'] = [];
+
+        for(let idx in chatRoomUserList) {
+            if(herbee_language_list[idx] === chatRoomUserList[idx]['language']) {
+                req.innerBody['fcm_push_token_other_list'].push(chatRoomUserList[idx]['fcm_push_token_other']);
+                req.innerBody['language'] = chatRoomUserList[idx]['language'];
+
+                switch (chatRoomUserList[idx]['language']) {
+                    case 'kr':
+                        req.innerBody['title'] = `메시지 알림`;
+                        req.innerBody['message'] = `${chatRoomUserList[idx]['fcm_nickname_me']}님이 메시지를 보냈습니다.`
+                        req.innerBody['channel'] = `메시지`;
+                        break;
+                    case 'en':
+                        req.innerBody['title'] = "message notification";
+                        req.innerBody['message'] = `${chatRoomUserList[idx]['fcm_nickname_me']} sent me a message.`;
+                        req.innerBody['channel'] = `message`;
+                        break;
+
+                }
+                await queryCreateAlertHistory(chatRoomUserList[idx], db_connection);
+                await fcmUtil.fcmMsgArray(req.innerBody);
+            }
+        }
+    }
 }

@@ -66,7 +66,7 @@
  *         description: |
  *           위글 앱 버전
  *           * ex - 0.0.1
- *      - in: query
+ *       - in: query
  *         name: language
  *         default: 'kr'
  *         required: true
