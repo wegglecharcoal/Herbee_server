@@ -129,6 +129,11 @@
  *                 * 0: false
  *                 * 1: true
  *               enum: [0,1]
+ *             language:
+ *               type: string
+ *               example: 'kr'
+ *               description: |
+ *                 사용하는 언어
  *
  *
  *     responses:
@@ -253,6 +258,7 @@ function queryCreate(req, db_connection) {
           , req.paramBody['is_alert']
           , req.paramBody['is_alert_marketing']
           , req.paramBody['recommender_code']
+          , req.paramBody['language']
         ]
     );
 }

@@ -66,6 +66,15 @@
  *         description: |
  *           위글 앱 버전
  *           * ex - 0.0.1
+ *      - in: query
+ *         name: language
+ *         default: 'kr'
+ *         required: true
+ *         schema:
+ *           type: string
+ *           example: 'kr'
+ *         description: |
+ *           사용하는 언어
  *
  *
  *     responses:
@@ -153,5 +162,6 @@ function queryUpdate(req, db_connection) {
             req.paramBody['push_token'],
             req.paramBody['os'],
             req.paramBody['version_app'],
-        ])
+            req.paramBody['language']
+        ]);
 }
