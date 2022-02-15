@@ -273,6 +273,9 @@ app.route('/block/phone/list')
 app.route('/alert/send/msg')
     .post( require('./alert/createAlertSendMsg') );
 
+app.route('/alert/send/msg/v2')
+    .post( require('./alert/createAlertSendMsg_v2') );
+
 app.route('/alert/history')
     .delete( require('./alert/deleteAlertHistory') );
 

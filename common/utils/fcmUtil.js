@@ -23,22 +23,9 @@ module.exports = {
     fcmMsgArray : async function(item){
         return await fcmFunc(
               item['fcm_push_token_other_list']
-
-            // 한글 버전
-            // , "메시지 알림"
-            // 영어 버전
-            , "message notification"
-
-            // 한글 버전
-            // , `${item['fcm_nickname_me']}님이 메시지를 보냈습니다.`
-            // 영어 버전
-            , `${item['fcm_nickname_me']} sent me a message.`
-
-            // 한글 버전
-            // , "메시지"
-            // 영어 버전
-            , "message"
-
+            , (!item['language'] || item['language'] === 'kr') ? "메시지 알림" : "message notification"
+            , (!item['language'] || item['language'] === 'kr') ? `${item['fcm_nickname_me']}님이 메시지를 보냈습니다.` : `${item['fcm_nickname_me']} sent me a message.`
+            , (!item['language'] || item['language'] === 'kr') ? "메시지" : "message"
             , "0"
             , item['fcm_filename_me']
             , item['fcm_target_uid']
