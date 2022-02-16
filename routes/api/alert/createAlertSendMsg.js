@@ -135,7 +135,7 @@ async function fcmFunction(req, db_connection) {
                 req.innerBody['language'] = chatRoomUserList[idx]['language'];
 
                 switch (chatRoomUserList[idx]['language']) {
-                    case 'kr':
+                    case 'ko':
                         req.innerBody['title'] = `메시지 알림`;
                         req.innerBody['message'] = `${chatRoomUserList[idx]['fcm_nickname_me']}님이 메시지를 보냈습니다.`;
                         req.innerBody['channel'] = `메시지`;
