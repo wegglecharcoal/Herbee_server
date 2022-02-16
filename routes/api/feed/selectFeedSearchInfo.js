@@ -4,7 +4,7 @@
  * @swagger
  * /api/private/feed/search/info:
  *   get:
- *     summary:
+ *     summary: 피드 검색 정보
  *     tags: [Feed]
  *     description: |
  *       path : /api/private/feed/search/info
@@ -91,7 +91,7 @@ function deleteBody(req) {
 function querySelect(req, db_connection) {
     const _funcName = arguments.callee.name;
 
-    return mysqlUtil.queryArray(db_connection
+    return mysqlUtil.querySingle(db_connection
         , 'call proc_select_feed_search_info'
         , [
             req.headers['user_uid']
