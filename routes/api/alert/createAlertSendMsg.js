@@ -131,6 +131,10 @@ async function fcmFunction(req, db_connection) {
         req.innerBody['fcm_push_token_other_list'] = [];
 
         for(let idx in chatRoomUserList) {
+            console.log('123121111: ' + herbee_language_list[idx]);
+            console.log('123121111: ' + chatRoomUserList[idx]['fcm_language_other']);
+            console.log('wdasdasasda:' + herbee_language_list[idx] === chatRoomUserList[idx]['fcm_language_other']);
+
             if(herbee_language_list[idx] === chatRoomUserList[idx]['fcm_language_other']) {
                 req.innerBody['fcm_push_token_other_list'].push(chatRoomUserList[idx]['fcm_push_token_other']);
 
