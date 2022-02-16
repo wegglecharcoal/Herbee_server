@@ -23,6 +23,7 @@ module.exports = {
 
 
     fcmMsgArray : async function(item){
+        console.log('aewofijwfeoi' + JSON.stringify(item['fcm_push_token_other_list']));
         return await fcmFunc(
               item['fcm_push_token_other_list']
             , item['title']

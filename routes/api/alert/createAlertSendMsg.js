@@ -109,14 +109,15 @@ function queryCreateAlertHistory(item, db_connection) {
               item['alert_source_uid']
             , item['alert_target_uid']
             , item['alert_type']
-            , `${item['fcm_nickname_me']}님이 메시지를 보냈습니다.`
+            , item['message']
         ]
     );
 }
+
+// 왜 동작안하는지 파악해야 함.
 async function fcmFunction(req, db_connection) {
 
-    let herbee_language_types = process.env.HERBEE_LANGUAGE_TYPES;
-    let herbee_language_list = herbee_language_types.split(',');
+    let herbee_language_list = process.env.HERBEE_LANGUAGE_TYPES.split(',');
 
     let chatRoomUserList = await querySelect(req, db_connection);
 
@@ -136,13 +137,15 @@ async function fcmFunction(req, db_connection) {
                 switch (chatRoomUserList[idx]['language']) {
                     case 'kr':
                         req.innerBody['title'] = `메시지 알림`;
-                        req.innerBody['message'] = `${chatRoomUserList[idx]['fcm_nickname_me']}님이 메시지를 보냈습니다.`
+                        req.innerBody['message'] = `${chatRoomUserList[idx]['fcm_nickname_me']}님이 메시지를 보냈습니다.`;
                         req.innerBody['channel'] = `메시지`;
+                        chatRoomUserList[idx]['message'] = req.innerBody['message'];
                         break;
                     case 'en':
                         req.innerBody['title'] = "message notification";
                         req.innerBody['message'] = `${chatRoomUserList[idx]['fcm_nickname_me']} sent me a message.`;
                         req.innerBody['channel'] = `message`;
+                        chatRoomUserList[idx]['message'] = req.innerBody['message'];
                         break;
 
                 }
