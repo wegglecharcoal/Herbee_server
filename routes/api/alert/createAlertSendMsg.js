@@ -119,6 +119,7 @@ async function fcmFunction(req, db_connection) {
 
     let herbee_language_list = process.env.HERBEE_LANGUAGE_TYPES.split(',');
 
+    console.log('asdfsafsdfsfs: ' + JSON.stringify(herbee_language_list ));
     let chatRoomUserList = await querySelect(req, db_connection);
 
     req.innerBody['fcm_nickname_me'] = chatRoomUserList[0]['fcm_nickname_me'];
@@ -126,7 +127,7 @@ async function fcmFunction(req, db_connection) {
     req.innerBody['fcm_target_uid'] = req.paramBody['chat_room_uid'];
 
     for (let idx in herbee_language_list) {
-
+        console.log('asdfsafsdfsfs: ' + herbee_language_list['idx'] );
         req.innerBody['fcm_push_token_other_list'] = [];
 
         for(let idx in chatRoomUserList) {
