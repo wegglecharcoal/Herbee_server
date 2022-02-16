@@ -131,11 +131,10 @@ async function fcmFunction(req, db_connection) {
         req.innerBody['fcm_push_token_other_list'] = [];
 
         for(let idx in chatRoomUserList) {
-            if(herbee_language_list[idx] === chatRoomUserList[idx]['language']) {
+            if(herbee_language_list[idx] === chatRoomUserList[idx]['fcm_language_other']) {
                 req.innerBody['fcm_push_token_other_list'].push(chatRoomUserList[idx]['fcm_push_token_other']);
-                req.innerBody['language'] = chatRoomUserList[idx]['language'];
 
-                switch (chatRoomUserList[idx]['language']) {
+                switch (chatRoomUserList[idx]['fcm_language_other']) {
                     case 'ko':
                         req.innerBody['title'] = `메시지 알림`;
                         req.innerBody['message'] = `${chatRoomUserList[idx]['fcm_nickname_me']}님이 메시지를 보냈습니다.`;
