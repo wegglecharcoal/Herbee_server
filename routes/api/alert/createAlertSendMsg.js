@@ -137,21 +137,21 @@ async function fcmFunction(req, db_connection) {
                 switch (chatRoomUserList[idx]['fcm_language_other']) {
                     case 'ko':
                         req.innerBody['title'] = `메시지 알림`;
-                        req.innerBody['message'] = `${chatRoomUserList[idx]['fcm_nickname_me']}님이 메시지를 보냈습니다.`;
+                        req.innerBody['message'] = `${req.innerBody['fcm_nickname_me']}님이 메시지를 보냈습니다.`;
                         req.innerBody['channel'] = `메시지`;
                         chatRoomUserList[idx]['message'] = req.innerBody['message'];
                         break;
                     case 'en':
                         req.innerBody['title'] = "message notification";
-                        req.innerBody['message'] = `${chatRoomUserList[idx]['fcm_nickname_me']} sent me a message.`;
+                        req.innerBody['message'] = `${req.innerBody['fcm_nickname_me']} sent me a message.`;
                         req.innerBody['channel'] = `message`;
                         chatRoomUserList[idx]['message'] = req.innerBody['message'];
                         break;
-
                 }
                 await queryCreateAlertHistory(chatRoomUserList[idx], db_connection);
-                await fcmUtil.fcmMsgArray(req.innerBody);
             }
         }
+
+        await fcmUtil.fcmMsgArray(req.innerBody);
     }
 }
