@@ -31,6 +31,9 @@ app.route('/user/overtime/check')
 app.route('/feed/count/view')
     .put( require('./feed/updateFeedCountView') );
 
+app.route('/feed/search/info')
+    .get( require('./feed/selectFeedSearchInfo') );
+
 app.route('/feed/list')
     .get( require('./feed/selectFeedList') );
 
