@@ -162,6 +162,6 @@ function queryUpdate(req, db_connection) {
             req.paramBody['push_token'],
             req.paramBody['os'],
             req.paramBody['version_app'],
-            req.paramBody['language']
+            req.paramBody['language'] ? req.paramBody['language'] : 'ko'
         ]);
 }

@@ -175,7 +175,6 @@ module.exports = function (req, res) {
             const user_data = await queryCheck(req, db_connection);
             paramUtil.checkParam_alreadyUse(user_data, errCode.already_sign_up,'Error code: 509 [이미 회원가입한 유저 입니다.]');
 
-
             const email_data = await queryCheckEmail(req, db_connection);
             paramUtil.checkParam_alreadyUse(email_data, errCode.already_email,'Error code: 510 [이미 가입한 이메일 입니다.]');
 
@@ -258,7 +257,7 @@ function queryCreate(req, db_connection) {
           , req.paramBody['is_alert']
           , req.paramBody['is_alert_marketing']
           , req.paramBody['recommender_code']
-          , req.paramBody['language']
+          , req.paramBody['language'] ? req.paramBody['language'] : 'ko'
         ]
     );
 }
