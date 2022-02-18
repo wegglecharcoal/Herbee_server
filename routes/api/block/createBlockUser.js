@@ -23,7 +23,7 @@
  *             - target_uid
  *           properties:
  *             target_uid:
- *               type: string
+ *               type: number
  *               description: |
  *                 차단 당하는 유저 Uid
  *
