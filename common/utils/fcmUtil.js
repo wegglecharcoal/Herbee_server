@@ -23,7 +23,6 @@ module.exports = {
 
 
     fcmMsgArray : async function(item){
-        console.log('aewofijwfeoi' + JSON.stringify(item['fcm_push_token_other_list']));
         return await fcmFunc(
               item['fcm_push_token_other_list']
             , item['title']
@@ -259,9 +258,10 @@ async function fcmFunc(token, title, message, channel, fcm_type, filename, targe
             "message": message,
             "channel" : channel,
             "fcm_type" : fcm_type,
-            "filename" : filename,
+            "image" : `${funcUtil.getFilePath()}${filename}`,
             "target_uid" : target_uid,
-            "type" : type
+            "type" : type,
+            "color" : "#ffb600"
         },
         "notification": {
             "icon" : 'ic_icon',
@@ -269,7 +269,7 @@ async function fcmFunc(token, title, message, channel, fcm_type, filename, targe
             "body": message,
             "channel" : channel,
             "fcm_type" : fcm_type,
-            "filename" : filename,
+            "image" : `${funcUtil.getFilePath()}${filename}`,
             "target_uid" : target_uid,
             "type" : type,
             "sound" : "default",
@@ -279,6 +279,7 @@ async function fcmFunc(token, title, message, channel, fcm_type, filename, targe
             "badge count" : "0",
             "android_channel_id" : channel,
             "channel_id" : channel,
+            "color" : "#ffb600"
         },
     }).catch((e) => console.log(e));
 };

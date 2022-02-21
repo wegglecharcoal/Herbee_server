@@ -54,7 +54,7 @@ let file_name = fileUtil.name(__filename);
 module.exports = function (req, res) {
     const _funcName = arguments.callee.name;
 
-    try{
+    try {
         req.file_name = file_name;
         logUtil.printUrlLog(req, `header: ${JSON.stringify(req.headers)}`);
         req.paramBody = paramUtil.parse(req);
@@ -114,12 +114,10 @@ function queryCreateAlertHistory(item, db_connection) {
     );
 }
 
-// 왜 동작안하는지 파악해야 함.
 async function fcmFunction(req, db_connection) {
 
     let herbee_language_list = process.env.HERBEE_LANGUAGE_TYPES.split(',');
 
-    console.log('asdfsafsdfsfs: ' + JSON.stringify(herbee_language_list ));
     let chatRoomUserList = await querySelect(req, db_connection);
 
     req.innerBody['fcm_nickname_me'] = chatRoomUserList[0]['fcm_nickname_me'];
@@ -127,14 +125,9 @@ async function fcmFunction(req, db_connection) {
     req.innerBody['fcm_target_uid'] = req.paramBody['chat_room_uid'];
 
     for (let i in herbee_language_list) {
-        console.log('asdfsafsdfsfs: ' + herbee_language_list[i] );
         req.innerBody['fcm_push_token_other_list'] = [];
 
         for(let j in chatRoomUserList) {
-            console.log('123121111: ' + herbee_language_list[i]);
-            console.log('123121111: ' + chatRoomUserList[j]['fcm_language_other']);
-            console.log('wdasdasasda:' + herbee_language_list[i] == chatRoomUserList[j]['fcm_language_other']);
-
             if(herbee_language_list[i] == chatRoomUserList[j]['fcm_language_other']) {
                 req.innerBody['fcm_push_token_other_list'].push(chatRoomUserList[j]['fcm_push_token_other']);
 
