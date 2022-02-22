@@ -54,10 +54,7 @@ module.exports = function (req, res) {
             req.innerBody = {};
             let check = await queryCheckUser(req, db_connection);
             if (!check) {
-                // 한글 버전
-                // errUtil.createCall(errCode.empty, `참여하지 않은 채팅방입니다.`);
-                // 영어 버전
-                errUtil.createCall(errCode.empty, `This is the chat room that I didn't participate in.`);
+                errUtil.createCall(errCode.non_participating_chatRoom, `Error code: 451 [참여하지 않은 채팅방입니다.]`);
                 return;
             }
 

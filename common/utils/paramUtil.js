@@ -32,26 +32,26 @@ module.exports = {
 
     checkParam_noReturn: function (param, key, minLength = 0, maxLength = 20000) {
         if (!param[key] && param[key] !== 0) {
-            errUtil.createCall(errCode.param, `Error code: 301 [파라미터 오류 발생. 파라미터를 확인해 주세요.\n확인 파라미터 : ${key}]`);
+            errUtil.createCall(errCode.non_exist_param, `Error code: 301 [파라미터 오류 발생. 파라미터를 확인해 주세요.\n확인 파라미터 : ${key}]`);
         }
         else if (param[key].length <= minLength) {
-            errUtil.createCall(errCode.param, `Error code: 401 [파라미터 오류 발생. ${minLength}자 이상 입력해 주세요.\n확인 파라미터 : ${key}]`);
+            errUtil.createCall(errCode.non_enough_param_length, `Error code: 401 [파라미터 오류 발생. ${minLength}자 이상 입력해 주세요.\n확인 파라미터 : ${key}]`);
         }
         else if (param[key].length > maxLength) {
-            errUtil.createCall(errCode.param, `Error code: 102 [파라미터 오류 발생. ${maxLength}자 이상 입력 하실 수 없습니다.\n확인 파라미터 : ${key}]`);
+            errUtil.createCall(errCode.over_param_length, `Error code: 102 [파라미터 오류 발생. ${maxLength}자 이상 입력 하실 수 없습니다.\n확인 파라미터 : ${key}]`);
         }
     },
 
 
     checkHeader_noReturn: function (param, key, minLength = 0, maxLength = 20000) {
         if (!param[key]) {
-            errUtil.createCall(errCode.param, `Error code: 302 [헤더 파라미터 오류 발생. 헤더 파라미터를 확인해 주세요.\n확인 헤더 파라미터 : ${key}]`);
+            errUtil.createCall(errCode.non_exist_header_param, `Error code: 302 [헤더 파라미터 오류 발생. 헤더 파라미터를 확인해 주세요.\n확인 헤더 파라미터 : ${key}]`);
         }
         else if (param[key].length <= minLength) {
-            errUtil.createCall(errCode.param, `Error code: 402 [헤더 파라미터 오류 발생. ${minLength}자 이상 입력해 주세요.\n확인 헤더 파라미터 : ${key}]`);
+            errUtil.createCall(errCode.non_enough_header_param_length, `Error code: 402 [헤더 파라미터 오류 발생. ${minLength}자 이상 입력해 주세요.\n확인 헤더 파라미터 : ${key}]`);
         }
         else if (param[key].length > maxLength) {
-            errUtil.createCall(errCode.param, `Error code: 103 [헤더 파라미터 오류 발생. ${maxLength}자 이상 입력 하실 수 없습니다.\n확인 헤더 파라미터 : ${key}]`);
+            errUtil.createCall(errCode.over_header_param_length, `Error code: 103 [헤더 파라미터 오류 발생. ${maxLength}자 이상 입력 하실 수 없습니다.\n확인 헤더 파라미터 : ${key}]`);
         }
     },
 

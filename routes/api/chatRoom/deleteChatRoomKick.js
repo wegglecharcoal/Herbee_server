@@ -60,11 +60,7 @@ module.exports = function (req, res) {
 
             req.innerBody['item'] = await queryCheck(req, db_connection);
             if (!req.innerBody['item']) {
-                // 한글 버전
-                // errUtil.createCall(errCode.empty, `방장 권한이 없습니다.`);
-                // 영어 버전
-                errUtil.createCall(errCode.empty, `You don't have the authority to be the room manager.`);
-
+                errUtil.createCall(errCode.non_authority_room_manager, `Error code: 452 [방장 권한이 없습니다. 확인 후 다시 시도해주세요.]`);
                 return;
             }
 
