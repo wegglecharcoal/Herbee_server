@@ -111,6 +111,8 @@ module.exports = function (req, res) {
 
             req.innerBody['item'] = await queryCreate(req, db_connection);
 
+            // 하루에 한 번만 꿀 지급 가능
+            let is_today_get_honey = await queryCheckHoney(req, db_connection);
 
             if(req.paramBody['file_type'] === 0) {
                 req.innerBody['manual_code'] = 'H0-001';
@@ -154,6 +156,18 @@ function checkParam(req) {
 
 function deleteBody(req) {
 }
+
+function queryCheckHoney(req, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_select_today_get_honey_check'
+        , [
+            req.headers['user_uid']
+        ]
+    );
+}
+
 
 function queryCheck(req, db_connection) {
     const _funcName = arguments.callee.name;

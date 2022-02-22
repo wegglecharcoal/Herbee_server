@@ -177,7 +177,7 @@ function queryCheckHoney(req, db_connection) {
     const _funcName = arguments.callee.name;
 
     return mysqlUtil.querySingle(db_connection
-        , 'call proc_select_lifestyle_today_get_honey_check'
+        , 'call proc_select_today_get_honey_check'
         , [
               req.headers['user_uid']
         ]
