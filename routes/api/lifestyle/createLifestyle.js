@@ -130,6 +130,7 @@ module.exports = function (req, res) {
             let is_today_get_honey = await queryCheckHoney(req, db_connection);
 
             if(req.paramBody['file_type'] === 0 && !is_today_get_honey) {
+                console.log('test')
                 req.innerBody['manual_code'] = 'H0-001';
                 let system_honey = await querySelectHoneySystem(req, db_connection);
                 system_honey['user_uid'] = req.headers['user_uid'];
@@ -137,6 +138,7 @@ module.exports = function (req, res) {
                 await queryCreateHoney(system_honey, db_connection);
             }
             else if(req.paramBody['file_type'] === 1 && !is_today_get_honey) {
+                console.log('test22')
                 req.innerBody['manual_code'] = 'H0-002';
                 let system_honey = await querySelectHoneySystem(req, db_connection);
                 system_honey['user_uid'] = req.headers['user_uid'];
