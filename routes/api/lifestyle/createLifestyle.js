@@ -129,8 +129,9 @@ module.exports = function (req, res) {
             // 하루에 한 번만 꿀 지급 가능
             let is_today_get_honey = await queryCheckHoney(req, db_connection);
 
+            console.log('weafpovaewkfowefiwajwevaew' + JSON.stringify(is_today_get_honey));
             if(req.paramBody['file_type'] === 0 && !is_today_get_honey) {
-                console.log('test')
+                console.log('testacfecaew')
                 req.innerBody['manual_code'] = 'H0-001';
                 let system_honey = await querySelectHoneySystem(req, db_connection);
                 system_honey['user_uid'] = req.headers['user_uid'];
