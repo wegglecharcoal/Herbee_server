@@ -131,7 +131,7 @@ module.exports = function (req, res) {
             let is_today_get_honey = await queryCheckHoney(req, db_connection);
 
             console.log('weafpovaewkfowefiwajwevaew' + JSON.stringify(is_today_get_honey));
-            if(req.paramBody['file_type'] === 0 && !is_today_get_honey) {
+            if(req.paramBody['file_type'] == 0 && !is_today_get_honey) {
                 console.log('testacfecaew')
                 req.innerBody['manual_code'] = 'H0-001';
                 let system_honey = await querySelectHoneySystem(req, db_connection);
@@ -139,7 +139,7 @@ module.exports = function (req, res) {
                 system_honey['type'] = 10; // type 10: 동영상 무료
                 await queryCreateHoney(system_honey, db_connection);
             }
-            else if(req.paramBody['file_type'] === 1 && !is_today_get_honey) {
+            else if(req.paramBody['file_type'] == 1 && !is_today_get_honey) {
                 console.log('test22')
                 req.innerBody['manual_code'] = 'H0-002';
                 let system_honey = await querySelectHoneySystem(req, db_connection);

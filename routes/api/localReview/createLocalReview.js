@@ -114,14 +114,14 @@ module.exports = function (req, res) {
             // 하루에 한 번만 꿀 지급 가능
             let is_today_get_honey = await queryCheckHoney(req, db_connection);
 
-            if(req.paramBody['file_type'] === 0) {
+            if(req.paramBody['file_type'] == 0 && !is_today_get_honey) {
                 req.innerBody['manual_code'] = 'H0-001';
                 let system_honey = await querySelectHoneySystem(req, db_connection);
                 system_honey['user_uid'] = req.headers['user_uid'];
                 system_honey['type'] = 10; // type 10: 동영상 무료
                 await queryCreateHoney(system_honey, db_connection);
             }
-            else if(req.paramBody['file_type'] === 1) {
+            else if(req.paramBody['file_type'] == 1 && !is_today_get_honey) {
                 req.innerBody['manual_code'] = 'H0-002';
                 let system_honey = await querySelectHoneySystem(req, db_connection);
                 system_honey['user_uid'] = req.headers['user_uid'];
