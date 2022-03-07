@@ -37,23 +37,10 @@ module.exports = {
     // 중복 처리 해결 해주어야 함 연속으로 눌렀을 때
     fcmFollowSingle : async function(item){
         return await fcmFunc(
-              [item['fcm_push_token_other']]
-
-            // 한글 버전
-            // , "팔로우 알림"
-            // 영어 버전
-            , "follow notification"
-
-            // 한글 버전
-            // , `${item['fcm_nickname_me']}님이 당신을 팔로우 했습니다.`
-            // 영어 버전
-            , `${item['fcm_nickname_me']} followed you.`
-
-            // 한글 버전
-            // , "팔로우"
-            // 영어 버전
-            , "follow"
-
+            [item['fcm_push_token_other']]
+            , item['title']
+            , item['message']
+            , item['channel']
             , "1"
             , item['fcm_filename_me']
             , item['fcm_target_uid']

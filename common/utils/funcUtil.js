@@ -98,7 +98,16 @@ module.exports = {
     },
     getOctetApiPath: function() {
         return _isRealServer() ? process.env.REAL_OCTET_API_PATH : process.env.DEV_OCTET_API_PATH;
-    }
+    },
+
+    /**
+     * Octet NFT
+     */
+    getOctetXChainID: function() {
+        return _isRealServer() ? process.env.REAL_OCTET_X_CHAIN_ID : process.env.DEV_OCTET_X_CHAIN_ID;
+    },
+
+
 
 }
 

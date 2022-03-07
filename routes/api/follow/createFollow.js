@@ -65,11 +65,8 @@ module.exports = function (req, res) {
             paramUtil.checkParam_alreadyUse(req.innerBody['item'],errCode.already_follow, 'Error code: 501 [이미 팔로우 된 유저입니다.]');
 
             req.innerBody['item'] = await queryCreate(req, db_connection);
-            req.innerBody['item']['fcm_target_uid'] = req.headers['user_uid'] ;
-            await fcmUtil.fcmFollowSingle(req.innerBody['item']);
 
-            req.innerBody['item']['alert_type'] = 1;
-            await queryCreateAlertHistory(req.innerBody['item'], db_connection);
+            await fcmFunction(req, db_connection);
 
             deleteBody(req);
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);
@@ -133,7 +130,34 @@ function queryCreateAlertHistory(item, db_connection) {
               item['alert_source_uid']
             , item['alert_target_uid']
             , item['alert_type']
-            , `${item['fcm_nickname_me']}님이 당신을 팔로우 했습니다.`
+            , item['message']
         ]
     );
+}
+
+async function fcmFunction(req, db_connection) {
+
+    let herbee_language_list = process.env.HERBEE_LANGUAGE_TYPES.split(',');
+
+    for (let i in herbee_language_list) {
+        switch (herbee_language_list[i]) {
+            case 'ko':
+                req.innerBody['title'] = `팔로우 알림`;
+                req.innerBody['message'] = `${req.innerBody['fcm_nickname_me']}님이 당신을 팔로우 했습니다.`;
+                req.innerBody['channel'] = `팔로우`;
+                break;
+            case 'en':
+                req.innerBody['title'] = "follow notification";
+                req.innerBody['message'] = `${req.innerBody['fcm_nickname_me']} followed you.`;
+                req.innerBody['channel'] = `follow`;
+                break;
+        }
+    }
+
+    req.innerBody['item']['fcm_target_uid'] = req.headers['user_uid'] ;
+    await fcmUtil.fcmFollowSingle(req.innerBody['item']);
+
+    req.innerBody['item']['alert_type'] = 1;
+    await queryCreateAlertHistory(req.innerBody['item'], db_connection);
+
 }
