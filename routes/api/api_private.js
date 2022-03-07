@@ -37,6 +37,9 @@ app.route('/feed/search/info')
 app.route('/feed/list')
     .get( require('./feed/selectFeedList') );
 
+app.route('/feed/list/temp')
+    .get( require('./feed/selectFeedListTemp') );
+
 app.route('/feed/me/list')
     .get( require('./feed/selectFeedMeList') );
 
