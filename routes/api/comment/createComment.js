@@ -150,12 +150,12 @@ async function fcmFunction(req, db_connection) {
             switch (req.innerBody['item']['fcm_language_other']) {
                 case 'ko':
                     req.innerBody['item']['fcm_title'] = `댓글 알림`;
-                    req.innerBody['item']['fcm_message'] = `${req.innerBody['fcm_nickname_me']}님이 게시물에 댓글을 남겼습니다.`;
+                    req.innerBody['item']['fcm_message'] = `${req.innerBody['item']['fcm_nickname_me']}님이 게시물에 댓글을 남겼습니다.`;
                     req.innerBody['item']['fcm_channel'] = `댓글`;
                     break;
                 case 'en':
                     req.innerBody['item']['fcm_title'] = "left a comment notification";
-                    req.innerBody['item']['fcm_message'] = `${req.innerBody['fcm_nickname_me']} left a comment on the post.`;
+                    req.innerBody['item']['fcm_message'] = `${req.innerBody['item']['fcm_nickname_me']} left a comment on the post.`;
                     req.innerBody['item']['fcm_channel'] = `comment`;
                     break;
             }
