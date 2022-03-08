@@ -92,7 +92,7 @@
  *               type: string
  *               example: '1996-08-02'
  *               description: 생년월일
- *            language:
+ *             language:
  *               type: string
  *               example: 'ko'
  *               description: |
