@@ -90,25 +90,13 @@ module.exports = function (req, res) {
             req.innerBody = {};
 
             req.innerBody['item'] = await queryCreate(req, db_connection);
-            console.log("ASDIOASK: " + JSON.stringify(req.innerBody['item']));
 
-            req.innerBody['fcm_push_token_other_list'] = [];
-            for (let idx in req.innerBody['item']) {
-                req.innerBody['item'][idx]['alert_type'] = 10;
-                req.innerBody['fcm_push_token_other_list'].push(req.innerBody['item'][idx]['fcm_push_token_other']);
-                if( req.innerBody['item'][idx]['source_uid'] === req.innerBody['item'][idx]['target_uid'] )
-                    await queryCreateAlertHistory(req.innerBody['item'][idx], db_connection);
-            }
-            req.innerBody['fcm_nickname_me'] = req.innerBody['item'][0]['fcm_nickname_me'];
-            req.innerBody['fcm_filename_me'] = req.innerBody['item'][0]['fcm_filename_me'];
-            req.innerBody['fcm_target_uid'] = req.innerBody['item'][0]['fcm_target_uid'];
-
-            await fcmUtil.fcmPromiseCreateArray(req.innerBody);
+            await fcmFunction(req, db_connection);
 
             deleteBody(req);
+
             await queryCreateUseHoney(req, db_connection);
 
-            console.log("vagepoigjwogij: " + JSON.stringify(req.innerBody['item']));
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);
 
         }, function (err) {
@@ -191,3 +179,57 @@ function queryCreateAlertHistory(item, db_connection) {
     );
 }
 
+
+async function fcmFunction(req, db_connection) {
+
+    let herbee_language_list = process.env.HERBEE_LANGUAGE_TYPES.split(',');
+
+    req.innerBody['fcm_nickname_me'] = req.innerBody['item'][0]['fcm_nickname_me'];
+    req.innerBody['fcm_filename_me'] = req.innerBody['item'][0]['fcm_filename_me'];
+    req.innerBody['fcm_target_uid'] = req.innerBody['item'][0]['fcm_target_uid'];
+
+    for (let i in herbee_language_list) {
+        req.innerBody['fcm_push_token_other_list'] = [];
+
+        for(let idx in req.innerBody['item']) {
+            if(herbee_language_list[i] == req.innerBody['item'][idx]['fcm_language_other']) {
+                req.innerBody['fcm_push_token_other_list'].push(req.innerBody['item'][idx]['fcm_push_token_other']);
+
+                switch (req.innerBody['item'][idx]['fcm_language_other']) {
+                    case 'ko':
+                        req.innerBody['title'] = `약속 생성 알림`;
+                        req.innerBody['message'] = `${req.innerBody['item'][idx]['fcm_nickname_me']}님이 약속을 잡았습니다.`;
+                        req.innerBody['channel'] = `약속`;
+                        break;
+                    case 'en':
+                        req.innerBody['title'] = "made an promise notification";
+                        req.innerBody['message'] = `${req.innerBody['item'][idx]['fcm_nickname_me']} made an promise.`;
+                        req.innerBody['channel'] = `promise`;
+                        break;
+                }
+
+                if( req.innerBody['item'][idx]['source_uid'] === req.innerBody['item'][idx]['target_uid'] ) {
+                    req.innerBody['item'][idx]['alert_type'] = 10;
+                    await queryCreateAlertHistory(req.innerBody['item'][idx], db_connection);
+                }
+            }
+        }
+
+        await fcmUtil.fcmPromiseCreateArray(req.innerBody);
+    }
+
+
+
+
+    req.innerBody['fcm_push_token_other_list'] = [];
+    for (let idx in req.innerBody['item']) {
+        req.innerBody['item'][idx]['alert_type'] = 10;
+        req.innerBody['fcm_push_token_other_list'].push(req.innerBody['item'][idx]['fcm_push_token_other']);
+        if( req.innerBody['item'][idx]['source_uid'] === req.innerBody['item'][idx]['target_uid'] )
+            await queryCreateAlertHistory(req.innerBody['item'][idx], db_connection);
+    }
+
+
+    await fcmUtil.fcmPromiseCreateArray(req.innerBody);
+
+}

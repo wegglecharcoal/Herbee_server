@@ -140,21 +140,24 @@ async function fcmFunction(req, db_connection) {
     let herbee_language_list = process.env.HERBEE_LANGUAGE_TYPES.split(',');
 
     for (let i in herbee_language_list) {
-        switch (herbee_language_list[i]) {
-            case 'ko':
-                req.innerBody['title'] = `팔로우 알림`;
-                req.innerBody['message'] = `${req.innerBody['fcm_nickname_me']}님이 당신을 팔로우 했습니다.`;
-                req.innerBody['channel'] = `팔로우`;
-                break;
-            case 'en':
-                req.innerBody['title'] = "follow notification";
-                req.innerBody['message'] = `${req.innerBody['fcm_nickname_me']} followed you.`;
-                req.innerBody['channel'] = `follow`;
-                break;
+        if (herbee_language_list[i] == req.innerBody['fcm_language_other']) {
+            switch (req.innerBody['fcm_language_other']) {
+                case 'ko':
+                    req.innerBody['title'] = `팔로우 알림`;
+                    req.innerBody['message'] = `${req.innerBody['fcm_nickname_me']}님이 당신을 팔로우 했습니다.`;
+                    req.innerBody['channel'] = `팔로우`;
+                    break;
+                case 'en':
+                    req.innerBody['title'] = "follow notification";
+                    req.innerBody['message'] = `${req.innerBody['fcm_nickname_me']} followed you.`;
+                    req.innerBody['channel'] = `follow`;
+                    break;
+            }
         }
+
     }
 
-    req.innerBody['item']['fcm_target_uid'] = req.headers['user_uid'] ;
+    req.innerBody['item']['fcm_target_uid'] = req.headers['user_uid'];
     await fcmUtil.fcmFollowSingle(req.innerBody['item']);
 
     req.innerBody['item']['alert_type'] = 1;

@@ -64,10 +64,7 @@ module.exports = function (req, res) {
             req.innerBody = {};
 
             req.innerBody['item'] = await queryCreate(req, db_connection);
-
-            await fcmUtil.fcmCommentSingle(req.innerBody['item'])
-            req.innerBody['item']['alert_type'] = 3;
-            await queryCreateAlertHistory(req.innerBody['item'], db_connection);
+            await fcmFunction(req, db_connection);
 
             deleteBody(req)
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);
@@ -121,7 +118,35 @@ function queryCreateAlertHistory(item, db_connection) {
               item['alert_source_uid']
             , item['alert_target_uid']
             , item['alert_type']
-            , `${item['fcm_nickname_me']}님이 회원님의 댓글에 대댓글을 남겼습니다.`
+            , item['message']
         ]
     );
+}
+
+
+async function fcmFunction(req, db_connection) {
+
+    let herbee_language_list = process.env.HERBEE_LANGUAGE_TYPES.split(',');
+
+    for (let i in herbee_language_list) {
+        if (herbee_language_list[i] == req.innerBody['fcm_language_other']) {
+            switch (req.innerBody['fcm_language_other']) {
+                case 'ko':
+                    req.innerBody['title'] = `댓글 알림`;
+                    req.innerBody['message'] = `${req.innerBody['fcm_nickname_me']}님이 댓글에 대댓글을 남겼습니다.`;
+                    req.innerBody['channel'] = `댓글`;
+                    break;
+                case 'en':
+                    req.innerBody['title'] = "left a comment notification";
+                    req.innerBody['message'] = `${req.innerBody['fcm_nickname_me']} left a nested comment on the comment.`;
+                    req.innerBody['channel'] = `comment`;
+                    break;
+            }
+        }
+
+    }
+    await fcmUtil.fcmCommentSingle(req.innerBody['item'])
+    req.innerBody['item']['alert_type'] = 3;
+    await queryCreateAlertHistory(req.innerBody['item'], db_connection);
+
 }

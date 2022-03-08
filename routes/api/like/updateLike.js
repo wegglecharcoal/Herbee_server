@@ -84,7 +84,9 @@ module.exports = function (req, res) {
 
         checkParam(req);
 
-        mysqlUtil.connectPool( async function (db_connection) {
+        mysqlUtil.connectPool( function (err) {
+            sendUtil.sendErrorPacket(req, res, err);
+        }, async function (db_connection) {
             req.innerBody = {};
 
             req.innerBody['item'] = await queryUpdate(req, db_connection);
@@ -98,13 +100,11 @@ module.exports = function (req, res) {
 
                     case 1:
                     case 2:
-                        await fcmUtil.fcmLikePostSingle(req.innerBody['item']);
-                        await queryCreateAlertHistory(req.innerBody['item'], db_connection);
+                        await fcmFunction(req, db_connection);
                         break;
                     case 3:
                     case 4:
-                        await fcmUtil.fcmLikeCommentSingle(req.innerBody['item']);
-                        await queryCreateAlertHistory(req.innerBody['item'], db_connection);
+                        await fcmFunction(req, db_connection);
                         break;
                     default:
                         break;
@@ -116,8 +116,6 @@ module.exports = function (req, res) {
             deleteBody(req)
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);
 
-        }, function (err) {
-            sendUtil.sendErrorPacket(req, res, err);
         } );
 
     }
@@ -165,10 +163,42 @@ function queryCreateAlertHistory(item, db_connection) {
     return mysqlUtil.querySingle(db_connection
         , 'call proc_create_alert_history'
         , [
-            item['alert_source_uid']
+              item['alert_source_uid']
             , item['alert_target_uid']
             , item['alert_type']
-            , `${item['fcm_nickname_me']}님이 ${item['type'] === 1 || item['type'] === 2 ? '게시물' : '댓글'}에 좋아요를 눌렀습니다.`
+            , item['message']
         ]
     );
+}
+
+
+async function fcmFunction(req, db_connection) {
+
+    let herbee_language_list = process.env.HERBEE_LANGUAGE_TYPES.split(',');
+
+    for (let i in herbee_language_list) {
+        if (herbee_language_list[i] == req.innerBody['fcm_language_other']) {
+            switch (req.innerBody['fcm_language_other']) {
+                case 'ko':
+                    req.innerBody['title'] = ((req.paramBody['type'] == 1) || (req.paramBody['type'] == 2)) ?
+                                             `게시물 좋아요 알림` : `댓글 좋아요 알림`;
+                    req.innerBody['message'] = ((req.paramBody['type'] == 1) || (req.paramBody['type'] == 2)) ?
+                                             `${req.innerBody['fcm_nickname_me']}님이 게시물에 좋아요를 눌렀습니다.` : `${req.innerBody['fcm_nickname_me']}님이 댓글에 좋아요를 눌렀습니다.`;
+                    req.innerBody['channel'] = `좋아요`;
+                    break;
+                case 'en':
+                    req.innerBody['title'] = ((req.paramBody['type'] == 1) || (req.paramBody['type'] == 2)) ?
+                                             `clicked like on the post notification` : `pressed comment like notification`;
+                    req.innerBody['message'] = ((req.paramBody['type'] == 1) || (req.paramBody['type'] == 2)) ?
+                                             `${req.innerBody['fcm_nickname_me']} clicked like on the post.` : `${req.innerBody['fcm_nickname_me']} pressed like in the comments.`;
+                    req.innerBody['channel'] = `like`;
+                    break;
+            }
+        }
+    }
+
+    ((req.paramBody['type'] == 1) || (req.paramBody['type'] == 2)) ?
+                                     await fcmUtil.fcmLikePostSingle(req.innerBody['item']) : await fcmUtil.fcmLikeCommentSingle(req.innerBody['item']);
+
+    await queryCreateAlertHistory(req.innerBody['item'], db_connection);
 }
