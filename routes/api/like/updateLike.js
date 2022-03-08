@@ -88,7 +88,7 @@ module.exports = function (req, res) {
             sendUtil.sendErrorPacket(req, res, err);
         }, async function (db_connection) {
             req.innerBody = {};
-
+            console.log('faweiofkoi3434343')
             req.innerBody['item'] = await queryUpdate(req, db_connection);
 
             if(req.paramBody['is_like'] === 1
@@ -100,10 +100,12 @@ module.exports = function (req, res) {
 
                     case 1:
                     case 2:
+                        console.log('faweiofkoi23km42kmokm')
                         await fcmFunction(req, db_connection);
                         break;
                     case 3:
                     case 4:
+                        console.log('faweiofkoieoqkweoq')
                         await fcmFunction(req, db_connection);
                         break;
                     default:
@@ -177,6 +179,7 @@ function queryCreateAlertHistory(item, db_connection) {
 
 async function fcmFunction(req, db_connection) {
 
+    console.log('faweiofkoi')
     let herbee_language_list = process.env.HERBEE_LANGUAGE_TYPES.split(',');
 
     for (let i in herbee_language_list) {
@@ -199,6 +202,8 @@ async function fcmFunction(req, db_connection) {
             }
         }
     }
+
+    console.log('ofiajweoij?')
 
     ((req.paramBody['type'] == 1) || (req.paramBody['type'] == 2)) ?
                                      await fcmUtil.fcmLikePostSingle(req.innerBody['item']) : await fcmUtil.fcmLikeCommentSingle(req.innerBody['item']);
