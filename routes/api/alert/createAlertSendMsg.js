@@ -63,6 +63,7 @@ module.exports = function (req, res) {
 
         mysqlUtil.connectPool( async function (db_connection) {
             req.innerBody = {};
+            req.innerBody['item'] = {};
 
             await fcmFunction(req, db_connection);
 
@@ -120,35 +121,35 @@ async function fcmFunction(req, db_connection) {
 
     let chatRoomUserList = await querySelect(req, db_connection);
 
-    req.innerBody['fcm_nickname_me'] = chatRoomUserList[0]['fcm_nickname_me'];
-    req.innerBody['fcm_filename_me'] = chatRoomUserList[0]['fcm_filename_me'];
-    req.innerBody['fcm_target_uid'] = req.paramBody['chat_room_uid'];
+    req.innerBody['item']['fcm_nickname_me'] = chatRoomUserList[0]['fcm_nickname_me'];
+    req.innerBody['item']['fcm_filename_me'] = chatRoomUserList[0]['fcm_filename_me'];
+    req.innerBody['item']['fcm_target_uid'] = req.paramBody['chat_room_uid'];
 
     for (let i in herbee_language_list) {
-        req.innerBody['fcm_push_token_other_list'] = [];
+        req.innerBody['item']['fcm_push_token_other_list'] = [];
 
         for(let j in chatRoomUserList) {
             if(herbee_language_list[i] == chatRoomUserList[j]['fcm_language_other']) {
-                req.innerBody['fcm_push_token_other_list'].push(chatRoomUserList[j]['fcm_push_token_other']);
+                req.innerBody['item']['fcm_push_token_other_list'].push(chatRoomUserList[j]['fcm_push_token_other']);
 
                 switch (chatRoomUserList[j]['fcm_language_other']) {
                     case 'ko':
-                        req.innerBody['title'] = `메시지 알림`;
-                        req.innerBody['message'] = `${req.innerBody['fcm_nickname_me']}님이 메시지를 보냈습니다.`;
-                        req.innerBody['channel'] = `메시지`;
-                        chatRoomUserList[j]['message'] = req.innerBody['message'];
+                        req.innerBody['item']['fcm_title'] = `메시지 알림`;
+                        req.innerBody['item']['fcm_message'] = `${req.innerBody['item']['fcm_nickname_me']}님이 메시지를 보냈습니다.`;
+                        req.innerBody['item']['fcm_channel'] = `메시지`;
+                        chatRoomUserList[j]['fcm_message'] = req.innerBody['item']['fcm_message'];
                         break;
                     case 'en':
-                        req.innerBody['title'] = "message notification";
-                        req.innerBody['message'] = `${req.innerBody['fcm_nickname_me']} sent me a message.`;
-                        req.innerBody['channel'] = `message`;
-                        chatRoomUserList[j]['message'] = req.innerBody['message'];
+                        req.innerBody['item']['fcm_title'] = "message notification";
+                        req.innerBody['item']['fcm_message'] = `${req.innerBody['item']['fcm_nickname_me']} sent me a message.`;
+                        req.innerBody['item']['fcm_channel'] = `message`;
+                        chatRoomUserList[j]['fcm_message'] = req.innerBody['item']['fcm_message'];
                         break;
                 }
                 await queryCreateAlertHistory(chatRoomUserList[j], db_connection);
             }
         }
 
-        await fcmUtil.fcmMsgArray(req.innerBody);
+        await fcmUtil.fcmMsgArray(req.innerBody['item']);
     }
 }
