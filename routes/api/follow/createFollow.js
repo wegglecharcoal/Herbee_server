@@ -144,19 +144,14 @@ async function fcmFunction(req, db_connection) {
     let herbee_language_list = process.env.HERBEE_LANGUAGE_TYPES.split(',');
 
     for (let i in herbee_language_list) {
-        console.log('difmoewin3');
-        console.log('difmoewin111' + herbee_language_list[i]);
-        console.log('difmoewin111' + req.innerBody['fcm_language_other']);
-        if (herbee_language_list[i] == req.innerBody['fcm_language_other']) {
-            switch (req.innerBody['fcm_language_other']) {
+        if (herbee_language_list[i] == req.innerBody['item']['fcm_language_other']) {
+            switch (req.innerBody['item']['fcm_language_other']) {
                 case 'ko':
-                    console.log('difmoewin3')
                     req.innerBody['item']['fcm_title'] = `팔로우 알림`;
                     req.innerBody['item']['fcm_message'] = `${req.innerBody['item']['fcm_nickname_me']}님이 당신을 팔로우 했습니다.`;
                     req.innerBody['item']['fcm_channel'] = `팔로우`;
                     break;
                 case 'en':
-                    console.log('difmoewin5')
                     req.innerBody['item']['fcm_title'] = `follow notification`;
                     req.innerBody['item']['fcm_message'] = `${req.innerBody['item']['fcm_nickname_me']} followed you.`;
                     req.innerBody['item']['fcm_channel'] = `follow`;
