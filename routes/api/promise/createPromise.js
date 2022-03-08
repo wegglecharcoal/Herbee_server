@@ -118,13 +118,17 @@ function deleteBody(req) {
         delete req.innerBody['item'][idx]['alert_source_uid'];
         delete req.innerBody['item'][idx]['alert_target_uid'];
     }
-    delete req.innerBody['fcm_nickname_me'];
-    delete req.innerBody['fcm_filename_me'];
-    delete req.innerBody['fcm_push_token_other'];
-    delete req.innerBody['fcm_target_uid'];
-    delete req.innerBody['alert_source_uid'];
-    delete req.innerBody['alert_target_uid'];
-    delete req.innerBody['alert_type'];
+    delete req.innerBody['item']['fcm_nickname_me'];
+    delete req.innerBody['item']['fcm_filename_me'];
+    delete req.innerBody['item']['fcm_push_token_other'];
+    delete req.innerBody['item']['fcm_target_uid'];
+    delete req.innerBody['item']['alert_source_uid'];
+    delete req.innerBody['item']['alert_target_uid'];
+    delete req.innerBody['item']['alert_type'];
+    delete req.innerBody['item']['fcm_title'];
+    delete req.innerBody['item']['fcm_message'];
+    delete req.innerBody['item']['fcm_channel'];
+
 }
 
 function checkParam(req) {
@@ -174,7 +178,7 @@ function queryCreateAlertHistory(item, db_connection) {
               item['alert_source_uid']
             , item['alert_target_uid']
             , item['alert_type']
-            , `${item['fcm_nickname_me']}님이 약속을 잡았습니다.`
+            , item['fcm_message']
         ]
     );
 }
@@ -184,27 +188,27 @@ async function fcmFunction(req, db_connection) {
 
     let herbee_language_list = process.env.HERBEE_LANGUAGE_TYPES.split(',');
 
-    req.innerBody['fcm_nickname_me'] = req.innerBody['item'][0]['fcm_nickname_me'];
-    req.innerBody['fcm_filename_me'] = req.innerBody['item'][0]['fcm_filename_me'];
-    req.innerBody['fcm_target_uid'] = req.innerBody['item'][0]['fcm_target_uid'];
+    req.innerBody['item']['fcm_nickname_me'] = req.innerBody['item'][0]['fcm_nickname_me'];
+    req.innerBody['item']['fcm_filename_me'] = req.innerBody['item'][0]['fcm_filename_me'];
+    req.innerBody['item']['fcm_target_uid'] = req.innerBody['item'][0]['fcm_target_uid'];
 
     for (let i in herbee_language_list) {
-        req.innerBody['fcm_push_token_other_list'] = [];
+        req.innerBody['item']['fcm_push_token_other_list'] = [];
 
         for(let idx in req.innerBody['item']) {
             if(herbee_language_list[i] == req.innerBody['item'][idx]['fcm_language_other']) {
-                req.innerBody['fcm_push_token_other_list'].push(req.innerBody['item'][idx]['fcm_push_token_other']);
+                req.innerBody['item']['fcm_push_token_other_list'].push(req.innerBody['item'][idx]['fcm_push_token_other']);
 
                 switch (req.innerBody['item'][idx]['fcm_language_other']) {
                     case 'ko':
-                        req.innerBody['title'] = `약속 생성 알림`;
-                        req.innerBody['message'] = `${req.innerBody['item'][idx]['fcm_nickname_me']}님이 약속을 잡았습니다.`;
-                        req.innerBody['channel'] = `약속`;
+                        req.innerBody['item']['fcm_title'] = `약속 생성 알림`;
+                        req.innerBody['item']['fcm_message'] = `${req.innerBody['item'][idx]['fcm_nickname_me']}님이 약속을 잡았습니다.`;
+                        req.innerBody['item']['fcm_channel'] = `약속`;
                         break;
                     case 'en':
-                        req.innerBody['title'] = "made an promise notification";
-                        req.innerBody['message'] = `${req.innerBody['item'][idx]['fcm_nickname_me']} made an promise.`;
-                        req.innerBody['channel'] = `promise`;
+                        req.innerBody['item']['fcm_title'] = "made an promise notification";
+                        req.innerBody['item']['fcm_message'] = `${req.innerBody['item'][idx]['fcm_nickname_me']} made an promise.`;
+                        req.innerBody['item']['fcm_channel'] = `promise`;
                         break;
                 }
 
@@ -214,22 +218,7 @@ async function fcmFunction(req, db_connection) {
                 }
             }
         }
-
-        await fcmUtil.fcmPromiseCreateArray(req.innerBody);
+        await fcmUtil.fcmPromiseCreateArray(req.innerBody['item']);
     }
-
-
-
-
-    req.innerBody['fcm_push_token_other_list'] = [];
-    for (let idx in req.innerBody['item']) {
-        req.innerBody['item'][idx]['alert_type'] = 10;
-        req.innerBody['fcm_push_token_other_list'].push(req.innerBody['item'][idx]['fcm_push_token_other']);
-        if( req.innerBody['item'][idx]['source_uid'] === req.innerBody['item'][idx]['target_uid'] )
-            await queryCreateAlertHistory(req.innerBody['item'][idx], db_connection);
-    }
-
-
-    await fcmUtil.fcmPromiseCreateArray(req.innerBody);
 
 }
