@@ -38,9 +38,9 @@ module.exports = {
     fcmFollowSingle : async function(item){
         return await fcmFunc(
             [item['fcm_push_token_other']]
-            , item['title']
-            , item['message']
-            , item['channel']
+            , item['fcm_title']
+            , item['fcm_message']
+            , item['fcm_channel']
             , "1"
             , item['fcm_filename_me']
             , item['fcm_target_uid']

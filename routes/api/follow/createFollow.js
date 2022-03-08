@@ -93,6 +93,10 @@ function deleteBody(req) {
     delete req.innerBody['item']['alert_source_uid'];
     delete req.innerBody['item']['alert_target_uid'];
     delete req.innerBody['item']['alert_type'];
+    delete req.innerBody['item']['fcm_title'];
+    delete req.innerBody['item']['fcm_message'];
+    delete req.innerBody['item']['fcm_channel'];
+    delete req.innerBody['item']['fcm_target_uid'];
 }
 
 function queryCreate(req, db_connection) {
@@ -130,7 +134,7 @@ function queryCreateAlertHistory(item, db_connection) {
               item['alert_source_uid']
             , item['alert_target_uid']
             , item['alert_type']
-            , item['message']
+            , item['fcm_message']
         ]
     );
 }
@@ -143,18 +147,17 @@ async function fcmFunction(req, db_connection) {
         if (herbee_language_list[i] == req.innerBody['fcm_language_other']) {
             switch (req.innerBody['fcm_language_other']) {
                 case 'ko':
-                    req.innerBody['title'] = `팔로우 알림`;
-                    req.innerBody['message'] = `${req.innerBody['fcm_nickname_me']}님이 당신을 팔로우 했습니다.`;
-                    req.innerBody['channel'] = `팔로우`;
+                    req.innerBody['item']['fcm_title'] = `팔로우 알림`;
+                    req.innerBody['item']['fcm_message'] = `${req.innerBody['fcm_nickname_me']}님이 당신을 팔로우 했습니다.`;
+                    req.innerBody['item']['fcm_channel'] = `팔로우`;
                     break;
                 case 'en':
-                    req.innerBody['title'] = "follow notification";
-                    req.innerBody['message'] = `${req.innerBody['fcm_nickname_me']} followed you.`;
-                    req.innerBody['channel'] = `follow`;
+                    req.innerBody['item']['fcm_title'] = "follow notification";
+                    req.innerBody['item']['fcm_message'] = `${req.innerBody['fcm_nickname_me']} followed you.`;
+                    req.innerBody['item']['fcm_channel'] = `follow`;
                     break;
             }
         }
-
     }
 
     req.innerBody['item']['fcm_target_uid'] = req.headers['user_uid'];
