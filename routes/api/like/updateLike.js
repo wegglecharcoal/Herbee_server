@@ -138,6 +138,9 @@ function deleteBody(req) {
     delete req.innerBody['item']['alert_source_uid'];
     delete req.innerBody['item']['alert_target_uid'];
     delete req.innerBody['item']['alert_type'];
+    delete req.innerBody['item']['fcm_title'];
+    delete req.innerBody['item']['fcm_message'];
+    delete req.innerBody['item']['fcm_channel'];
 }
 
 
