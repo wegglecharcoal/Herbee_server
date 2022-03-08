@@ -6,7 +6,7 @@ const moment = require('moment');
 module.exports = {
     printUrlLog: function (req, msg) {
         if (!req) {
-            return;a
+            return;
         }
         if (!req.file_name) {
             req.file_name = '';
