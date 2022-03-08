@@ -106,6 +106,9 @@ function deleteBody(req) {
     delete req.innerBody['item']['alert_source_uid'];
     delete req.innerBody['item']['alert_target_uid'];
     delete req.innerBody['item']['alert_type'];
+    delete req.innerBody['item']['fcm_title'];
+    delete req.innerBody['item']['fcm_message'];
+    delete req.innerBody['item']['fcm_channel'];
 }
 
 
@@ -143,17 +146,17 @@ async function fcmFunction(req, db_connection) {
     let herbee_language_list = process.env.HERBEE_LANGUAGE_TYPES.split(',');
 
     for (let i in herbee_language_list) {
-        if (herbee_language_list[i] == req.innerBody['fcm_language_other']) {
-            switch (req.innerBody['fcm_language_other']) {
+        if (herbee_language_list[i] == req.innerBody['item']['fcm_language_other']) {
+            switch (req.innerBody['item']['fcm_language_other']) {
                 case 'ko':
-                    req.innerBody['title'] = `댓글 알림`;
-                    req.innerBody['message'] = `${req.innerBody['fcm_nickname_me']}님이 게시물에 댓글을 남겼습니다.`;
-                    req.innerBody['channel'] = `댓글`;
+                    req.innerBody['item']['fcm_title'] = `댓글 알림`;
+                    req.innerBody['item']['fcm_message'] = `${req.innerBody['fcm_nickname_me']}님이 게시물에 댓글을 남겼습니다.`;
+                    req.innerBody['item']['fcm_channel'] = `댓글`;
                     break;
                 case 'en':
-                    req.innerBody['title'] = "left a comment notification";
-                    req.innerBody['message'] = `${req.innerBody['fcm_nickname_me']} left a comment on the post.`;
-                    req.innerBody['channel'] = `comment`;
+                    req.innerBody['item']['fcm_title'] = "left a comment notification";
+                    req.innerBody['item']['fcm_message'] = `${req.innerBody['fcm_nickname_me']} left a comment on the post.`;
+                    req.innerBody['item']['fcm_channel'] = `comment`;
                     break;
             }
         }
