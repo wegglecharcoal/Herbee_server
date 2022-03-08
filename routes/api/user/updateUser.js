@@ -92,6 +92,14 @@
  *               type: string
  *               example: '1996-08-02'
  *               description: 생년월일
+ *            language:
+ *               type: string
+ *               example: 'ko'
+ *               description: |
+ *                 언어설정
+ *                 * ko: 한글
+ *                 * en: 영어
+ *
  *
  *     responses:
  *       200:
@@ -167,6 +175,7 @@ function queryUpdate(req, db_connection) {
             , req.paramBody['job']
             , req.paramBody['introduce']
             , req.paramBody['birth']
+            , req.paramBody['language']
         ]
     );
 }
