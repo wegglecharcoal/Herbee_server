@@ -86,6 +86,16 @@ function checkParam(req) {
 }
 
 function deleteBody(req) {
+    delete req.innerBody['item']['fcm_nickname_me'];
+    delete req.innerBody['item']['fcm_filename_me'];
+    delete req.innerBody['item']['fcm_push_token_other_list'];
+    delete req.innerBody['item']['alert_source_uid'];
+    delete req.innerBody['item']['alert_target_uid'];
+    delete req.innerBody['item']['alert_type'];
+    delete req.innerBody['item']['fcm_title'];
+    delete req.innerBody['item']['fcm_message'];
+    delete req.innerBody['item']['fcm_channel'];
+    delete req.innerBody['item']['fcm_target_uid'];
 }
 
 function querySelect(req, db_connection) {
@@ -146,6 +156,7 @@ async function fcmFunction(req, db_connection) {
                         chatRoomUserList[j]['fcm_message'] = req.innerBody['item']['fcm_message'];
                         break;
                 }
+                chatRoomUserList[j]['alert_type'] = 0;
                 await queryCreateAlertHistory(chatRoomUserList[j], db_connection);
             }
         }

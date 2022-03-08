@@ -166,7 +166,7 @@ function queryCreateAlertHistory(item, db_connection) {
               item['alert_source_uid']
             , item['alert_target_uid']
             , item['alert_type']
-            , item['message']
+            , item['fcm_message']
         ]
     );
 }
@@ -177,21 +177,21 @@ async function fcmFunction(req, db_connection) {
     let herbee_language_list = process.env.HERBEE_LANGUAGE_TYPES.split(',');
 
     for (let i in herbee_language_list) {
-        if (herbee_language_list[i] == req.innerBody['fcm_language_other']) {
-            switch (req.innerBody['fcm_language_other']) {
+        if (herbee_language_list[i] == req.innerBody['item']['fcm_language_other']) {
+            switch (req.innerBody['item']['fcm_language_other']) {
                 case 'ko':
-                    req.innerBody['title'] = ((req.paramBody['type'] == 1) || (req.paramBody['type'] == 2)) ?
+                    req.innerBody['item']['fcm_title'] = ((req.paramBody['type'] == 1) || (req.paramBody['type'] == 2)) ?
                                              `게시물 좋아요 알림` : `댓글 좋아요 알림`;
-                    req.innerBody['message'] = ((req.paramBody['type'] == 1) || (req.paramBody['type'] == 2)) ?
-                                             `${req.innerBody['fcm_nickname_me']}님이 게시물에 좋아요를 눌렀습니다.` : `${req.innerBody['fcm_nickname_me']}님이 댓글에 좋아요를 눌렀습니다.`;
-                    req.innerBody['channel'] = `좋아요`;
+                    req.innerBody['item']['fcm_message'] = ((req.paramBody['type'] == 1) || (req.paramBody['type'] == 2)) ?
+                                             `${req.innerBody['item']['fcm_nickname_me']}님이 게시물에 좋아요를 눌렀습니다.` : `${req.innerBody['item']['fcm_nickname_me']}님이 댓글에 좋아요를 눌렀습니다.`;
+                    req.innerBody['item']['fcm_channel'] = `좋아요`;
                     break;
                 case 'en':
-                    req.innerBody['title'] = ((req.paramBody['type'] == 1) || (req.paramBody['type'] == 2)) ?
+                    req.innerBody['item']['fcm_title'] = ((req.paramBody['type'] == 1) || (req.paramBody['type'] == 2)) ?
                                              `clicked like on the post notification` : `pressed comment like notification`;
-                    req.innerBody['message'] = ((req.paramBody['type'] == 1) || (req.paramBody['type'] == 2)) ?
-                                             `${req.innerBody['fcm_nickname_me']} clicked like on the post.` : `${req.innerBody['fcm_nickname_me']} pressed like in the comments.`;
-                    req.innerBody['channel'] = `like`;
+                    req.innerBody['item']['fcm_message'] = ((req.paramBody['type'] == 1) || (req.paramBody['type'] == 2)) ?
+                                             `${req.innerBody['item']['fcm_nickname_me']} clicked like on the post.` : `${req.innerBody['item']['fcm_nickname_me']} pressed like in the comments.`;
+                    req.innerBody['item']['fcm_channel'] = `like`;
                     break;
             }
         }

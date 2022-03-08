@@ -65,9 +65,9 @@ module.exports = {
     fcmLikeCommentSingle : async function(item){
         return await fcmFunc(
             [item['fcm_push_token_other']]
-            , item['title']
-            , item['message']
-            , item['channel']
+            , item['fcm_title']
+            , item['fcm_message']
+            , item['fcm_channel']
             , "like"
             , "2"
             , item['fcm_filename_me']
