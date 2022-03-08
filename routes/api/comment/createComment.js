@@ -135,7 +135,7 @@ function queryCreateAlertHistory(item, db_connection) {
               item['alert_source_uid']
             , item['alert_target_uid']
             , item['alert_type']
-            , item['message']
+            , item['fcm_message']
         ]
     );
 }
@@ -163,7 +163,6 @@ async function fcmFunction(req, db_connection) {
 
     }
     await fcmUtil.fcmCommentSingle(req.innerBody['item']);
-
     req.innerBody['item']['alert_type'] = 3;
     await queryCreateAlertHistory(req.innerBody['item'], db_connection);
 

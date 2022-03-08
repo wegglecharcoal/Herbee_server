@@ -118,7 +118,7 @@ function queryCreateAlertHistory(item, db_connection) {
               item['alert_source_uid']
             , item['alert_target_uid']
             , item['alert_type']
-            , item['message']
+            , item['fcm_message']
         ]
     );
 }
@@ -129,17 +129,17 @@ async function fcmFunction(req, db_connection) {
     let herbee_language_list = process.env.HERBEE_LANGUAGE_TYPES.split(',');
 
     for (let i in herbee_language_list) {
-        if (herbee_language_list[i] == req.innerBody['fcm_language_other']) {
-            switch (req.innerBody['fcm_language_other']) {
+        if (herbee_language_list[i] == req.innerBody['item']['fcm_language_other']) {
+            switch (req.innerBody['item']['fcm_language_other']) {
                 case 'ko':
-                    req.innerBody['title'] = `댓글 알림`;
-                    req.innerBody['message'] = `${req.innerBody['fcm_nickname_me']}님이 댓글에 대댓글을 남겼습니다.`;
-                    req.innerBody['channel'] = `댓글`;
+                    req.innerBody['item']['fcm_title'] = `댓글 알림`;
+                    req.innerBody['item']['fcm_message'] = `${req.innerBody['fcm_nickname_me']}님이 댓글에 대댓글을 남겼습니다.`;
+                    req.innerBody['item']['fcm_channel'] = `댓글`;
                     break;
                 case 'en':
-                    req.innerBody['title'] = "left a comment notification";
-                    req.innerBody['message'] = `${req.innerBody['fcm_nickname_me']} left a nested comment on the comment.`;
-                    req.innerBody['channel'] = `comment`;
+                    req.innerBody['item']['fcm_title'] = "left a comment notification";
+                    req.innerBody['item']['fcm_message'] = `${req.innerBody['fcm_nickname_me']} left a nested comment on the comment.`;
+                    req.innerBody['item']['fcm_channel'] = `comment`;
                     break;
             }
         }
