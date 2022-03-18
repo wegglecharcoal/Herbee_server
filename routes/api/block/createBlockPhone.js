@@ -76,7 +76,7 @@ module.exports = function (req, res) {
 }
 
 function checkParam(req) {
-    paramUtil.checkParam_noReturn(req.paramBody, 'block_phone_list');
+    // paramUtil.checkParam_noReturn(req.paramBody, 'block_phone_list');
 }
 
 function deleteBody(req) {
