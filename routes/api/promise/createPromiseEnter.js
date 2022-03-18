@@ -64,10 +64,9 @@ module.exports = function (req, res) {
             paramUtil.checkParam_alreadyUse(check, errCode.already_promise_enter,'Error code: 507 [이미 해당 약속에 참여했습니다.]');
 
             req.innerBody['item'] = await queryCreate(req, db_connection);
+
             req.innerBody['item']['alert_type'] = 11;
-            req.innerBody['item']['content'] = `${req.innerBody['item']['fcm_nickname_me']}님이 약속을 수락했습니다.`;
-            await queryCreateAlertHistory(req.innerBody['item'], db_connection);
-            await fcmUtil.fcmPromiseAcceptSingle(req.innerBody['item']);
+            await fcmFunction(req, db_connection);
 
             let promise_milli = new Date(req.innerBody['item']['promise_date']).getTime();
             let now_milli = new Date().getTime();
@@ -76,11 +75,7 @@ module.exports = function (req, res) {
             // 약속 한 시간 전 리마인드 FCM 알림
             setTimeout(  async function() {
                 req.innerBody['item']['alert_type'] = 12;
-                req.innerBody['item']['content'] = `${req.innerBody['item']['fcm_nickname_other']}님과의 약속 잊지 않으셨죠? 출발할 때 알려주세요.`;
-                req.innerBody['item']['alert_target_uid'] = req.innerBody['item'] ['alert_source_uid'];
-                req.innerBody['item']['alert_source_uid'] = req.headers['user_uid'];
-                await queryCreateAlertHistory(req.innerBody['item'], db_connection);
-                await fcmUtil.fcmPromiseAfterAnHourSingle(req.innerBody['item']);
+                await fcmFunction(req, db_connection);
             }, gap_milli);
 
             // deleteBody(req);
@@ -149,7 +144,46 @@ function queryCreateAlertHistory(item, db_connection) {
               item['alert_source_uid']
             , item['alert_target_uid']
             , item['alert_type']
-            , item['content']
+            , item['fcm_message']
         ]
     );
+}
+
+async function fcmFunction(req, db_connection) {
+
+    let herbee_language_list = process.env.HERBEE_LANGUAGE_TYPES.split(',');
+
+    for (let i in herbee_language_list) {
+        if (herbee_language_list[i] == req.innerBody['item']['fcm_language_other']) {
+            switch (req.innerBody['item']['fcm_language_other']) {
+                case 'ko':
+                    req.innerBody['item']['fcm_title'] = (req.innerBody['item']['alert_type'] == 11) ?
+                                                            `약속 수락 알림` : '약속 한 시간 전 알림';
+                    req.innerBody['item']['fcm_message'] = (req.innerBody['item']['alert_type'] == 11) ?
+                                                            `${req.innerBody['item']['fcm_nickname_me']}님이 약속을 수락했습니다.` : `${req.innerBody['item']['fcm_nickname_other']}님과의 약속 잊지 않으셨죠? 출발할 때 알려주세요.`;
+                    req.innerBody['item']['fcm_channel'] = `약속`;
+                    break;
+                case 'en':
+                    req.innerBody['item']['fcm_title'] = (req.innerBody['item']['alert_type'] == 11) ?
+                                                            "accepted the promise notification" : "an hour before the promise notification";
+                    req.innerBody['item']['fcm_message'] = (req.innerBody['item']['alert_type'] == 11) ?
+                                                            `${req.innerBody['item']['fcm_nickname_me']} accepted the promise.` : `You didn't forget your promise with ${req.innerBody['item']['fcm_nickname_other']}, right? Please let me know when you leave.`;
+                    req.innerBody['item']['fcm_channel'] = `promise`;
+                    break;
+            }
+        }
+
+    }
+
+    if(req.innerBody['item']['alert_type'] == 12) {
+        req.innerBody['item']['alert_target_uid'] = req.innerBody['item']['alert_source_uid'];
+        req.innerBody['item']['alert_source_uid'] = req.headers['user_uid'];
+        await fcmUtil.fcmPromiseAfterAnHourSingle(req.innerBody['item']);
+    }
+    else {
+        await fcmUtil.fcmPromiseAcceptSingle(req.innerBody['item']);
+    }
+
+    await queryCreateAlertHistory(req.innerBody['item'], db_connection);
+
 }

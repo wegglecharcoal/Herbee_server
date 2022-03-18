@@ -104,18 +104,9 @@ module.exports = {
     fcmPromiseAcceptSingle : async function(item){
         return await fcmFunc(
               [item['fcm_push_token_other']]
-
-            // 한글 버전
-            // , "약속 수락 알림"
-            // 영어 버전
-            , "accepted the promise notification"
-
-            // 한글 버전
-            // , `${item['fcm_nickname_me']}님이 약속을 수락했습니다.`
-            // 영어 버전
-            , `${item['fcm_nickname_me']} accepted the promise.`
-
-            , "약속"
+            , item['fcm_title']
+            , item['fcm_message']
+            , item['fcm_channel']
             , "4"
             , item['fcm_filename_me']
             , item['fcm_target_uid']
@@ -125,17 +116,9 @@ module.exports = {
     fcmPromiseAfterAnHourSingle : async function(item){
         return await fcmFunc(
               [item['fcm_push_token_me']]
-            // 한글 버전
-            // , "약속 한 시간 전 알림"
-            // 영어 버전
-            , "an hour before the promise notification"
-
-            // 한글 버전
-            // , `${item['fcm_nickname_other']}님과의 약속 잊지 않으셨죠? 출발할 때 알려주세요.`
-            // 영어 버전
-            , `You didn't forget your promise with ${item['fcm_nickname_other']}, right? Please let me know when you leave.`
-
-            , "약속"
+            , item['fcm_title']
+            , item['fcm_message']
+            , item['fcm_channel']
             , "4"
             , item['fcm_filename_other']
             , item['fcm_target_uid']
