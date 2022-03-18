@@ -128,22 +128,9 @@ module.exports = {
     fcmPromiseDepartSingle : async function(item){
         return await fcmFunc(
             [item['fcm_push_token_other']]
-
-            // 한글 버전
-            // , "약속 출발 알림"
-            // 영어 버전
-            , "Promise start notification"
-
-            // 한글 버전
-            // , `${item['fcm_nickname_me']}님이 약속 장소로 향하고 있습니다.`
-            // 영어 버전
-            , `${item['fcm_nickname_me']} is heading to the meeting place.`
-
-            // 한글 버전
-            // , "약속"
-            // 영어 버전
-            , "promise"
-
+            , item['fcm_title']
+            , item['fcm_message']
+            , item['fcm_channel']
             , "4"
             , item['fcm_filename_me']
             , item['fcm_target_uid']
@@ -153,22 +140,9 @@ module.exports = {
     fcmPromiseRetentionSingle : async function(item){
         return await fcmFunc(
               [item['fcm_push_token_me']]
-
-            // 한글 버전
-            // , "약속 리텐션"
-            // 영어 버전
-            , "promise retention notification"
-
-            // 한글 버전
-            // , `${item['fcm_nickname_other']}님과의 약속 어떠셨나요?`
-            // 영어 버전
-            , `How was the meeting with ${item['fcm_nickname_other']}?`
-
-            // 한글 버전
-            // , "약속"
-            // 영어 버전
-            , "promise"
-
+            , item['fcm_title']
+            , item['fcm_message']
+            , item['fcm_channel']
             , "4"
             , item['fcm_filename_other']
             , item['fcm_target_uid']

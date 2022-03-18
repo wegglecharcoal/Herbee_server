@@ -110,10 +110,6 @@ module.exports = function (req, res) {
                 // 주최자 외에 모든 사람이 거절한다면 꿀을 환불 해주어야 함
                 case 0: {
                     let check = await queryPromiseEnterCheck(req, db_connection);
-                    // 한글 버전
-                    // paramUtil.checkParam_alreadyUse(check,'이미 해당 약속에 참여했기 때문에 거절을 수행할 수 없습니다.');
-                    // 영어 버전
-                    paramUtil.checkParam_alreadyUse(check,'Rejection cannot be performed because you have already participated in the promise.');
                     paramUtil.checkParam_alreadyUse(check, errCode.fail_refuse_promise,'Error code: 208 [이미 해당 약속에 참여했기 때문에 거절을 수행할 수 없습니다.]');
 
                     await queryCreatePromiseRefuse(req, db_connection);
@@ -143,11 +139,7 @@ module.exports = function (req, res) {
                 case 2: {
                     if( req.innerBody['item'] === 0 ) {
                         req.innerBody['item']['alert_type'] = 13;
-
-                        req.innerBody['item']['content'] = `${req.innerBody['item']['fcm_nickname_me']}님이 약속 장소로 향하고 있습니다.`;
-
-                        await queryCreateAlertHistory(req.innerBody['item'], db_connection);
-                        await fcmUtil.fcmPromiseDepartSingle(req.innerBody['item']);
+                        await fcmFunction(req, db_connection);
                     }
                 } break;
 
@@ -176,11 +168,7 @@ module.exports = function (req, res) {
                     if( req.innerBody['item'] === 0 ) {
                         setTimeout(  async function() {
                             req.innerBody['item']['alert_type'] = 14;
-                            req.innerBody['item']['content'] = `${req.innerBody['item']['fcm_nickname_other']}님과의 약속 어떠셨나요?`;
-                            req.innerBody['item']['alert_target_uid'] = req.innerBody['item'] ['alert_source_uid'];
-                            req.innerBody['item']['alert_source_uid'] = req.headers['user_uid'];
-                            await queryCreateAlertHistory(req.innerBody['item'], db_connection);
-                            await fcmUtil.fcmPromiseRetentionSingle(req.innerBody['item']);
+                            await fcmFunction(req, db_connection);
                         }, DAY_MILLI);
                     }
 
@@ -363,7 +351,45 @@ function queryCreateAlertHistory(item, db_connection) {
             item['alert_source_uid']
             , item['alert_target_uid']
             , item['alert_type']
-            , item['content']
+            , item['fcm_message']
         ]
     );
+}
+
+
+async function fcmFunction(req, db_connection) {
+
+    let herbee_language_list = process.env.HERBEE_LANGUAGE_TYPES.split(',');
+
+    for (let i in herbee_language_list) {
+        if (herbee_language_list[i] == req.innerBody['item']['fcm_language_other']) {
+            switch (req.innerBody['item']['fcm_language_other']) {
+                case 'ko':
+                    req.innerBody['item']['fcm_title'] = (req.innerBody['item']['alert_type'] == 13) ?
+                        `약속 출발 알림` : '약속 리텐션';
+                    req.innerBody['item']['fcm_message'] = (req.innerBody['item']['alert_type'] == 13) ?
+                        `${req.innerBody['item']['fcm_nickname_me']}님이 약속 장소로 향하고 있습니다.` : `${req.innerBody['item']['fcm_nickname_other']}님과의 약속 어떠셨나요?`
+                    req.innerBody['item']['fcm_channel'] = `약속`;
+                    break;
+                case 'en':
+                    req.innerBody['item']['fcm_title'] = (req.innerBody['item']['alert_type'] == 13) ?
+                        "Promise start notification" : "promise retention notification";
+                    req.innerBody['item']['fcm_message'] = (req.innerBody['item']['alert_type'] == 13) ?
+                        `${req.innerBody['item']['fcm_nickname_me']} is heading to the meeting place.` : `How was the meeting with ${req.innerBody['item']['fcm_nickname_other']}?`
+                    req.innerBody['item']['fcm_channel'] = `promise`;
+                    break;
+            }
+        }
+
+    }
+
+    if(req.innerBody['item']['alert_type'] == 14) {
+        req.innerBody['item']['alert_target_uid'] = req.innerBody['item'] ['alert_source_uid'];
+        req.innerBody['item']['alert_source_uid'] = req.headers['user_uid'];
+        await fcmUtil.fcmPromiseRetentionSingle(req.innerBody['item']);
+    }
+    else {
+        await fcmUtil.fcmPromiseDepartSingle(req.innerBody['item']);
+    }
+
 }
