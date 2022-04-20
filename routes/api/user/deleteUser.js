@@ -11,6 +11,16 @@
  *
  *       * 유저 탈퇴
  *
+ *     parameters:
+ *       - in: query
+ *         name: user_uid
+ *         default: 0
+ *         required: true
+ *         schema:
+ *           type: number
+ *           example: 1
+ *         description: 탈퇴할 유저 uid
+ *
  *     responses:
  *       200:
  *         description: 결과 정보
