@@ -54,6 +54,16 @@
  *                 * 1: 외모가 제 타입이 아니에요 ㅠ
  *                 * 2: 대화가 잘 안 통했어요
  *                 * 3: 기타
+ *             latitude:
+ *               type: number
+ *               example: 37.5662952
+ *               description: |
+ *                 위도
+ *             longitude:
+ *               type: number
+ *               example: 126.9773966
+ *               description: |
+ *                 경도
  *
  *
  *     responses:
@@ -137,6 +147,8 @@ module.exports = function (req, res) {
 
                 // 1:1 채팅일 시에 약속을 출발한다면 상대방에게 알림을 보내준다.
                 case 2: {
+                    await queryUpdatePosition(req, db_connection);
+
                     if( req.innerBody['item'] === 0 ) {
                         req.innerBody['item']['alert_type'] = 13;
                         await fcmFunction(req, db_connection);
@@ -146,6 +158,16 @@ module.exports = function (req, res) {
 
                 // 모두가 만남이 성사된다면 꿀을 지급해주어야 함
                 case 3: {
+                    let arrive_honey = await querySelectArriveHoney(req, db_connection);
+
+                    req.innerBody['manual_code'] = arrive_honey['manual_code'];
+                    let system_honey = await querySelect(req, db_connection);
+                    arrive_honey['user_uid'] = req.headers['user_uid'];
+                    arrive_honey['honey_amount'] = system_honey['honey_amount'];
+                    arrive_honey['type'] = 13; // type 20: 약속 거절 환불
+                    arrive_honey['content'] = system_honey['title'];
+                    await queryCreate(arrive_honey, db_connection);
+
                     let price_user_list = await queryMeetSuccessCheck(req, db_connection);
 
                     if(price_user_list) {
@@ -269,6 +291,18 @@ function querySelect(req, db_connection) {
     );
 }
 
+function querySelectArriveHoney(req, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_select_arrive_honey_event'
+        , [
+            req.headers['user_uid'],
+            req.paramBody['promise_uid']
+        ]
+    );
+}
+
 
 function queryCreate(user, db_connection) {
     const _funcName = arguments.callee.name;
@@ -325,6 +359,20 @@ function queryUpdate(req, db_connection) {
           , req.paramBody['status']
           , req.paramBody['review']
           , req.paramBody['hate_reason']
+        ]
+    );
+}
+
+function queryUpdatePosition(req, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_update_promise_position'
+        , [
+              req.headers['user_uid']
+            , req.paramBody['promise_uid']
+            , req.paramBody['latitude']
+            , req.paramBody['longitude']
         ]
     );
 }

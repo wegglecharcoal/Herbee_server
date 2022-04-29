@@ -11,10 +11,12 @@ const SEVEN_DAYS_TIMESTAMP_SECOND = 604800;
 
 let data = {};
 axios.defaults.headers.common['Authorization'];
+axios.defaults.headers.common['x-chain-id'];
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 module.exports = {
 
+    // BEE COIN 관련 API
     // API 토큰 유효기간 확인
     octetToken : octetToken,
 
@@ -57,7 +59,6 @@ module.exports = {
         );
     },
 
-
     // 수수료
     octetSelectFee : async function(accessToken){
         return await octetGet(
@@ -66,6 +67,29 @@ module.exports = {
             , accessToken
         );
     },
+
+
+    // NFT 관련 API
+    octetCreateNftToken : async function(token_name, token_description, filename, accessToken) {
+        axios.defaults.headers.common['x-chain-id'] = `${funcUtil.getOctetXChainID()}`;
+
+        data =  {
+            "alias" : `herbeeContract`
+            , "symbol" : "KIP17"
+            , "name" : "EOA"
+            , "metadata" : {
+                "name": `${token_name}`,
+                "description": `${description}`,
+                "image": `${funcUtil.getFilePath()}${filename}`
+            }
+        }
+        return await octetPost(
+
+            `v1/KLAY/nft/KIP17/herbeeContract/token`
+            , data
+            , accessToken
+        )
+    }
 
 
 
