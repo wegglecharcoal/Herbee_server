@@ -170,21 +170,21 @@ module.exports = function (req, res) {
 
                     let price_user_list = await queryMeetSuccessCheck(req, db_connection);
 
-                    if(price_user_list) {
-
-                        req.innerBody['manual_code'] = 'H0-003';
-                        let system_honey = await querySelect(req, db_connection);
-
-                        for (let idx in price_user_list) {
-                            price_user_list[idx]['honey_amount'] = system_honey['honey_amount'];
-                            price_user_list[idx]['type'] = 12; // type 12: 만남 인증 무료
-                            price_user_list[idx]['content'] = system_honey['title'];
-                            await queryCreate(price_user_list[idx], db_connection);
-                        }
-
-                        req.innerBody['success'] = '만남 꿀이 지급되었습니다.';
-
-                    }
+                    // if(price_user_list) {
+                    //
+                    //     req.innerBody['manual_code'] = 'H0-003';
+                    //     let system_honey = await querySelect(req, db_connection);
+                    //
+                    //     for (let idx in price_user_list) {
+                    //         price_user_list[idx]['honey_amount'] = system_honey['honey_amount'];
+                    //         price_user_list[idx]['type'] = 12; // type 12: 만남 인증 무료
+                    //         price_user_list[idx]['content'] = system_honey['title'];
+                    //         await queryCreate(price_user_list[idx], db_connection);
+                    //     }
+                    //
+                    //     req.innerBody['success'] = '만남 꿀이 지급되었습니다.';
+                    //
+                    // }
 
                     // 1:1 채팅일 경우 만남 후 다음날 약속에 대한 후기 FCM 알림
                     if( req.innerBody['item'] === 0 ) {

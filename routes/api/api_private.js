@@ -209,6 +209,7 @@ app.route('/addressBook/default')
  * Comment
  */
 app.route('/comment')
+    .put( require('./comment/updateComment'))
     .post( require('./comment/createComment'))
     .delete( require('./comment/deleteComment') );
 
@@ -218,6 +219,7 @@ app.route('/comment/list')
 
 
 app.route('/comment/nested')
+    .put( require('./comment/updateCommentNested'))
     .post( require('./comment/createCommentNested'))
     .delete( require('./comment/deleteCommentNested') );
 
