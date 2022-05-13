@@ -58,7 +58,7 @@ module.exports = function (req, res) {
 
             req.innerBody['item'] = await queryCheckIsHead(req, db_connection);
 
-            if (req.innerBody['item']) {
+            if (req.innerBody['item']['result'] == 0 ) {
                 errUtil.createCall(errCode.fail_exit_chatRoom, `Error code: 202 [모임 채팅방은 혼자 있을 경우에만 채팅방에서 나갈 수 있습니다.]`);
                 return;
             }
