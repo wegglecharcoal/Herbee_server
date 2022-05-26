@@ -50,18 +50,20 @@ module.exports = function (req, res) {
         mysqlUtil.connectPool( async function (db_connection) {
             req.innerBody = {};
 
-            req.innerBody['item'] = await queryCheckUser(req, db_connection);
-            // console.log( req.innerBody['item'])
+            req.innerBody['item'] = await queryCheckUser(req, db_connection); //채팅방 참여 여부를 알 수 있다.
+            console.log( req.innerBody['item'])
             if (!req.innerBody['item']) {
                 errUtil.createCall(errCode.non_participating_chatRoom, `Error code: 451 [참여하지 않은 채팅방입니다.]`);
                 return;
             }
 
-            req.innerBody['item'] = await queryCheckIsHead(req, db_connection);
-            // console.log( req.innerBody['item'])
-            if (req.innerBody['item']['result'] == 0 ) {
-                errUtil.createCall(errCode.fail_exit_chatRoom, `Error code: 202 [모임 채팅방은 혼자 있을 경우에만 채팅방에서 나갈 수 있습니다.]`);
-                return;
+            if(req.innerBody['item']['is_head'] == 1){ //방장이면 is_head가 1이 된다.
+                req.innerBody['item'] = await queryCheckChatRoomCount(req, db_connection);//채팅방 참여자수를 확인한다.
+                console.log( req.innerBody['item'])
+                if (req.innerBody['item']['count_room_user'] !== 1 ) { //카운트가 1 이상이면 나갈 수 없다.
+                    errUtil.createCall(errCode.fail_exit_chatRoom, `Error code: 202 [모임 채팅방은 혼자 있을 경우에만 채팅방에서 나갈 수 있습니다.]`);
+                    return;
+                }
             }
 
             await queryDelete(req, db_connection);
@@ -112,7 +114,7 @@ function queryCheckIsHead(req, db_connection) {
         , [
               req.headers['user_uid']
             , req.paramBody['chat_room_uid']
-            , 0    // is_head      {0: false, 1: true}
+            , 1    // is_head      {0: false, 1: true}
         ]
     );
 }
@@ -126,6 +128,18 @@ function queryDelete(req, db_connection) {
         , [
               req.headers['user_uid']
             , req.paramBody['chat_room_uid']
+        ]
+    );
+}
+
+
+function queryCheckChatRoomCount(req, db_connection) {
+    const _funcName = arguments.callee.name;
+
+    return mysqlUtil.querySingle(db_connection
+        , 'call proc_select_chatRoom_user_list_count'
+        , [
+            req.paramBody['chat_room_uid'],
         ]
     );
 }
