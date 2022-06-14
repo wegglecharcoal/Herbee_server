@@ -7,7 +7,8 @@ const funcUtil = require('./funcUtil')
 const axios = require('axios');
 const {log} = require("debug");
 
-axios.defaults.headers.common['Authorization'] = `key=${funcUtil.getFCMKey()}`;
+// axios.defaults.headers.common['Authorization'] = `key=${funcUtil.getFCMKey()}`;
+axios.defaults.headers.common['Authorization'] = `key=AAAANOHqZjY:APA91bGhh2ZeYVeqJdF-oVgGJgpJaCbAQlMhkHLs5Swht_xKuD_LxEuf5ZjfaD905cWGxxSgkDPdWIOaxh3ztQGQjIoo8pFpYkASXPaSFK815BcDl0J4ij_sjSTk2S9GX8_fNqno1s_7`;
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 // fcm_type
