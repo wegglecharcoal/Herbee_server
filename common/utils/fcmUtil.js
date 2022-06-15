@@ -7,9 +7,9 @@ const funcUtil = require('./funcUtil')
 const axios = require('axios');
 const {log} = require("debug");
 
+// axios.defaults.headers.common['Authorization'] = `key=AAAANOHqZjY:APA91bGhh2ZeYVeqJdF-oVgGJgpJaCbAQlMhkHLs5Swht_xKuD_LxEuf5ZjfaD905cWGxxSgkDPdWIOaxh3ztQGQjIoo8pFpYkASXPaSFK815BcDl0J4ij_sjSTk2S9GX8_fNqno1s_7`;
 // axios.defaults.headers.common['Authorization'] = `key=${funcUtil.getFCMKey()}`;
-axios.defaults.headers.common['Authorization'] = `key=AAAANOHqZjY:APA91bGhh2ZeYVeqJdF-oVgGJgpJaCbAQlMhkHLs5Swht_xKuD_LxEuf5ZjfaD905cWGxxSgkDPdWIOaxh3ztQGQjIoo8pFpYkASXPaSFK815BcDl0J4ij_sjSTk2S9GX8_fNqno1s_7`;
-axios.defaults.headers.post['Content-Type'] = 'application/json';
+// axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 // fcm_type
 // 0: 메시지 알림
@@ -155,6 +155,8 @@ module.exports = {
 
 
 async function fcmFunc(token, title, message, channel, fcm_type, filename, target_uid, type){
+    axios.defaults.headers.common['Authorization'] = `key=${funcUtil.getFCMKey()}`;
+    axios.defaults.headers.post['Content-Type'] = 'application/json';
     return  await axios.post('https://fcm.googleapis.com/fcm/send', {
         "registration_ids": token,
         "priority": "high",
