@@ -68,34 +68,44 @@ module.exports = function (req, res) {
         mysqlUtil.connectPool(async function (db_connection) {
             req.innerBody = {};
 
-            let check = await selectExchangeCheck(req, db_connection);
+            let check = await selectExchangeCheck(req, db_connection); //내가가진 꿀 소유량, 내가가진 코인 소유량 확인
             switch (req.paramBody['type']) {
-                case 0:
-                    if(check['own_honey_amount'] < req.paramBody['amount']) {
+                case 0: //꿀 -> Bee coin 스웨거 표시 문제. 0이 꿀을 비로 바꾸는거다
+                    if(check['own_honey_amount'] < req.paramBody['amount']) { //소지한 꿀이 사용할 꿀보다 적으면
                         errUtil.createCall(errCode.non_enough_honey_1, `Error code: 403 [소지한 꿀 개수가 부족합니다.]`);
                         return;
                     }
+
+                    if(req.paramBody['amount'] % 100 != 0){
+                        errUtil.createCall(errCode.non_enough_honey_1, 'Error code: 403 [꿀과 비코인 환전비율을 100:1로 해야합니다.]')
+                        return;
+                    }
+
+                    req.innerBody['bee_coin_exchange_rate'] = 0.01 //꿀 100개를 비코인 1개로 변경
                     break;
-                case 1:
-                    if(check['own_bee_coin_amount'] < req.paramBody['amount']) {
+                case 1:  //Bee coin -> 꿀
+                    if(check['own_bee_coin_amount'] < req.paramBody['amount']) { //소지한 비가 사용할 비보다 작으면
                         errUtil.createCall(errCode.non_enough_bee_coin, `Error code: 404 [소지한 BEE coin 개수가 부족합니다.]`);
                         return;
                     }
+
+                    req.innerBody['bee_coin_exchange_rate'] = 100 //비코인 1개를 꿀 100개로 변경
                     break;
                 default:
                     break;
             }
 
-            let bee_coin_info = await coinExchangeUtil.lBankSelectCoinRate('bee_usdt');
-            if(bee_coin_info === 'false') {
-                let db_bee_coin_info = await querySelectBeeCoinRate(bee_coin_info, db_connection);
-                bee_coin_info = db_bee_coin_info['coin_rate'];
-            } else {
-                await queryUpdateBeeCoinRate(bee_coin_info, db_connection);
-            }
+            // ** 꿀:비코인 환전비율은 100대 1로 진행한다. 기존 코인비율을 불러오지 않는다.
+            // let bee_coin_info = await coinExchangeUtil.lBankSelectCoinRate('bee_usdt'); //비코인 비율 가져오기
+            // if(bee_coin_info === 'false') {
+            //     let db_bee_coin_info = await querySelectBeeCoinRate(bee_coin_info, db_connection); //못가져오면 디비 저장된 값으로 교환
+            //     bee_coin_info = db_bee_coin_info['coin_rate']; //* 디비에도 비코인 비율 기록이 없다? 왜지? => 비율대로 교환 안하니 상관없나
+            // } else {
+            //     await queryUpdateBeeCoinRate(bee_coin_info, db_connection); //
+            // }
+            // req.innerBody['bee_coin_exchange_rate'] = Math.round(bee_coin_info * 100);
 
-            req.innerBody['bee_coin_exchange_rate'] = Math.round(bee_coin_info * 100);
-            req.innerBody['item'] =  await createOctetExchange(req, db_connection);
+            req.innerBody['item'] =  await createOctetExchange(req, db_connection);//옥텍 교환 시작
 
             deleteBody(req);
             sendUtil.sendSuccessPacket(req, res, req.innerBody, true);
