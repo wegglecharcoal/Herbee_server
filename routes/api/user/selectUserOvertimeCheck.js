@@ -11,7 +11,7 @@
  *
  *       * 유저 시간초과 체크
  *       1. 약속 제안 자동 취소 환불 (6시간 안에 수락 안하면 자동 전액 환불 + 취소)
- *       2. 채팅 제안 자동 취소 환불 (3일 안에 수락 안하면 자동 전액 환불 + 취소)
+ *       2. 채팅 제안 자동 취소 환불 (1일 안에 수락 안하면 자동 전액 환불 + 취소)
  *       3. promise date 약속 시간 이후로 30분 만남을 하지 못했다면 (환불X 취소만)
  *
  *     responses:
@@ -63,7 +63,7 @@ module.exports = function (req, res) {
 
             }
 
-            // 채팅 제안 자동 취소 환불 (3일 안에 수락 안하면 자동 전액 환불)
+            // 채팅 제안 자동 취소 환불 (1일 안에 수락 안하면 자동 전액 환불)
             let overtimeChatRoomList = await queryCheckChatRoom(req, db_connection);
 
             if (overtimeChatRoomList) {
@@ -77,7 +77,7 @@ module.exports = function (req, res) {
                     let refund_honey = await querySelectHoneySystem(req, db_connection);
 
                     refund_honey['user_uid'] = req.headers['user_uid'];
-                    refund_honey['type'] = 23; // type 23: 채팅 제안 자동 취소 환불 (3일 안에 수락 안하면 자동 전액 환불)
+                    refund_honey['type'] = 23; // type 23: 채팅 제안 자동 취소 환불 (1일 안에 수락 안하면 자동 전액 환불)
                     await queryRefundHoney(refund_honey, db_connection);
                 }
 
