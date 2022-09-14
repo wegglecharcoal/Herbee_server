@@ -42,7 +42,7 @@ module.exports = function (req, res) {
             req.innerBody = {};
 
             req.innerBody['item'] = {};
-            // 약속 제안 자동 취소 환불 (6시간 안에 수락 안하면 자동 전액 환불)
+            //  약속 제안 자동 취소 환불 (6시간 안에 수락 안하면 자동 전액 환불)
             let overtimePromiseList = await queryCheckPromiseAccept(req, db_connection);
 
             if (overtimePromiseList) {
