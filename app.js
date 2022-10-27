@@ -41,6 +41,7 @@ if( !funcUtil.isRealServer ) {
     app.use('/api-docs', require('./apiDocs/swaggerDocs'))
 }
 
+require('./routes/cron/updateOctetApiToken').start()
 
 console.log(`@#isRealServer ${funcUtil.isRealServer}`);
 console.log(`@#getDBUser ${funcUtil.getDBUser()}`);
